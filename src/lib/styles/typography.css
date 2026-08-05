@@ -1,0 +1,49 @@
+/* Font loading */
+@font-face {
+    font-family: 'TG4';
+    src: url('/fonts/TG4/tg4-regular-webfont.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'TG4';
+    src: url('/fonts/TG4/tg4-bold-webfont.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'FS Lucas';
+    src: url('/fonts/FSLucas/FSLucasPro-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Typography rules */
+:root {
+    --font-body: 'FS Lucas', sans-serif;
+    --font-brand: 'TG4', sans-serif;
+}
+
+body {
+    font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--font-body);
+    font-weight: 700;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+.brand {
+    font-family: var(--font-brand);
+}

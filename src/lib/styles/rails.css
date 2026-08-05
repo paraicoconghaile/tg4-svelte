@@ -1,0 +1,8 @@
+.rail {
+    max-width: var(--page-width);
+    margin: 60px auto;
+}
+
+.rail-title {
+    margin-bottom: 30px;
+}

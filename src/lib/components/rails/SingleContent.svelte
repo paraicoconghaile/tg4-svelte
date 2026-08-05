@@ -1,0 +1,108 @@
+<script lang="ts">
+    let {
+        rail,
+        isIrish
+    } = $props();
+
+    const video = rail.items[0].video;
+    const image = video.image?.xLarge ?? video.image?.large ?? video.poster;
+    const videoID = video.vid;
+
+    //console.log(rail);
+</script>
+
+<section class="single-content">
+    <a href={`/${isIrish ? 'ga' : 'en'}/player/${videoID}`}>
+        <img src={image} alt={video.displayName}/>
+        <div class="play-box">
+            <svg
+                viewBox="18 0 38 56"
+                width="20"
+                height="28"
+                aria-hidden="true"
+            >
+                <path d="M55.9383 27.9696L46.9742 19.3235L35.2362 30.6515L18.6702 46.6389L27.6318 55.2875L55.9383 27.9696Z" fill="#2B2A2A"/>
+                <path d="M46.9354 36.6571L55.8945 28.0061L44.1565 16.6781L27.5905 0.690705L18.6289 9.33929L46.9354 36.6571Z" fill="#2B2A2A"/>
+            </svg>
+        </div>
+        <div class="overlay">
+            <h2>
+                {isIrish ? rail.titleGa : rail.titleEn}
+            </h2>
+            <p>
+                {isIrish ? rail.subtitleGa : rail.subtitleEn}
+            </p>
+        </div>
+    </a>
+</section>
+
+<style>
+.single-content {
+    position: relative;
+    max-width: 1440px;
+    height: 500px;
+    margin: 20px auto;
+    overflow: hidden;
+    border-radius: 0px;
+}
+
+.single-content img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.single-content::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,0,0,.75) 0%,
+            rgba(0,0,0,.35) 40%,
+            rgba(0,0,0,.05) 100%
+        );
+}
+
+.overlay {
+    position: absolute;
+    left: 70px;
+    bottom: 45%;
+    max-width: 500px;
+    color: white;
+    z-index: 2;
+}
+
+.overlay h2 {
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+.overlay p {
+    font-size:1.2rem;
+    margin:0;
+}
+
+.play-box {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 64px;
+    height: 64px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .25s ease;
+}
+
+.play-box svg {
+    width: 22px;
+    height: 32px;
+}
+
+.content-card:hover .play-box {
+    transform: scale(1.1);
+}
+</style>

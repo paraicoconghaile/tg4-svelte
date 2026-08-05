@@ -1,0 +1,15 @@
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: 999px;
+    background: var(--tg4-pink);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.button:hover {
+    opacity:.9;
+}

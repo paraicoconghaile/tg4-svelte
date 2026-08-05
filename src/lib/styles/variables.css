@@ -1,0 +1,30 @@
+:root {
+    /* Brand */
+    --tg4-pink: #FF126C;
+    --tg4-green: #009640;
+    --tg4-black: #1F1F1F;
+    --tg4-white: #FFFFFF;
+
+    /* Greys */
+    --grey-50: #FAFAFA;
+    --grey-100: #F3F3F3;
+    --grey-300: #DADADA;
+    --grey-600: #6E6E6E;
+    --grey-900: #222222;
+
+        /* Semantic colours */
+    --body-background: var(--tg4-black);
+    --text-primary: var(--tg4-white);
+    --text-secondary: var(--grey-300);
+    --link-colour: var(--tg4-pink);
+
+    /* Sizes */
+    --page-width: 1440px;
+    --rail-gap: 12px;
+    --section-gap: 40px;
+
+    /* Radius */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+}

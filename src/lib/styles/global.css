@@ -1,0 +1,36 @@
+/* Global CSS */
+
+@import './typography.css';
+@import './variables.css';
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--body-background);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+a:hover {
+    text-decoration: none;
+    color: var(--tg4-pink);
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+button {
+    font-family: inherit;
+}
