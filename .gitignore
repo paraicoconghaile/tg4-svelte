@@ -7,6 +7,8 @@ node_modules
 .wrangler
 /.svelte-kit
 /build
+src/routes/[lang]/hero-test/
+src/routes/[lang]/test-carousel/
 
 # OS
 .DS_Store
