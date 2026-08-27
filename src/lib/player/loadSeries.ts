@@ -14,6 +14,7 @@ export async function loadSeries(slug:string, lang:string) {
     const rawEpisodes = await getSeriesVideos(series.series.slug, seasonNumber);
 
     /* console.log("Raw Episodes:", rawEpisodes);
+    console.log('Raw Episodes:', JSON.stringify(rawEpisodes, null, 2));
     console.log("Type:", typeof rawEpisodes);
     console.log("Is Array:", Array.isArray(rawEpisodes)); */
 
@@ -34,9 +35,11 @@ export async function loadSeries(slug:string, lang:string) {
                 : ep.customFields.seriesdesce,
         episodeDescription:
             lang === 'ga'
-                ? ep.customFields.longdescgaeilge
-                : ep.description
+                ? ep.descriptionGa
+                : ep.descriptionEn
     }));
+
+    console.log("Episodes:", episodes);
 
     return {
         series,

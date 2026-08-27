@@ -3,9 +3,9 @@
     import { genres } from '$lib/config/playerNav';
 
     const poster =
-        data.series.series.poster ??
+        data.series.categories.image?.xlarge ??
         data.series.series.mainImage?.large ??
-        data.series.series.boxsetImage?.large ??
+        data.series.series.poster ??
         'https://res.cloudinary.com/tg4/image/upload/w_1440,h_810,g_faces,c_fill,f_auto,q_auto/000000.jpg';
     
     const description = $derived(
@@ -39,7 +39,7 @@
     	return (ep.poster || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg');
   	}
 
-  	//console.log(data);
+  	//console.log("Data", JSON.stringify(data, null, 2));
 </script>
 
 <section class="episode-page">
@@ -57,14 +57,14 @@
                         class="play-button"
                         href={`/${data.lang}/player/${data.slug}/${data.episodes[0]?.episodeID}`}
                     >
-                        ▶&nbsp; Play
+                        ▶&nbsp; {data.lang === 'ga' ? 'Féach' : 'Watch now'}
                     </a>
-                    <a
+                    <!-- <a
                         class="back-button"
                         href={`/${data.lang}/player/${data.section}`}
                     >
                         Back
-                    </a>
+                    </a> -->
                 </div>
             </div>
         </div>
@@ -75,9 +75,7 @@
         {#each episodesBySeries as [seriesNumber, episodes]}
             <section class="series">
                 <h2>
-                    {data.lang === 'ga'
-                        ? `Sraith ${seriesNumber}`
-                        : `Series ${seriesNumber}`}
+                    {data.lang === 'ga' ? `Sraith ${seriesNumber}` : `Series ${seriesNumber}`}
                 </h2>
                 <div class="episode-grid">
                     {#each episodes as ep}

@@ -31,7 +31,7 @@ export async function load({ params }) {
     } */
 
     const rawVideo = await getVideo(params.episode);
-    //console.log(JSON.stringify(rawVideo, null, 2));
+    console.log(JSON.stringify(rawVideo, null, 2));
 
     if (!rawVideo) {
         throw error(404, 'Video not found');
@@ -47,7 +47,8 @@ export async function load({ params }) {
             params.lang === 'ga'
                 ? rawVideo.video.customFields?.longdescgaeilge
                 : rawVideo.description,
-        poster: rawVideo.video.poster,
+        //poster: rawVideo.video.poster,
+        poster: rawVideo.video.image.xLarge,
         prodCode: rawVideo.video.customFields.p_prodcode,
         seriesCode: rawVideo.video.customFields.s_prodcode
     };

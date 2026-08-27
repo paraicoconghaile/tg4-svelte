@@ -42,18 +42,18 @@
     }
 
     function getImageUrl(data: any) {
-        if (data.video?.prodCode) {
+        /* if (data.video?.prodCode) {
             return `https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto:eco/${data.video.prodCode}.jpg`;
         }
 
         if (data.video?.seriesCode) {
             return `https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto:eco/${data.video.seriesCode}.jpg`;
-        }
+        } */
 
-        return (video.poster || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg');
+        return (data.video.poster || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg');
     }
 
-    //console.log(data);
+    //console.log("Data", JSON.stringify(data, null, 2));
 </script>
 
 <section class="episode-page">
