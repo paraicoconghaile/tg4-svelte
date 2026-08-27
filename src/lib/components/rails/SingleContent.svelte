@@ -4,16 +4,44 @@
         isIrish
     } = $props();
 
-    const video = rail.items[0].video;
-    const image = video.image?.xLarge ?? video.image?.large ?? video.poster;
-    const videoID = video.vid;
+    console.log('========== RAIL JSON ==========');
+    console.log(JSON.stringify(rail, null, 2));
+    console.log('================================');
 
-    //console.log(rail);
+    const item = rail.items?.[0];
+
+    let image = '';
+    let link = '#';
+    let displayName = '';
+
+    if (item?.type === 'VIDEO' && item.video) {
+        const video = item.video;
+
+        image = video.image?.xLarge
+            ?? video.image?.large
+            ?? video.poster
+            ?? '';
+
+        link = `/${isIrish ? 'ga' : 'en'}/player/${video.vid}`;
+        displayName = video.displayName ?? '';
+
+    } else if (item?.type === 'SERIES' && item.series) {
+        const series = item.series;
+
+        image = series.mainImage?.xLarge
+            ?? series.mainImage?.large
+            ?? series.poster
+            ?? '';
+
+        link = `/${isIrish ? 'ga' : 'en'}/player/${series.slug}`;
+        displayName = series.name ?? '';
+    }
 </script>
 
 <section class="single-content">
-    <a href={`/${isIrish ? 'ga' : 'en'}/player/${videoID}`}>
-        <img src={image} alt={video.displayName}/>
+    <a href={link}>
+        <img src={image} alt={displayName}/>
+
         <div class="play-box">
             <svg
                 viewBox="18 0 38 56"
@@ -21,14 +49,16 @@
                 height="28"
                 aria-hidden="true"
             >
-                <path d="M55.9383 27.9696L46.9742 19.3235L35.2362 30.6515L18.6702 46.6389L27.6318 55.2875L55.9383 27.9696Z" fill="#2B2A2A"/>
+                <path d="M55.9383 27.9696L46.9742 19.3235L35.2362 30.6515L18.6702 46.6389L27.6318 55.2875Z" fill="#2B2A2A"/>
                 <path d="M46.9354 36.6571L55.8945 28.0061L44.1565 16.6781L27.5905 0.690705L18.6289 9.33929L46.9354 36.6571Z" fill="#2B2A2A"/>
             </svg>
         </div>
+
         <div class="overlay">
             <h2>
                 {isIrish ? rail.titleGa : rail.titleEn}
             </h2>
+
             <p>
                 {isIrish ? rail.subtitleGa : rail.subtitleEn}
             </p>

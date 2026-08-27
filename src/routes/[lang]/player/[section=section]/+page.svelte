@@ -82,7 +82,7 @@
     }
 }
 
-.language-switch {
+/* .language-switch {
     background:var(--tg4-pink);
     color:var(--tg4-white);
     padding:4px 18px;
@@ -92,7 +92,7 @@
 
 .language-switch:hover {
     background:#ff4b91;
-}
+} */
 </style>
 
 <!-- <pre>

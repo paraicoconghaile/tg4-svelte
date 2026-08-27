@@ -3,7 +3,7 @@ const API_KEY = env.TG4_API_KEY;
 const NEW_API_KEY = env.TG4_NEW_API_KEY;
 
 export async function getGenre(genre: string) {
-    const response = await fetch(`https://staging.api.tg4dev.com/api/series?limit=50&category=${genre}`,
+    const response = await fetch(`https://staging.api.tg4dev.com/api/series?limit=150&category=${genre}`,
         {
             headers: {
             'Content-Type': 'application/json',
