@@ -19,9 +19,11 @@ export async function getGenre(genre: string) {
     return response.json();
 }
 
-export async function getSeriesVideos(seriesTitle: string) {
+export async function getSeriesVideos(seriesTitle: string, seasonNumber: number) {
     //const url = `https://playerapi.tg4tech.com/series/videos` + `?seriesTitle=${encodeURIComponent(seriesTitle)}` + `&seriesNumber=` + `&sort=desc`;
-    const url = `https://staging.api.tg4dev.com/api/series/${seriesTitle}/1`;
+    const url = `https://staging.api.tg4dev.com/api/series/${seriesTitle}/${seasonNumber}`;
+
+    //console.log('getSeriesVideos URL:', url);
 
     const response = await fetch(url,
         {
@@ -32,15 +34,15 @@ export async function getSeriesVideos(seriesTitle: string) {
         }
     );
 
-    /* console.log("Status:", response.status);
-    const body = await response.text();
-    console.log("Response:", body); */
+    const text = await response.text();
+    /* console.log('getSeriesVideos status:', response.status);
+    console.log('getSeriesVideos response:', text); */
 
     if (!response.ok) {
         throw new Error(`API Error: ${response.status}`);
     }
 
-    return response.json();
+    return JSON.parse(text);
 }
 
 export async function getVideo(videoId: string) {

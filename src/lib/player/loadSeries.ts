@@ -10,7 +10,8 @@ export async function loadSeries(slug:string, lang:string) {
 
     //console.log(series);
 
-    const rawEpisodes = await getSeriesVideos(series.series.slug);
+    const seasonNumber = series.seasons?.[0]?.number;
+    const rawEpisodes = await getSeriesVideos(series.series.slug, seasonNumber);
 
     /* console.log("Raw Episodes:", rawEpisodes);
     console.log("Type:", typeof rawEpisodes);
