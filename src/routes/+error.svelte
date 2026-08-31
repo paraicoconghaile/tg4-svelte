@@ -9,8 +9,7 @@
 <div class="error-page">
     <h1>{page.status}</h1>
     <p>{page.error?.message ?? 'Something went wrong.'}</p>
-
-    <a href="/" class="language-switch">Home</a>
+    <p><a href="/" class="language-switch">Home</a></p>
 </div>
 
 <style>
@@ -35,14 +34,14 @@ p {
 }
 
 .language-switch {
-    background:var(--tg4-pink);
-    color:var(--tg4-white);
-    padding:4px 18px;
-    font-weight:700;
-    transition:background .2s ease;
+    background: var(--tg4-pink);
+    color: var(--tg4-white);
+    padding: 4px 18px;
+    font-weight: 700;
+    transition: background .2s ease;
 }
 
 .language-switch:hover {
-    background:#ff4b91;
+    background: #ff4b91;
 }
 </style>

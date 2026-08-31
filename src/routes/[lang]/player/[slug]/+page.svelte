@@ -120,33 +120,31 @@
 
 <style>
 .episode-page {
-    max-width:var(--page-width);
-    margin:0 auto;
+    max-width: var(--page-width);
+    margin: 0 auto;
 }
 
 .language-switch {
-    background:var(--tg4-pink);
-    color:var(--tg4-white);
-    padding:4px 18px;
-    font-weight:700;
-    transition:background .2s ease;
+    background: var(--tg4-pink);
+    color: var(--tg4-white);
+    padding: 4px 18px;
+    font-weight: 700;
+    transition: background .2s ease;
 }
 
 .language-switch:hover {
-    background:#ff4b91;
+    background: #ff4b91;
 }
 
 /* --------------------------------
    HERO
 -------------------------------- */
-
 .episode-hero {
     position: relative;
     width: 100%;
     height: 810px;
     overflow: hidden;
 }
-
 
 .hero-image {
     position: absolute;
@@ -156,9 +154,7 @@
     object-fit: cover;
 }
 
-
 /* Dark gradient over image */
-
 .hero-overlay {
     position: absolute;
     inset: 0;
@@ -179,13 +175,11 @@
     max-width: 650px;
 }
 
-
 .hero-content h1 {
     margin: 0 0 15px;
     font-size: 3.5rem;
     line-height: 1.05;
 }
-
 
 .hero-content p {
     margin: 0 0 25px;
@@ -193,27 +187,22 @@
     line-height: 1.5;
 }
 
-
 /* --------------------------------
    BUTTONS
 -------------------------------- */
-
 .hero-buttons {
     display: flex;
     gap: 12px;
 }
 
-.play-button,
-.back-button {
+.play-button, .back-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 12px 26px;
     text-decoration: none;
     font-weight: 700;
-    transition:
-        transform .2s ease,
-        background .2s ease;
+    transition: transform .2s ease, background .2s ease;
 }
 
 .play-button {
@@ -226,16 +215,13 @@
     color: white;
 }
 
-.play-button:hover,
-.back-button:hover {
+.play-button:hover, .back-button:hover {
     transform: translateY(-2px);
 }
-
 
 /* --------------------------------
    EPISODES
 -------------------------------- */
-
 .episodes {
     padding: 50px 0;
 }
@@ -291,11 +277,9 @@
     transform: scale(1.1);
 }
 
-
 /* --------------------------------
    MOBILE
 -------------------------------- */
-
 @media (max-width: 900px) {
     .episode-hero {
         height: 650px;
@@ -307,7 +291,6 @@
         font-size: 2.8rem;
     }
 }
-
 
 @media (max-width: 600px) {
     .episode-hero {

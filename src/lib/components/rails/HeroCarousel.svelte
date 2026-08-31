@@ -32,6 +32,70 @@
     let current = $state(0);
     let direction = $state<'next' | 'prev' | null>(null);
     let animating = $state(false);
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let isDragging = false;
+    let hasSwiped = false;
+
+    function handlePointerDown(event: PointerEvent) {
+        startX = event.clientX;
+        startY = event.clientY;
+        currentX = startX;
+        currentY = startY;
+        isDragging = true;
+        hasSwiped = false;
+
+        window.addEventListener('pointermove', handlePointerMove);
+        window.addEventListener('pointerup', handlePointerUp);
+    }
+
+    function handlePointerMove(event: PointerEvent) {
+        if (!isDragging) return;
+
+        currentX = event.clientX;
+        currentY = event.clientY;
+
+        const deltaX = currentX - startX;
+        const deltaY = currentY - startY;
+
+        if (
+            Math.abs(deltaX) > 20 &&
+            Math.abs(deltaX) > Math.abs(deltaY)
+        ) {
+            hasSwiped = true;
+        }
+    }
+
+    function handlePointerUp() {
+        if (!isDragging) return;
+
+        isDragging = false;
+
+        window.removeEventListener('pointermove', handlePointerMove);
+        window.removeEventListener('pointerup', handlePointerUp);
+
+        const deltaX = currentX - startX;
+        const deltaY = currentY - startY;
+
+        if (Math.abs(deltaX) < 50) return;
+        if (Math.abs(deltaY) > Math.abs(deltaX)) return;
+
+        if (deltaX < 0) {
+            next();
+        } else {
+            previous();
+        }
+    }
+
+    function handleClick(event: MouseEvent) {
+        if (hasSwiped) {
+            event.preventDefault();
+            event.stopPropagation();
+            hasSwiped = false;
+        }
+    }
 
     function getSlide(offset: number) {
         const index =
@@ -42,22 +106,20 @@
 
     function next() {
         if (animating) return;
+        direction = 'next';
         animating = true;
         setTimeout(() => {
-            current =
-                (current + 1) %
-                slides.length;
+            current = (current + 1) % slides.length;
             animating = false;
         },450);
     }
 
     function previous() {
         if (animating) return;
+        direction = 'prev';
         animating = true;
         setTimeout(() => {
-            current =
-                (current - 1 + slides.length) %
-                slides.length;
+            current = (current - 1 + slides.length) % slides.length;
             animating = false;
         },450);
     }
@@ -89,20 +151,38 @@
             </div>
         </div> -->
 
-        <div class="card hero">
+        <div class="card hero" onpointerdown={handlePointerDown}>
             {#key current}
-                <div
-                    in:fly={{ x: 750, duration: 350 }}
-                    out:fly={{ x: -750, duration: 350 }}
-                    class="hero-content"
-                >
-                    <a href={`/${isIrish ? 'ga' : 'en'}/player/${getSlide(0).slug}`}>
+                <a class="hero-card" href={`/${isIrish ? 'ga' : 'en'}/player/${getSlide(0).slug}`} onclick={handleClick}>
+                    <div
+                        in:fly={{
+                            x: direction === 'next' ? 750 : -750,
+                            duration: 350
+                        }}
+                        out:fly={{
+                            x: direction === 'next' ? -750 : 750,
+                            duration: 350
+                        }}
+                        class="hero-content"
+                    >
                         <img src={getSlide(0).image} alt={getSlide(0).title} />
                         <div class="overlay">
                             <h1>{getSlide(0).title}</h1>
+                            <p>{getSlide(0).description}</p>
                         </div>
-                    </a>
-                </div>
+                    </div>
+                    <div class="play-box">
+                        <svg
+                            viewBox="18 0 38 56"
+                            width="20"
+                            height="28"
+                            aria-hidden="true"
+                        >
+                            <path d="M55.9383 27.9696L46.9742 19.3235L35.2362 30.6515L18.6702 46.6389L27.6318 55.2875L55.9383 27.9696Z" fill="#2B2A2A"/>
+                            <path d="M46.9354 36.6571L55.8945 28.0061L44.1565 16.6781L27.5905 0.690705L18.6289 9.33929L46.9354 36.6571Z" fill="#2B2A2A"/>
+                        </svg>
+                    </div>
+                </a>
             {/key}
         </div>
 
@@ -125,12 +205,30 @@
     width: min(1440px, 100%);
     margin: 0 auto;
     overflow: hidden;
+    position: relative;
 }
 
 .stage {
     display: flex;
     gap: 6px;
     aspect-ratio: 12 / 5;   /* roughly 1440 × 600 */
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.stage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.stage a {
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 .sliver {
@@ -139,6 +237,28 @@
 
 .hero {
     flex: 1;
+}
+
+.play-box {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 64px;
+    height: 64px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .25s ease;
+}
+
+.play-box svg {
+    width: 22px;
+    height: 32px;
+}
+
+.hero-card:hover .play-box {
+    transform: scale(1.1);
 }
 
 .card {
@@ -153,25 +273,26 @@
 }
 
 .hero img {
-    transition:opacity .45s ease;
+    transition: opacity .45s ease;
 }
 
 .hero.changing img {
-    opacity:.4;
+    opacity: .4;
 }
 
 .overlay {
-    position:absolute;
-    bottom:0;
-    left:0;
-    right:0;
-    padding:60px;
-    color:white;
-    background:
-        linear-gradient(
-            transparent,
-            rgba(0,0,0,.8)
-        );
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px;
+    color: white;
+    background: linear-gradient(
+        rgba(0, 0, 0, .15),
+        rgba(0, 0, 0, .45)
+    );
 }
 
 .overlay h1 {
@@ -180,34 +301,34 @@
 }
 
 .overlay p {
-    font-size:1.2rem;
-    margin:0;
+    font-size: 1.2rem;
+    margin: 0;
 }
 
 .arrow {
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    z-index:20;
-    width:50px;
-    height:50px;
-    border-radius:50%;
-    border:none;
-    background:rgba(0,0,0,.6);
-    color:white;
-    font-size:32px;
-    cursor:pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,.6);
+    color: white;
+    font-size: 32px;
+    cursor: pointer;
 }
 
 .arrow:hover {
-    background:rgba(0,0,0,.85);
+    background: rgba(0,0,0,.85);
 }
 
 .left {
-    left:20px;
+    left: 20px;
 }
 
 .right {
-    right:20px;
+    right: 20px;
 }
 </style>

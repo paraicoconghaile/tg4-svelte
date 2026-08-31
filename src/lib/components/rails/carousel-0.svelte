@@ -34,11 +34,7 @@
                     <img src={image} alt={item.series.name} />
                     <div class="overlay">
                         <h2>{item.series.name}</h2>
-                        <p>
-                            {isIrish
-                                ? item.series.descGa
-                                : item.series.descEn}
-                        </p>
+                        <p>{isIrish ? item.series.descGa : item.series.descEn}</p>
                     </div>
                 </div>
             {/each}
@@ -85,10 +81,6 @@
     bottom:0;
     padding:40px;
     color:white;
-    background:
-        linear-gradient(
-            transparent,
-            rgba(0,0,0,.8)
-        );
+    background: linear-gradient(transparent, rgba(0,0,0,.8));
 }
 </style>

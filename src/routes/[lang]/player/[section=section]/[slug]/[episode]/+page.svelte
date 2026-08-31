@@ -37,21 +37,21 @@
 
 <style>
 .episode-page {
-    max-width:var(--page-width);
-    margin:0 auto;
-    padding:40px 20px;
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 40px 20px;
 }
 
 .language-switch {
-    background:var(--tg4-pink);
-    color:var(--tg4-white);
-    padding:4px 18px;
-    font-weight:700;
-    transition:background .2s ease;
+    background: var(--tg4-pink);
+    color: var(--tg4-white);
+    padding: 4px 18px;
+    font-weight: 700;
+    transition: background .2s ease;
 }
 
 .language-switch:hover {
-    background:#ff4b91;
+    background: #ff4b91;
 }
 </style>
 

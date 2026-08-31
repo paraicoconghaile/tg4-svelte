@@ -39,7 +39,7 @@
 </script>
 
 <section class="single-content">
-    <a href={link}>
+    <a class="single-card" href={link}>
         <img src={image} alt={displayName}/>
 
         <div class="play-box">
@@ -55,13 +55,8 @@
         </div>
 
         <div class="overlay">
-            <h2>
-                {isIrish ? rail.titleGa : rail.titleEn}
-            </h2>
-
-            <p>
-                {isIrish ? rail.subtitleGa : rail.subtitleEn}
-            </p>
+            <h2>{isIrish ? rail.titleGa : rail.titleEn}</h2>
+            <p>{isIrish ? rail.subtitleGa : rail.subtitleEn}</p>
         </div>
     </a>
 </section>
@@ -86,13 +81,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0,0,0,.75) 0%,
-            rgba(0,0,0,.35) 40%,
-            rgba(0,0,0,.05) 100%
-        );
+    background: linear-gradient(90deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,.35) 40%, rgba(0,0,0,.05) 100%);
 }
 
 .overlay {
@@ -110,8 +99,8 @@
 }
 
 .overlay p {
-    font-size:1.2rem;
-    margin:0;
+    font-size: 1.2rem;
+    margin: 0;
 }
 
 .play-box {
@@ -132,7 +121,7 @@
     height: 32px;
 }
 
-.content-card:hover .play-box {
+.single-card:hover .play-box {
     transform: scale(1.1);
 }
 </style>

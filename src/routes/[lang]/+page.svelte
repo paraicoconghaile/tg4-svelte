@@ -6,9 +6,9 @@
     import SingleContent from '$lib/components/rails/SingleContent.svelte';
 
     let { data } = $props();
-    const isIrish = data.lang === 'ga';
+    let isIrish = $derived(data.lang === 'ga');
 
-    //console.log(data);
+    console.log('RAILS API:', data.rails);
 </script>
 
 {#each data.rails.rails as rail}

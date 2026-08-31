@@ -35,16 +35,16 @@
         isIrish
     } = $props();
 
-
     //console.log(rail);
 </script>
 
 <section class="rail">
     <button class="arrow left" onclick={previous} aria-label="Previous programmes">‹</button>
     {#if rail.titleEn || rail.titleGa}
-        <h2>
-            {isIrish ? rail.titleGa : rail.titleEn}
-        </h2>
+        <h2>{isIrish ? rail.titleGa : rail.titleEn}</h2>
+    {/if}
+    {#if rail.subtitleEn || rail.subtitleGa}
+        <p>{isIrish ? rail.subtitleGa : rail.subtitleEn}</p>
     {/if}
     <div class="embla" use:emblaCarouselSvelte={options} onemblaInit={onEmblaInit}>
         <div class="embla__container">
@@ -102,15 +102,6 @@
     overflow: hidden;
 }
 
-/* .embla__container {
-    display: flex;
-    gap: 20px;
-}
-
-.embla__slide {
-    flex: 0 0 calc(25% - 15px);
-} */
-
 .embla__container {
     display: flex;
     gap: 6px;
@@ -135,13 +126,13 @@
 
 @media (max-width:900px){
     .embla__slide{
-        flex:0 0 calc(50% - 10px);
+        flex: 0 0 calc(50% - 10px);
     }
 }
 
 @media (max-width:600px){
     .embla__slide{
-        flex:0 0 100%;
+        flex: 0 0 100%;
     }
 }
 </style>

@@ -39,7 +39,7 @@ export async function loadSeries(slug:string, lang:string) {
                 : ep.descriptionEn
     }));
 
-    console.log("Episodes:", episodes);
+    //console.log("Episodes:", episodes);
 
     return {
         series,

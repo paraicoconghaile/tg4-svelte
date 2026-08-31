@@ -8,19 +8,9 @@
 
 <section class="category-rail">
     <!-- Information panel -->
-    <div
-        class="intro"
-        style={`
-            background:${rail.backgroundColor};
-            color:${rail.textColor};
-        `}
-    >
-        <h2>
-            {isIrish ? rail.titleGa : rail.titleEn}
-        </h2>
-        <p>
-            {isIrish ? rail.subtitleGa : rail.subtitleEn}
-        </p>
+    <div class="intro" style={`background:${rail.backgroundColor}; color:${rail.textColor};`}>
+        <h2>{isIrish ? rail.titleGa : rail.titleEn}</h2>
+        <p>{isIrish ? rail.subtitleGa : rail.subtitleEn}</p>
     </div>
 
     <!-- Categories -->
@@ -28,11 +18,7 @@
         {@const category = item.category}
         {@const title = isIrish ? category.displayGa : category.displayEn}
         {@const url = isIrish ? category.urlPathGa : category.urlPathEn}
-        <a
-            class="category"
-            href={`/${isIrish ? 'ga' : 'en'}/player/${url}`}
-            style={`background:${category.color ?? '#333'};`}
-        >
+        <a class="category" href={`/${isIrish ? 'ga' : 'en'}/player/${url}`} style={`background:${category.color ?? '#333'};`}>
             <div class="play-box">
                 <svg width="56" height="56" viewBox="18.5 0 35.5 56" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M55.9383 27.9696L46.9742 19.3235L35.2362 30.6515L18.6702 46.6389L27.6318 55.2875L55.9383 27.9696Z" fill="#2B2A2A"/>
@@ -46,50 +32,49 @@
 <style>
 .category-rail {
     max-width: 1440px;
-    min-height:630px;
+    min-height: 630px;
     margin: 0px auto;
     display: grid;
     grid-template-columns: 1fr repeat(4, 177px);
     gap: 5px;
 }
 
-.intro,
-.category {
-    border-radius:0px;
+.intro, .category {
+    border-radius: 0px;
 }
 
 .intro {
-    padding:40px;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .intro h2 {
-    font-size:2.5rem;
-    margin:0;
+    font-size: 2.5rem;
+    margin: 0;
 }
 
 .intro p {
-    font-size:1.2rem;
-    margin:0;
+    font-size: 1.2rem;
+    margin: 0;
 }
 
 .category {
     position: relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:white;
-    font-size:1.4rem;
-    font-weight:bold;
-    text-decoration:none;
-    transition:transform .2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.4rem;
+    font-weight: bold;
+    text-decoration: none;
+    transition: transform .2s ease;
     overflow: hidden;
 }
 
 .category:hover {
-    transform:translateY(-6px);
+    transform: translateY(-6px);
 }
 
 .play-box {
@@ -119,22 +104,19 @@
 
 @media(max-width:1000px){
     .category-rail {
-        grid-template-columns:
-            repeat(2,1fr);
+        grid-template-columns: repeat(2,1fr);
     }
-
     .intro {
-        grid-column:span 2;
+        grid-column: span 2;
     }
 }
 
 @media(max-width:600px){
     .category-rail {
-        grid-template-columns:1fr;
+        grid-template-columns: 1fr;
     }
-
     .intro {
-        grid-column:auto;
+        grid-column: auto;
     }
 }
 </style>

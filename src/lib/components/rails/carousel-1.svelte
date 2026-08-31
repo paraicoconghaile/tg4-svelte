@@ -24,9 +24,7 @@
 
 <section class="carousel">
     {#if rail.titleEn || rail.titleGa}
-        <h2 class="rail-title">
-            {isIrish ? rail.titleGa : rail.titleEn}
-        </h2>
+        <h2 class="rail-title">{isIrish ? rail.titleGa : rail.titleEn}</h2>
     {/if}
 
     <div class="carousel-container">
@@ -40,12 +38,8 @@
                         '/images/placeholder.jpg'
                     }
                     <article class:active={current === index} class="slide">
-
                         <img src={image} alt={item.series.name} />
-
-                        <div class="overlay">
-                            <h2>{item.series.name}</h2>
-                        </div>
+                        <div class="overlay"><h2>{item.series.name}</h2></div>
                     </article>
                 {/each}
             </div>
@@ -106,10 +100,7 @@
     bottom: 0;
     padding: 50px;
     color: white;
-    background: linear-gradient(
-        transparent,
-        rgba(0,0,0,.85)
-    );
+    background: linear-gradient(transparent, rgba(0,0,0,.85));
 }
 
 .overlay h2 {

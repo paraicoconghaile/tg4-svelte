@@ -16,11 +16,8 @@
 </script>
 
 <section class="carousel">
-
     {#if rail.titleEn || rail.titleGa}
-        <h2 class="rail-title">
-            {isIrish ? rail.titleGa : rail.titleEn}
-        </h2>
+        <h2 class="rail-title">{isIrish ? rail.titleGa : rail.titleEn}</h2>
     {/if}
 
     <div class="viewport">
@@ -31,17 +28,10 @@
                     item.series.boxsetImage?.large ??
                     '/images/placeholder.jpg'}
                 <div class="slide">
-                    <img
-                        src={image}
-                        alt={item.series.name}
-                    />
+                    <img src={image} alt={item.series.name} />
                     <div class="overlay">
                         <h2>{item.series.name}</h2>
-                        <p>
-                            {isIrish
-                                ? item.series.descGa
-                                : item.series.descEn}
-                        </p>
+                        <p>{isIrish ? item.series.descGa : item.series.descEn}</p>
                     </div>
                 </div>
             {/each}
@@ -89,10 +79,7 @@
     padding:40px;
     color:white;
     background:
-    linear-gradient(
-        transparent,
-        rgba(0,0,0,.8)
-    );
+    linear-gradient(transparent, rgba(0,0,0,.8));
 }
 
 .overlay p {
