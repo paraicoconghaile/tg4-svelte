@@ -198,6 +198,27 @@
     </div>
 
     <button class="arrow right" onclick={next}>›</button>
+
+    <div class="pagination">
+        {#each slides as _, index}
+            <button
+                class:active={index === current}
+                onclick={() => {
+                    if (index === current || animating) return;
+
+                    direction = index > current ? 'next' : 'prev';
+                    animating = true;
+
+                    setTimeout(() => {
+                        current = index;
+                        animating = false;
+                    }, 450);
+                }}
+                aria-label={`Go to slide ${index + 1}`}
+                aria-current={index === current ? 'true' : undefined}
+            ></button>
+        {/each}
+    </div>
 </section>
 
 <style>
@@ -330,5 +351,36 @@
 
 .right {
     right: 20px;
+}
+
+.pagination {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 30;
+}
+
+.pagination button {
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border: none;
+    border-radius: 0%;
+    background: var(--tg4-pink);
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.pagination button:hover {
+    background: white;
+}
+
+.pagination button.active {
+    width: 28px;
+    border-radius: 0px;
+    background: var(--tg4-pink);
 }
 </style>
