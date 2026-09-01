@@ -9,15 +9,32 @@
     let searchTerm = $state('');
 
     const switchLanguage = $derived.by(() => {
-        const url = new URL(page.url);
+        const currentPath = page.url.pathname;
 
-        if (url.pathname.startsWith('/ga')) {
-            url.pathname = url.pathname.replace(/^\/ga/, '/en');
-        } else if (url.pathname.startsWith('/en')) {
-            url.pathname = url.pathname.replace(/^\/en/, '/ga');
+        function findTranslation(items: typeof navigation): string | null {
+            for (const item of items) {
+                if (item.children) {
+                    const result = findTranslation(item.children);
+                    if (result) return result;
+                }
+
+                if (isIrish && item.hrefGa === currentPath) {
+                    return item.hrefEn ?? null;
+                }
+
+                if (!isIrish && item.hrefEn === currentPath) {
+                    return item.hrefGa ?? null;
+                }
+            }
+
+            return null;
         }
 
-        return url.pathname + url.search + url.hash;
+        const translatedPath =
+            findTranslation(navigation) ??
+            currentPath.replace(/^\/(en|ga)/, isIrish ? '/en' : '/ga');
+
+        return translatedPath + page.url.search + page.url.hash;
     });
 </script>
 

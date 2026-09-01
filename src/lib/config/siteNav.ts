@@ -74,6 +74,36 @@ export const navigation: NavItem[] = [
         hrefGa: '/ga/boxsets'
     },
     {
+        titleEn: 'Schedule',
+        titleGa: 'Sceideal',
+        children: [
+            {
+                titleEn: 'Daily Schedule',
+                titleGa: 'Sceideal an Lae',
+                hrefEn: '/en/daily-schedule',
+                hrefGa: '/ga/sceideal-an-lae'
+            },
+            {
+                titleEn: 'Cúla4 Schedule',
+                titleGa: 'Sceideal Cúla4',
+                hrefEn: '/en/cula4-schedule',
+                hrefGa: '/ga/sceideal-cula4'
+            },
+            {
+                titleEn: 'Sport Schedule',
+                titleGa: 'Sceideal Spóirt',
+                hrefEn: '/en/sport-schedule',
+                hrefGa: '/ga/sceideal-spoirt'
+            },
+            {
+                titleEn: 'Live Sport',
+                titleGa: 'Spórt Beo',
+                hrefEn: '/en/live-sport',
+                hrefGa: '/ga/sport-beo'
+            }
+        ]
+    },
+    {
         titleEn: 'Live',
         titleGa: 'Beo',
         children: [
