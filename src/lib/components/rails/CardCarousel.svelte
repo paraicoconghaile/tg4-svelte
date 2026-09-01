@@ -73,10 +73,12 @@
         isIrish
     } = $props();
 
-    //console.log(rail);
+    console.log('========== CARD RAIL JSON ==========');
+    console.log(JSON.stringify(rail, null, 2));
+    console.log('================================');
 </script>
 
-<section class="rail">
+<section class:boxset-rail={rail.showItemsAsBoxset} class="rail">
     {#if rail.titleEn || rail.titleGa}
         <h2>{isIrish ? rail.titleGa : rail.titleEn}</h2>
     {/if}
@@ -89,10 +91,9 @@
         <div class="embla" use:emblaCarouselSvelte={{options}} onemblaInit={onEmblaInit}>
             <div class="embla__container">
                 {#each rail.items as item}
-                    {@const image =
-                        item.series.boxsetImage?.large ??
-                        item.series.mainImage?.large ??
-                        '/images/placeholder.jpg'
+                    {@const image = rail.showItemsAsBoxset
+                        ? item.series.boxsetImage?.large
+                        : item.series.mainImage?.large
                     }
                     <div class="embla__slide">
                         <a href={`/${isIrish ? 'ga' : 'en'}/player/${item.series.slug}`}><img src={image} alt={item.series.name} />
@@ -165,6 +166,11 @@
     aspect-ratio: 16 / 9;
     object-fit: cover;
     display: block;
+}
+
+/* Boxset / portrait images */
+.boxset-rail .embla__slide img {
+    aspect-ratio: 5 / 7;
 }
 
 .embla__slide h3 {
