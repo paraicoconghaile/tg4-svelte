@@ -4,6 +4,7 @@
     import CategoryRail from '$lib/components/rails/CategoryRail.svelte';
     import DoubleContent from '$lib/components/rails/DoubleContent.svelte';
     import SingleContent from '$lib/components/rails/SingleContent.svelte';
+    import Marketing from '$lib/components/rails/Marketing.svelte';
 
     let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
@@ -22,6 +23,8 @@
         <DoubleContent {rail} {isIrish}/>
     {:else if rail.type === 'SINGLE_CONTENT'}
         <SingleContent {rail} {isIrish}/>
+    {:else if rail.type === 'MARKETING'}
+        <Marketing {rail} {isIrish} />
     {/if}
 {/each}
 

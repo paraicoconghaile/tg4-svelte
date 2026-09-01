@@ -73,9 +73,9 @@
         isIrish
     } = $props();
 
-    console.log('========== CARD RAIL JSON ==========');
+    /* console.log('========== CARD RAIL JSON ==========');
     console.log(JSON.stringify(rail, null, 2));
-    console.log('================================');
+    console.log('================================'); */
 </script>
 
 <section class:boxset-rail={rail.showItemsAsBoxset} class="rail">
@@ -92,7 +92,7 @@
             <div class="embla__container">
                 {#each rail.items as item}
                     {@const image = rail.showItemsAsBoxset
-                        ? item.series.boxsetImage?.large
+                        ? item.series.boxsetImage?.original
                         : item.series.mainImage?.large
                     }
                     <div class="embla__slide">
