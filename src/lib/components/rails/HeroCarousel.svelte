@@ -125,93 +125,134 @@
     }
 </script>
 
+{#if slides.length === 1}
+    <!-- Single image - no carousel -->
+    <section class="carousel single-slide">
+        <a class="single-hero" href={`/${isIrish ? 'ga' : 'en'}/player/${slides[0].slug}`}>
+            <img src={slides[0].image} alt={slides[0].title}/>
 
-<section class="carousel">
-    <button class="arrow left" onclick={previous}>‹</button>
+            <div class="overlay">
+                <h2>{slides[0].title}</h2>
 
-    <div
-        class:animating
-        class:next-animation={direction === 'next'}
-        class:prev-animation={direction === 'prev'}
-        class="stage"
-    >
-        <!-- Previous -->
-        <div class="card sliver">
-            <img src={getSlide(-1).image} alt={getSlide(-1).title} />
-        </div>
+                {#if slides[0].description}
+                    <p>{slides[0].description}</p>
+                {/if}
+            </div>
+            <div class="play-box">
+                <svg
+                    viewBox="18 0 38 56"
+                    width="20"
+                    height="28"
+                    aria-hidden="true"
+                >
+                    <path d="M55.9383 27.9696L46.9742 19.3235L35.2362 30.6515L18.6702 46.6389L27.6318 55.2875L55.9383 27.9696Z" fill="#2B2A2A"/>
+                    <path d="M46.9354 36.6571L55.8945 28.0061L44.1565 16.6781L27.5905 0.690705L18.6289 9.33929L46.9354 36.6571Z" fill="#2B2A2A"/>
+                </svg>
+            </div>
+        </a>
+    </section>
+{:else if slides.length > 1}
+    <section class="carousel">
+        <button class="arrow left" onclick={previous}>‹</button>
 
-        <!-- Hero -->
-        <div class="card hero" onpointerdown={handlePointerDown}>
-            {#key current}
-                <a class="hero-card" href={`/${isIrish ? 'ga' : 'en'}/player/${getSlide(0).slug}`} onclick={handleClick}>
-                    <div
-                        in:fly={{
-                            x: direction === 'next' ? 750 : -750,
-                            duration: 350
-                        }}
-                        out:fly={{
-                            x: direction === 'next' ? -750 : 750,
-                            duration: 350
-                        }}
-                        class="hero-content"
-                    >
-                        <img src={getSlide(0).image} alt={getSlide(0).title} />
-                        <div class="overlay">
-                            <h2>{getSlide(0).title}</h2>
-                            <p>{getSlide(0).description}</p>
-                        </div>
-                    </div>
-                    <div class="play-box">
-                        <svg
-                            viewBox="18 0 38 56"
-                            width="20"
-                            height="28"
-                            aria-hidden="true"
+        <div
+            class:animating
+            class:next-animation={direction === 'next'}
+            class:prev-animation={direction === 'prev'}
+            class="stage"
+        >
+            <!-- Previous -->
+            <div class="card sliver">
+                <img src={getSlide(-1).image} alt={getSlide(-1).title} />
+            </div>
+
+            <!-- Hero -->
+            <div class="card hero" onpointerdown={handlePointerDown}>
+                {#key current}
+                    <a class="hero-card" href={`/${isIrish ? 'ga' : 'en'}/player/${getSlide(0).slug}`} onclick={handleClick}>
+                        <div
+                            in:fly={{
+                                x: direction === 'next' ? 750 : -750,
+                                duration: 350
+                            }}
+                            out:fly={{
+                                x: direction === 'next' ? -750 : 750,
+                                duration: 350
+                            }}
+                            class="hero-content"
                         >
-                            <path d="M55.9383 27.9696L46.9742 19.3235L35.2362 30.6515L18.6702 46.6389L27.6318 55.2875L55.9383 27.9696Z" fill="#2B2A2A"/>
-                            <path d="M46.9354 36.6571L55.8945 28.0061L44.1565 16.6781L27.5905 0.690705L18.6289 9.33929L46.9354 36.6571Z" fill="#2B2A2A"/>
-                        </svg>
-                    </div>
-                </a>
-            {/key}
+                            <img src={getSlide(0).image} alt={getSlide(0).title} />
+                            <div class="overlay">
+                                <h2>{getSlide(0).title}</h2>
+                                <p>{getSlide(0).description}</p>
+                            </div>
+                        </div>
+                        <div class="play-box">
+                            <svg
+                                viewBox="18 0 38 56"
+                                width="20"
+                                height="28"
+                                aria-hidden="true"
+                            >
+                                <path d="M55.9383 27.9696L46.9742 19.3235L35.2362 30.6515L18.6702 46.6389L27.6318 55.2875L55.9383 27.9696Z" fill="#2B2A2A"/>
+                                <path d="M46.9354 36.6571L55.8945 28.0061L44.1565 16.6781L27.5905 0.690705L18.6289 9.33929L46.9354 36.6571Z" fill="#2B2A2A"/>
+                            </svg>
+                        </div>
+                    </a>
+                {/key}
+            </div>
+
+            <!-- Next -->
+            <div class="card sliver">
+                <img src={getSlide(1).image} alt={getSlide(1).title} />
+            </div>
+
+            <!-- Next + 1 -->
+            <div class="card sliver">
+                <img src={getSlide(2).image} alt={getSlide(2).title} />
+            </div>
         </div>
 
-        <!-- Next -->
-        <div class="card sliver">
-            <img src={getSlide(1).image} alt={getSlide(1).title} />
+        <button class="arrow right" onclick={next}>›</button>
+
+        <div class="pagination">
+            {#each slides as _, index}
+                <button
+                    class:active={index === current}
+                    onclick={() => {
+                        if (index === current || animating) return;
+
+                        direction = index > current ? 'next' : 'prev';
+                        animating = true;
+
+                        setTimeout(() => {
+                            current = index;
+                            animating = false;
+                        }, 450);
+                    }}
+                    aria-label={`Go to slide ${index + 1}`}
+                    aria-current={index === current ? 'true' : undefined}
+                ></button>
+            {/each}
         </div>
-
-        <!-- Next + 1 -->
-        <div class="card sliver">
-            <img src={getSlide(2).image} alt={getSlide(2).title} />
-        </div>
-    </div>
-
-    <button class="arrow right" onclick={next}>›</button>
-
-    <div class="pagination">
-        {#each slides as _, index}
-            <button
-                class:active={index === current}
-                onclick={() => {
-                    if (index === current || animating) return;
-
-                    direction = index > current ? 'next' : 'prev';
-                    animating = true;
-
-                    setTimeout(() => {
-                        current = index;
-                        animating = false;
-                    }, 450);
-                }}
-                aria-label={`Go to slide ${index + 1}`}
-                aria-current={index === current ? 'true' : undefined}
-            ></button>
-        {/each}
-    </div>
-</section>
+    </section>
+{/if}
 
 <style>
+.single-hero {
+    display: block;
+    position: relative;
+    aspect-ratio: 12 / 5;
+    overflow: hidden;
+}
+
+.single-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 .carousel {
     width: min(1440px, 100%);
     margin: 0 auto;
@@ -268,7 +309,7 @@
     height: 32px;
 }
 
-.hero-card:hover .play-box {
+.hero-card:hover .play-box, .single-hero:hover .play-box {
     transform: scale(1.1);
 }
 
