@@ -66,7 +66,7 @@
     position: relative;
     max-width: 1440px;
     height: 500px;
-    margin: 20px auto;
+    margin: 0 auto;
     overflow: hidden;
     border-radius: 0px;
 }

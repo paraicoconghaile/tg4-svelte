@@ -72,100 +72,90 @@
 
 <style>
 .carousel {
-    width:min(1440px,100%);
-    margin:50px auto;
-    position:relative;
+    width: min(1440px,100%);
+    margin: 50px auto;
+    position: relative;
 }
 
 .viewport {
-    overflow:hidden;
+    overflow: hidden;
 }
 
 .track {
-    display:flex;
-    gap:6px;
-    transition:
-    transform .45s ease;
+    display: flex;
+    gap: 6px;
+    transition: transform .45s ease;
 }
 
 /* .card {
-    height:600px;
-    flex:0 0 100px;
-    overflow:hidden;
-    position:relative;
+    height: 600px;
+    flex: 0 0 100px;
+    overflow: hidden;
+    position: relative;
 }
 
 .card.hero {
-    flex-basis:
-    calc(100vw - 330px);
-    max-width:1122px;
+    flex-basis: calc(100vw - 330px);
+    max-width: 1122px;
 } */
 
 .card {
-    flex:0 0 100px;
-    transition:
-        flex-basis .45s ease;
+    flex: 0 0 100px;
+    transition: flex-basis .45s ease;
 }
 
 .card.hero {
-    flex-basis:1122px;
+    flex-basis: 1122px;
 }
 
 .card img {
-    width:100%;
-    height:100%;
-    object-fit:cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .overlay {
-    position:absolute;
-    bottom:0;
-    left:0;
-    right:0;
-    padding:40px;
-    color:white;
-    background:
-    linear-gradient(
-    transparent,
-    rgba(0,0,0,.8)
-    );
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 40px;
+    color: white;
+    background: linear-gradient(transparent, rgba(0,0,0,.8));
 }
 
 .arrow {
-    position:absolute;
-    top:50%;
-    transform:
-    translateY(-50%);
-    z-index:10;
-    width:50px;
-    height:50px;
-    border:0;
-    border-radius:50%;
-    background:
-    rgba(0,0,0,.6);
-    color:white;
-    font-size:32px;
-    cursor:pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 50px;
+    height: 50px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(0,0,0,.6);
+    color: white;
+    font-size: 32px;
+    cursor: pointer;
 }
 
 .left {
-    left:20px;
+    left: 20px;
 }
 
 .right {
-    right:20px;
+    right: 20px;
 }
 
 /* Tablet */
 
 @media(max-width:900px){
     .card {
-        height:450px;
+        height: 450px;
     }
 
     .card.hero {
-        flex-basis:
-        calc(100vw - 220px);
+        flex-basis: calc(100vw - 220px);
     }
 }
 
@@ -173,12 +163,12 @@
 
 @media(max-width:700px){
     .card:not(.hero){
-        display:none;
+        display: none;
     }
 
     .card.hero {
-        flex-basis:100%;
-        height:320px;
+        flex-basis: 100%;
+        height: 320px;
     }
 }
 </style>

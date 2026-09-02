@@ -79,12 +79,14 @@
 </script>
 
 <section class:boxset-rail={rail.showItemsAsBoxset} class="rail">
-    {#if rail.titleEn || rail.titleGa}
-        <h2>{isIrish ? rail.titleGa : rail.titleEn}</h2>
-    {/if}
-    {#if rail.subtitleEn || rail.subtitleGa}
-        <p>{isIrish ? rail.subtitleGa : rail.subtitleEn}</p>
-    {/if}
+    <div class="rail-heading">
+        {#if rail.titleEn || rail.titleGa}
+            <h2>{isIrish ? rail.titleGa : rail.titleEn}</h2>
+        {/if}
+        {#if rail.subtitleEn || rail.subtitleGa}
+            <p>{isIrish ? rail.subtitleGa : rail.subtitleEn}</p>
+        {/if}
+    </div>
 
     <div class="carousel-wrapper">
         <button class="arrow left" onclick={previous} aria-label="Previous programmes">‹</button>
@@ -109,8 +111,22 @@
 <style>
 .rail {
     max-width: 1440px;
-    margin: 20px auto;
+    margin: 0 auto;
     position: relative;
+    background-color: #2B2A2A;
+    padding: 30px 0 20px 0;
+}
+
+.rail-heading {
+    margin-left: 55px;
+}
+
+.rail-heading h2 {
+    margin: 0 0 15px;
+}
+
+.rail-heading p {
+    margin: 0 0 20px;
 }
 
 .carousel-wrapper {

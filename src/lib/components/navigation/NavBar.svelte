@@ -111,10 +111,13 @@
 .navbar {
     max-width: 1440px;
     height: 80px;
-    margin: auto;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background-color: #2B2A2A;
+    padding: 0 55px;
+    box-sizing: border-box;
 }
 
 .nav-left {

@@ -36,25 +36,25 @@ function previous() {
 </div>
 
 <style>
-.carousel{
-    max-width:1440px;
-    margin:auto;
-    position:relative;
+.carousel {
+    max-width: 1440px;
+    margin: auto;
+    position: relative;
 }
 
-.viewport{
-    overflow:hidden;
+.viewport {
+    overflow: hidden;
 }
 
-/* .track{
-    display:grid;
+/* .track {
+    display: grid;
     grid-template-columns:
         100px
         1fr
         100px
         100px;
-    gap:6px;
-    height:600px;
+    gap: 6px;
+    height: 600px;
 } */
 
 .track {
@@ -64,34 +64,34 @@ function previous() {
     transition: transform .35s ease;
 }
 
-/* .slide{
-    flex:0 0 78%;
-    height:600px;
-    overflow:hidden;
+/* .slide {
+    flex: 0 0 78%;
+    height: 600px;
+    overflow: hidden;
 } */
 
 .slide {
     flex: 0 0 1200px;
 }
 
-.slide img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-button{
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    z-index:20;
+button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
 }
 
-button:first-child{
-    left:20px;
+button:first-child {
+    left: 20px;
 }
 
-button:last-child{
-    right:20px;
+button:last-child {
+    right: 20px;
 }
 </style>

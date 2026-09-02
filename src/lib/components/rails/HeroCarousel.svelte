@@ -253,7 +253,7 @@
 }
 
 .sliver {
-    flex: 0 0 7%;
+    flex: 0 0 4%;
 }
 
 .hero {

@@ -34,41 +34,41 @@
 
 <style>
 .carousel {
-    max-width:1440px;
-    margin:auto;
-    position:relative;
+    max-width: 1440px;
+    margin: auto;
+    position: relative;
 }
 
 .embla {
-    overflow:hidden;
+    overflow: hidden;
 }
 
 .embla__container{
-    display:flex;
-    gap:6px;
+    display: flex;
+    gap: 6px;
 }
 
 .embla__slide{
-    flex:0 0 88%;
-    position:relative;
-    overflow:hidden;
-    border-radius:0px;
+    flex: 0 0 88%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0px;
 }
 
 .embla__slide img{
-    width:100%;
-    aspect-ratio:16/9;
-    object-fit:cover;
-    display:block;
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    display: block;
 }
 
 .overlay{
-    position:absolute;
-    left:0;
-    right:0;
-    bottom:0;
-    padding:40px;
-    color:white;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 40px;
+    color: white;
     background: linear-gradient(transparent, rgba(0,0,0,.8));
 }
 </style>

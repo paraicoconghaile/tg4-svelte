@@ -49,7 +49,7 @@ let {
 .double-content {
     max-width: 1440px;
     min-height: 610px;
-    margin: 20px auto;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 359px 359px;
     gap: 5px;

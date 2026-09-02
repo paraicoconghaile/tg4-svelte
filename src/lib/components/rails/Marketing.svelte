@@ -52,7 +52,7 @@
 <style>
 .marketing-rail {
     max-width: 1440px;
-    margin: 20px auto;
+    margin: 0 auto;
     position: relative;
 }
 
