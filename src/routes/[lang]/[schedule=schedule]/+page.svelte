@@ -44,7 +44,7 @@
 
 <style>
     .schedule {
-        max-width: 1340px;
+        max-width: 864px;
         margin: 40px auto;
     }
 
@@ -60,18 +60,20 @@
     }
 
     .schedule-time {
-        font-size: 1.2rem;
-        font-weight: 700;
+        font-size: 16px;
+        font-weight: 500;
     }
 
     .schedule-content h2 {
         margin: 0 0 8px;
-        font-size: 1.4rem;
+        font-size: 18px;
+        font-weight: 700;
     }
 
     .description {
         margin: 0 0 8px;
-        font-size: 1rem;
+        font-size: 16px;
+        font-weight: 500;
     }
 
     .subtitle {
@@ -82,7 +84,7 @@
 
     hr {
         border: 0;
-        border-top: 1px solid #ccc;
+        border-top: 1px solid #EBEBEB;
         margin: 0;
     }
 

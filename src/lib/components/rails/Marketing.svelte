@@ -4,47 +4,37 @@
         isIrish
     } = $props();
 
-    const image = rail.image;
-
-    const buttonText = isIrish
-        ? rail.actionButtonTextGa
-        : rail.actionButtonTextEn;
-
-    const buttonUrl = rail.actionButtonUrl;
-
-    const altText = isIrish
-        ? rail.image?.altTextGa
-        : rail.image?.altTextEn;
+    const image = $derived(rail.image);
+    const buttonText = $derived(
+        isIrish ? rail.actionButtonTextGa : rail.actionButtonTextEn
+    );
+    const buttonUrl = $derived(rail.actionButtonUrl);
+    const altText = $derived(
+        isIrish ? rail.image?.altTextGa : rail.image?.altTextEn
+    );
 </script>
 
-<section
-    class="marketing-rail"
-    style={`background:${rail.backgroundColor ?? '#2B2A2A'};`}
->
+<section class="marketing-rail" style={`background:${rail.backgroundColor ?? '#2B2A2A'};`}>
     {#if image}
         <div class="marketing-image">
+            <img src={image.xLarge ?? image.large} alt={altText ?? ''} />
 
-            <img
-                src={image.xLarge ?? image.large}
-                alt={altText ?? ''}
-            />
-
-            {#if buttonText && buttonUrl}
+            <!-- {#if buttonText && buttonUrl} -->
+            {#if buttonText}
                 <div
                     class="marketing-action"
                     class:left={rail.actionButtonPosition === 'LEFT'}
                     class:center={rail.actionButtonPosition === 'CENTER'}
                     class:right={rail.actionButtonPosition === 'RIGHT'}
                 >
-                    <a
-                        href={buttonUrl}
-                        class="marketing-button"
-                    >
-                        {buttonText}
-                    </a>
+                    <a href={buttonUrl} class="marketing-button">{buttonText}</a>
                 </div>
             {/if}
 
+            <div class="overlay">
+                <h2>{isIrish ? rail.titleGa : rail.titleEn}</h2>
+                <p>{isIrish ? rail.subtitleGa : rail.subtitleEn}</p>
+            </div>
         </div>
     {/if}
 </section>
@@ -64,7 +54,6 @@
 .marketing-image img {
     display: block;
     width: 100%;
-    aspect-ratio: 3.5556 / 1;
     object-fit: cover;
 }
 
@@ -100,6 +89,28 @@
 
 .marketing-button:hover {
     background: #ff4b91;
+}
+
+.overlay {
+    position: absolute;
+    left: 70px;
+    bottom: 30%;
+    max-width: 500px;
+    color: white;
+    z-index: 2;
+}
+
+.overlay h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin: 0;
+    font-weight: 700;
+    line-height: 100%;
+}
+
+.overlay p {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    margin: 0;
+    font-weight: 400;
 }
 
 @media (max-width: 600px) {

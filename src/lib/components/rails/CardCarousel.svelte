@@ -123,10 +123,14 @@
 
 .rail-heading h2 {
     margin: 0 0 15px;
+    font-size: clamp(1.5rem, 2.5vw, 2.5rem);
+    font-weight: 400;
 }
 
 .rail-heading p {
     margin: 0 0 20px;
+    font-size: clamp(1rem, 1.5vw, 1.5rem);
+    font-weight: 400;
 }
 
 .carousel-wrapper {
@@ -190,8 +194,9 @@
 }
 
 .embla__slide h3 {
-    margin-top: 12px;
-    font-size: 1rem;
+    margin: 15px 0 0;
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    font-weight: 700;
 }
 
 @media (max-width:900px){

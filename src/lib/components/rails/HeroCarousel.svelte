@@ -141,16 +141,6 @@
         </div>
 
         <!-- Hero -->
-        <!-- <div class="card hero" class:changing={animating}>
-            <img src={getSlide(0).image} alt={getSlide(0).title} />
-            <div class="overlay">
-                <h1>
-                    {getSlide(0).title}
-                </h1>
-                <p></p>
-            </div>
-        </div> -->
-
         <div class="card hero" onpointerdown={handlePointerDown}>
             {#key current}
                 <a class="hero-card" href={`/${isIrish ? 'ga' : 'en'}/player/${getSlide(0).slug}`} onclick={handleClick}>
@@ -167,7 +157,7 @@
                     >
                         <img src={getSlide(0).image} alt={getSlide(0).title} />
                         <div class="overlay">
-                            <h1>{getSlide(0).title}</h1>
+                            <h2>{getSlide(0).title}</h2>
                             <p>{getSlide(0).description}</p>
                         </div>
                     </div>
@@ -316,14 +306,22 @@
     );
 }
 
-.overlay h1 {
-    font-size: 3rem;
+.overlay h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
     margin: 0;
+    font-weight: 700;
 }
 
 .overlay p {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 2vw, 1.5rem);
     margin: 0;
+    font-weight: 400;
+}
+
+@media (max-width: 600px) {
+    .overlay p {
+        display: none;
+    }
 }
 
 .arrow {

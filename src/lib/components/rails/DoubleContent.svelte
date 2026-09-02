@@ -63,13 +63,16 @@ let {
 }
 
 .intro h2 {
-    font-size: 2.5rem;
+    font-size: clamp(2rem, 4vw, 3rem);
     margin: 0;
+    font-weight: 700;
+    line-height: 100%;
 }
 
 .intro p {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 2vw, 1.5rem);
     margin: 0;
+    font-weight: 400;
 }
 
 .content-card {

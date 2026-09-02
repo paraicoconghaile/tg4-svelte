@@ -36,12 +36,15 @@ body {
 h1,
 h2,
 h3 {
-    font-family: var(--font-body);
-    font-weight: 700;
+    font-family: var(--font-brand);
 }
 
 h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
+}
+
+p {
+    font-family: var(--font-body);
 }
 
 .brand {
