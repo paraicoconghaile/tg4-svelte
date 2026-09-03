@@ -6,4 +6,5 @@
 
 <Schedule
     schedule={data.schedule}
+    channel="C4"
 />

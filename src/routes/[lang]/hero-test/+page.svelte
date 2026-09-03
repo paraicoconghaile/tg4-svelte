@@ -3,6 +3,7 @@
     import CardCarousel from '$lib/components/rails/CardCarousel.svelte';
 
     let { data } = $props();
+    let isIrish = $derived(data.lang === 'ga');
 
     const slides = [
         {

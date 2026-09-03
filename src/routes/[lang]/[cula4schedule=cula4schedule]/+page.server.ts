@@ -3,20 +3,19 @@ import { getSchedule } from '$lib/api/schedule';
 
 export async function load({ params }) {
     const validRoutes = {
-        en: 'daily-schedule',
-        ga: 'sceideal-an-lae'
+        en: 'cula4-schedule',
+        ga: 'sceideal-cula4'
     };
 
-    const routes = validRoutes[params.lang as keyof typeof validRoutes];
-
-    if (!routes || !routes.includes(params.schedule)) {
+    if (
+        validRoutes[params.lang as keyof typeof validRoutes] !==
+        params.cula4schedule
+    ) {
         throw error(404, 'Page not found');
     }
 
-    // Today's date in YYYY-MM-DD format
     const today = new Date().toISOString().split('T')[0];
-
-    const schedule = await getSchedule(today);
+    const schedule = await getSchedule(today, 'C4');
 
     return {
         schedule

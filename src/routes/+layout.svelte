@@ -10,6 +10,6 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<Navbar isIrish={false} />
+<Navbar />
 
 {@render children()}

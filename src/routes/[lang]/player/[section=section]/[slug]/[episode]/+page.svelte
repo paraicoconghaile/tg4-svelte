@@ -1,5 +1,7 @@
 <script lang="ts">
     let { data } = $props();
+    let isIrish = $derived(data.lang === 'ga');
+    
     import { genres } from '$lib/config/playerNav';
 
     function getImageUrl(data: any) {
