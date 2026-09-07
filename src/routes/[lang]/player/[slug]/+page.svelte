@@ -224,7 +224,6 @@
    EPISODES
 -------------------------------- */
 .episodes {
-    //padding: 50px 0;
     margin: 0 auto;
     max-width: var(--episode-width);
 }

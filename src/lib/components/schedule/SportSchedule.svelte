@@ -198,16 +198,12 @@
         grid-template-columns: 100px 1fr 40px;
         gap: 30px;
         align-items: center;
-
         padding: 20px 0;
-
         border: 0;
         background: transparent;
         color: inherit;
-
         text-align: left;
         font: inherit;
-
         cursor: pointer;
     }
 
@@ -218,12 +214,14 @@
     .sport-time {
         font-size: 1rem;
         font-weight: 500;
+        line-height: 1.2;
+        margin-bottom: 5px;
     }
 
     .sport-title {
         font-size: 1.125rem;
         font-weight: 700;
-        line-height: 1.3;
+        line-height: 1.2;
     }
 
     .toggle-button {
