@@ -76,9 +76,7 @@
     <section class="episodes">
         {#each episodesBySeries as [seriesNumber, episodes]}
             <section class="series">
-                <h2>
-                    {data.lang === 'ga' ? `Sraith ${seriesNumber}` : `Series ${seriesNumber}`}
-                </h2>
+                <h2>{data.lang === 'ga' ? `Sraith ${seriesNumber}` : `Series ${seriesNumber}`}</h2>
                 <div class="episode-grid">
                     {#each episodes as ep}
                         <article class="episode">
@@ -124,6 +122,7 @@
 .episode-page {
     max-width: var(--page-width);
     margin: 0 auto;
+    background-color: #2B2A2A;
 }
 
 .language-switch {
@@ -225,7 +224,9 @@
    EPISODES
 -------------------------------- */
 .episodes {
-    padding: 50px 0;
+    //padding: 50px 0;
+    margin: 0 auto;
+    max-width: var(--episode-width);
 }
 
 .episodes > h2 {

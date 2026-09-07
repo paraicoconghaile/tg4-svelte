@@ -20,27 +20,32 @@
 </script>
 
 <section class="series-page">
-    <h1>{data.lang === 'ga' ? data.labelGa : data.labelEn}</h1>
+    <section class="episodes">
+        <h1>{data.lang === 'ga' ? data.labelGa : data.labelEn}</h1>
 
-    <div class="series-grid">
-        {#each data.series as item}
-            <a 
-                class="series-card"
-                href={`/${data.lang}/player/${item.slug}`}
-            >
-                <img src={getImageUrl(item)} alt={item.title} onerror={(e) => {e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';}}/>
-                <h3>{item.title}</h3>
-                <p>{item.description}**</p>
-            </a>
-        {/each}
-    </div>
+        <div class="series-grid">
+            {#each data.series as item}
+                <a class="series-card" href={`/${data.lang}/player/${item.slug}`}>
+                    <img src={getImageUrl(item)} alt={item.title} onerror={(e) => {e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';}}/>
+                    <h3>{item.title}</h3>
+                    <p>{item.description}</p>
+                </a>
+            {/each}
+        </div>
+    </section>
 </section>
 
 <style>
 .series-page {
     max-width: var(--page-width);
     margin: 0 auto;
-    padding: 40px 20px;
+    background-color: #2B2A2A;
+}
+
+.episodes {
+    //padding: 50px 0;
+    margin: 0 auto;
+    max-width: var(--episode-width);
 }
 
 .series-grid {

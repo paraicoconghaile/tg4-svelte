@@ -107,112 +107,121 @@
     //console.log('Schedule data:', schedule);
 </script>
 
-<section class="schedule">
-    <h1>
-        {#if channel === 'C4'}
-            {isIrish ? 'Sceideal Cúla4' : 'Cúla4 Schedule'}
-        {:else}
-            {isIrish ? 'Sceideal an Lae' : 'Daily Schedule'}
-        {/if}
-    </h1>
+<section class="schedule-page">
+    <section class="schedule">
+        <h1>
+            {#if channel === 'C4'}
+                {isIrish ? 'Sceideal Cúla4' : 'Cúla4 Schedule'}
+            {:else}
+                {isIrish ? 'Sceideal an Lae' : 'Daily Schedule'}
+            {/if}
+        </h1>
 
-    <div class="date-slider">
-        <button
-            class="date-arrow"
-            aria-label={isIrish ? 'Dátaí roimhe seo' : 'Previous dates'}
-            onclick={() => scrollDates(-1)}
-        >
-            ‹
-        </button>
+        <div class="date-slider">
+            <button
+                class="date-arrow"
+                aria-label={isIrish ? 'Dátaí roimhe seo' : 'Previous dates'}
+                onclick={() => scrollDates(-1)}
+            >
+                ‹
+            </button>
 
-        <div class="dates" bind:this={datesContainer}>
-            {#each dates as date, index}
-                <button
-                    class:active={date.toDateString() === selectedDate.toDateString()}
-                    class="date"
-                    onclick={() => selectDate(date)}
-                >
-                    <span class="date-day">
-                        {#if index === 0}
-                            {isIrish ? 'INNIU' : 'TODAY'}
-                        {:else}
-                            {isIrish
-                                ? weekdaysGa[date.getDay()]
-                                : weekdaysEn[date.getDay()]
-                            }
-                        {/if}
-                    </span>
+            <div class="dates" bind:this={datesContainer}>
+                {#each dates as date, index}
+                    <button
+                        class:active={date.toDateString() === selectedDate.toDateString()}
+                        class="date"
+                        onclick={() => selectDate(date)}
+                    >
+                        <span class="date-day">
+                            {#if index === 0}
+                                {isIrish ? 'INNIU' : 'TODAY'}
+                            {:else}
+                                {isIrish
+                                    ? weekdaysGa[date.getDay()]
+                                    : weekdaysEn[date.getDay()]
+                                }
+                            {/if}
+                        </span>
 
-                    <span class="date-number">
-                        {date.toLocaleDateString(locale, {
-                            day: '2-digit',
-                            month: '2-digit'
-                        })}
-                    </span>
-                </button>
-            {/each}
+                        <span class="date-number">
+                            {date.toLocaleDateString(locale, {
+                                day: '2-digit',
+                                month: '2-digit'
+                            })}
+                        </span>
+                    </button>
+                {/each}
+            </div>
+
+            <button
+                class="date-arrow"
+                aria-label={isIrish ? 'Na chéad dátaí eile' : 'Next dates'}
+                onclick={() => scrollDates(1)}
+            >
+                ›
+            </button>
         </div>
 
-        <button
-            class="date-arrow"
-            aria-label={isIrish ? 'Na chéad dátaí eile' : 'Next dates'}
-            onclick={() => scrollDates(1)}
-        >
-            ›
-        </button>
-    </div>
+        {#each schedule as programme, index}
+            <article class="schedule-row">
 
-    {#each schedule as programme, index}
-        <article class="schedule-row">
-
-            <div class="schedule-time">
-                {programme.time}
-            </div>
-
-            <div class="schedule-main">
-
-                <div class="schedule-title-row">
-                    <div class="schedule-title">
-                        <h2>{programme.title}</h2>
-
-                        {#if programme.subtitle}
-                            <p class="subtitle">
-                                {programme.subtitle}
-                            </p>
-                        {/if}
-                    </div>
-
-                    <div class="schedule-toggle">
-                        <button
-                            class="toggle-button"
-                            onclick={() => toggleProgramme(index)}
-                            aria-label={
-                                openProgramme === index
-                                    ? 'Close programme details'
-                                    : 'Show programme details'
-                            }
-                        >
-                            {openProgramme === index ? '×' : '↓'}
-                        </button>
-                    </div>
+                <div class="schedule-time">
+                    {programme.time}
                 </div>
 
-                {#if openProgramme === index}
-                    <div class="programme-details">
-                        <p class="description">
-                            {isIrish ? programme.gaetext : programme.engtext}
-                        </p>
+                <div class="schedule-main">
+
+                    <div class="schedule-title-row">
+                        <div class="schedule-title">
+                            <h2>{programme.title}</h2>
+
+                            {#if programme.subtitle}
+                                <p class="subtitle">
+                                    {programme.subtitle}
+                                </p>
+                            {/if}
+                        </div>
+
+                        <div class="schedule-toggle">
+                            <button
+                                class="toggle-button"
+                                onclick={() => toggleProgramme(index)}
+                                aria-label={
+                                    openProgramme === index
+                                        ? 'Close programme details'
+                                        : 'Show programme details'
+                                }
+                            >
+                                {openProgramme === index ? '×' : '↓'}
+                            </button>
+                        </div>
                     </div>
-                {/if}
 
-            </div>
+                    {#if openProgramme === index}
+                        <div class="programme-details">
+                            <p class="description">
+                                {isIrish ? programme.gaetext : programme.engtext}
+                            </p>
+                        </div>
+                    {/if}
 
-        </article>
-        <hr />
-    {/each}
+                </div>
+
+            </article>
+            <hr />
+        {/each}
+    </section>
 </section>
 
 <style>
+    .schedule-page {
+        max-width: var(--page-width);
+        margin: 0 auto;
+        padding: 40px 20px;
+        background: #403f3f;
+    }
+
     .date-slider {
         display: flex;
         align-items: center;
