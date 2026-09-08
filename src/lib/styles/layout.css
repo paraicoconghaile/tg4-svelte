@@ -7,3 +7,8 @@
 section {
     margin-bottom:var(--section-gap);
 }
+
+section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 10px;
+}

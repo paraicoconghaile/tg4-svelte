@@ -5,18 +5,15 @@
     import { genres } from '$lib/config/playerNav';
 
     function getImageUrl(item: any) {
-        if (item.programme.custom_fields?.p_prodcode) {
-            return `https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto:eco/${item.programme.custom_fields.p_prodcode}.jpg`;
-        }
-
-        if (item.programme.custom_fields?.s_prodcode) {
-            return `https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto:eco/${item.programme.custom_fields.s_prodcode}.jpg`;
-        }
-
-        return (item.programme.poster || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg');
+        return (
+            item.programme?.heroImage?.large ||
+            item.programme?.heroImage?.thumbnail ||
+            item.programme?.poster ||
+            'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg'
+        );
     }
 
-  	//console.log(data);
+    console.log("Data", JSON.stringify(data, null, 2));
 </script>
 
 <section class="series-page">

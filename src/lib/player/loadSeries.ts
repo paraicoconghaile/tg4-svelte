@@ -1,48 +1,76 @@
 import { error } from '@sveltejs/kit';
 import { getSeries, getSeriesVideos } from '$lib/api/tg4_1';
 
-export async function loadSeries(slug:string, lang:string) {
+export async function loadSeries(slug: string, lang: string) {
     const series = await getSeries(slug);
 
     if (!series) {
         throw error(404, 'Series not found');
     }
 
-    console.log(series);
+    console.log("Series", series);
 
-    const seasonNumber = series.seasons?.[0]?.number;
-    const rawEpisodes = await getSeriesVideos(series.series.slug, seasonNumber);
+    // Get latest season only
+    const latestSeason = series.seasons[0];
 
-    /* console.log("Raw Episodes:", rawEpisodes);
-    console.log('Raw Episodes:', JSON.stringify(rawEpisodes, null, 2));
-    console.log("Type:", typeof rawEpisodes);
-    console.log("Is Array:", Array.isArray(rawEpisodes)); */
-
-    if (!rawEpisodes) {
-        throw error(404, 'Episodes not found');
+    if (!latestSeason) {
+        throw error(404, 'Seasons not found');
     }
 
-    const episodes = rawEpisodes.videos.map((ep) => ({
+    const seasonNumber = latestSeason.number;
+
+    //console.log("Loading latest season:", seasonNumber);
+
+    const rawEpisodes = await getSeriesVideos(
+        series.series.slug,
+        seasonNumber
+    );
+
+    const episodes = rawEpisodes?.videos?.map((ep) => ({
         title: ep.displayName,
         episodeID: ep.vid,
         episodeNumber: ep.episodeNumber,
         seriesNumber: ep.seasonNumber,
         prodCode: ep.pCode,
         seriesCode: ep.customFields.s_prodcode,
-        seriesDescription:
-            lang === 'ga'
-                ? ep.customFields.seriesdescg
-                : ep.customFields.seriesdesce,
-        episodeDescription:
-            lang === 'ga'
-                ? ep.descriptionGa
-                : ep.descriptionEn
-    }));
-
-    //console.log("Episodes:", episodes);
+        seriesDescription: lang === 'ga' ? ep.customFields.seriesdescg : ep.customFields.seriesdesce,
+        episodeDescription: lang === 'ga' ? ep.descriptionGa : ep.descriptionEn
+    })) ?? [];
 
     return {
         series,
+        seasons: [
+            {
+                seasonNumber,
+                episodes
+            }
+        ]
+    };
+}
+
+export async function loadSeason(
+    seriesSlug: string,
+    seasonNumber: number,
+    lang: string
+) {
+    const rawEpisodes = await getSeriesVideos(
+        seriesSlug,
+        seasonNumber
+    );
+
+    const episodes = rawEpisodes?.videos?.map((ep) => ({
+        title: ep.displayName,
+        episodeID: ep.vid,
+        episodeNumber: ep.episodeNumber,
+        seriesNumber: ep.seasonNumber,
+        prodCode: ep.pCode,
+        seriesCode: ep.customFields.s_prodcode,
+        seriesDescription: lang === 'ga' ? ep.customFields.seriesdescg : ep.customFields.seriesdesce,
+        episodeDescription: lang === 'ga' ? ep.descriptionGa : ep.descriptionEn
+    })) ?? [];
+
+    return {
+        seasonNumber,
         episodes
     };
 }
