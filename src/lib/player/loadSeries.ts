@@ -8,7 +8,7 @@ export async function loadSeries(slug:string, lang:string) {
         throw error(404, 'Series not found');
     }
 
-    //console.log(series);
+    console.log(series);
 
     const seasonNumber = series.seasons?.[0]?.number;
     const rawEpisodes = await getSeriesVideos(series.series.slug, seasonNumber);

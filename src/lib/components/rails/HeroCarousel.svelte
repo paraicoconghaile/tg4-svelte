@@ -17,6 +17,9 @@
                 description: isIrish
                     ? item.series.descGa
                     : item.series.descEn,
+                tagline: isIrish
+                    ? item.series.taglineGa
+                    : item.series.taglineEn,
                 image:
                     item.series.mainImage?.large ??
                     item.series.boxsetImage?.large ??
@@ -134,8 +137,8 @@
             <div class="overlay">
                 <h2>{slides[0].title}</h2>
 
-                {#if slides[0].description}
-                    <p>{slides[0].description}</p>
+                {#if slides[0].tagline}
+                    <p>{slides[0].tagline}</p>
                 {/if}
             </div>
             <div class="play-box">
@@ -184,7 +187,9 @@
                             <img src={getSlide(0).image} alt={getSlide(0).title} />
                             <div class="overlay">
                                 <h2>{getSlide(0).title}</h2>
-                                <p>{getSlide(0).description}</p>
+                                {#if slides[0].tagline}
+                                    <p>{slides[0].tagline}</p>
+                                {/if}
                             </div>
                         </div>
                         <div class="play-box">

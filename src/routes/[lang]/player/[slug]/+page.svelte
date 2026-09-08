@@ -41,7 +41,7 @@
     	return (ep.poster || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg');
   	}
 
-  	//console.log("Data", JSON.stringify(data, null, 2));
+  	console.log("Data", JSON.stringify(data, null, 2));
 </script>
 
 <section class="episode-page">
@@ -122,7 +122,7 @@
 .episode-page {
     max-width: var(--page-width);
     margin: 0 auto;
-    background-color: #2B2A2A;
+    background-color: #403f3f;
 }
 
 .language-switch {

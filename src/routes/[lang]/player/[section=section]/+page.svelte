@@ -39,7 +39,8 @@
 .series-page {
     max-width: var(--page-width);
     margin: 0 auto;
-    background-color: #2B2A2A;
+    padding: 20px;
+    background-color: #403f3f;
 }
 
 .episodes {

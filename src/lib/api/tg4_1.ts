@@ -56,8 +56,8 @@ export async function getVideo(videoId: string) {
     });
 
 
-    /* console.log('Status:', response.status);
-    console.log('Response:', response); */
+    /* */ console.log('Status:', response.status);
+    console.log('Response:', response);
 
     if (!response.ok) {
         throw new Error(`API Error: ${response.status}`);

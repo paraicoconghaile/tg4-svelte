@@ -41,7 +41,8 @@
 .episode-page {
     max-width: var(--page-width);
     margin: 0 auto;
-    padding: 40px 20px;
+    background-color: #403f3f;
+    padding: 20px;
 }
 
 .language-switch {
@@ -54,6 +55,12 @@
 
 .language-switch:hover {
     background: #ff4b91;
+}
+
+
+.episodes {
+    margin: 0 auto;
+    max-width: var(--episode-width);
 }
 </style>
 

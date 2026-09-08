@@ -165,7 +165,7 @@
     .schedule-page {
         max-width: var(--page-width);
         margin: 0 auto;
-        padding: 40px 20px;
+        padding: 20px;
         background: #403f3f;
     }
 

@@ -106,17 +106,22 @@
         </div>
     {/if}
 
-    <h1>{data.video.seriesTitle}</h1>
+    <section class="episodes">
+        <h1>{data.video.seriesTitle}</h1>
 
-    <p>{data.video.description}</p>
+        <p>Season {data.video.seriesNumber}, Episode {data.video.episodeNumber}, Duration {data.video.duration}</p>
 
-    <p><a class="language-switch" href={`/${data.lang}/player/${data.slug}`}>{data.backLabel}</a></p>
+        <p>{data.video.description}</p>
+
+        <p><a class="language-switch" href={`/${data.lang}/player/${data.slug}`}>{data.backLabel}</a></p>
+    </section>
 </section>
 
 <style>
 .episode-page {
     max-width: var(--page-width);
     margin: 0 auto;
+    background-color: #403f3f;
 }
 
 .language-switch {
@@ -185,6 +190,11 @@
 .player-container :global(.vjs-tech) {
     width: 100%;
     height: 100%;
+}
+
+.episodes {
+    margin: 0 auto;
+    max-width: var(--episode-width);
 }
 </style>
 
