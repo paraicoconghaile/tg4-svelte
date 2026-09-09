@@ -8,8 +8,9 @@ export async function loadSeries(slug: string, lang: string) {
         throw error(404, 'Series not found');
     }
 
-    /* console.log("POCO");
-    console.log("Raw Series:", series); */
+    /* console.log('========== SERIES JSON ==========');
+    console.log("Raw Series:", series);
+    console.log('================================'); */
 
     // Get latest season only
     const latestSeason = series.seasons[0];

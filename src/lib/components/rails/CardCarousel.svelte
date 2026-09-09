@@ -74,7 +74,7 @@
     } = $props();
 
     /* console.log('========== CARD RAIL JSON ==========');
-    console.log(JSON.stringify(rail, null, 2));
+    console.log("Card Rail Data:", JSON.stringify(rail, null, 2));
     console.log('================================'); */
 </script>
 
@@ -93,13 +93,32 @@
         <div class="embla" use:emblaCarouselSvelte={{options}} onemblaInit={onEmblaInit}>
             <div class="embla__container">
                 {#each rail.items as item}
+                    {@const isSeries = item.type === 'SERIES'}
+                    {@const content = isSeries ? item.series : item.video}
+
                     {@const image = rail.showItemsAsBoxset
-                        ? item.series.boxsetImage?.original
-                        : item.series.mainImage?.large
+                        ? (content.boxsetImage?.original ?? content.image?.original)
+                        : (content.mainImage?.large ?? content.image?.large)
                     }
+
+                    {@const name = isSeries
+                        ? content.name
+                        : content.displayName
+                    }
+
                     <div class="embla__slide">
-                        <a href={`/${isIrish ? 'ga' : 'en'}/player/${item.series.slug}`}><img src={image} alt={item.series.name} />
-                        <h3>{item.series.name}</h3></a>
+                        {#if isSeries}
+                            <a href={`/${isIrish ? 'ga' : 'en'}/player/${content.slug}`}>
+                                <img src={image} alt={name} />
+                                <h3>{name}</h3>
+                            </a>
+                        {:else}
+                            <!-- Keep your existing VIDEO URL here -->
+                            <a href="#">
+                                <img src={image} alt={name} />
+                                <h3>{name}</h3>
+                            </a>
+                        {/if}
                     </div>
                 {/each}
             </div>
