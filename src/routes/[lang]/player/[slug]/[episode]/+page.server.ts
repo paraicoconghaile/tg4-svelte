@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { getGenre, getVideo } from '$lib/api/tg4_1';
+import { getGenre, getVideo, getSeriesVideos } from '$lib/api/tg4_1';
 import { getGenreByKey } from '$lib/config/playerNav';
 
 export async function load({ params }) {
@@ -31,7 +31,7 @@ export async function load({ params }) {
     } */
 
     const rawVideo = await getVideo(params.episode);
-    //console.log('Raw Video', JSON.stringify(rawVideo, null, 2));
+    console.log('Raw Video', JSON.stringify(rawVideo, null, 2));
 
     if (!rawVideo) {
         throw error(404, 'Video not found');
@@ -49,8 +49,37 @@ export async function load({ params }) {
         seriesCode: rawVideo.video.customFields.s_prodcode,
         duration: rawVideo.video.duration,
         airDate: rawVideo.video.airDate,
-        categories: rawVideo.categories
+        categories: rawVideo.categories,
+        subtitles: rawVideo.video.subtitles,
+        contentRating: rawVideo.video.contentRating
     };
+
+    const rawEpisodes = await getSeriesVideos(
+        params.slug,
+        Number(rawVideo.video.customFields.series)
+    );
+
+    const otherEpisodes = (rawEpisodes?.videos ?? [])
+        .filter((ep) => {
+            const episodeId = String(ep.vid).replace(/^BC-/, '');
+            const currentId = String(video.videoId).replace(/^BC-/, '');
+
+            return episodeId !== currentId;
+        })
+        .slice(0, 4)
+        .map((ep) => ({
+            title: ep.displayName,
+            episodeID: ep.vid,
+            episodeNumber: ep.episodeNumber,
+            seriesNumber: ep.seasonNumber,
+            prodCode: ep.pCode,
+            seriesCode: ep.customFields?.s_prodcode,
+            description:
+                params.lang === 'ga'
+                    ? ep.descriptionGa
+                    : ep.descriptionEn,
+            duration: ep.duration
+        }));
 
     return {
         lang: params.lang,
@@ -60,6 +89,7 @@ export async function load({ params }) {
         //backRoute: currentGenre.key[params.lang],
         //routeGa: currentGenre.key.ga,
         //routeEn: currentGenre.key.en,
-        video
+        video,
+        otherEpisodes
     };
 }

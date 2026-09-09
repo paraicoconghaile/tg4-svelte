@@ -85,7 +85,22 @@
         );
     }
 
-    console.log("Series Data", JSON.stringify(data, null, 2));
+    const subtitleLanguages: Record<string, Record<string, string>> = {
+        en: {
+            en: 'English',
+            ga: 'Irish'
+        },
+        ga: {
+            en: 'Béarla',
+            ga: 'Gaeilge'
+        }
+    };
+
+    function getLanguageName(code: string, lang: string) {
+        return subtitleLanguages[lang]?.[code] ?? code;
+    }
+
+    //console.log("Series Data", JSON.stringify(data, null, 2));
 </script>
 
 <section class="episode-page">
@@ -112,7 +127,21 @@
                     <p>{description}</p>
                 {/if}
                     
-                <p>{data.series.series.subtitles} {data.series.series.contentRating}</p>
+                <p>
+                {#each data.series.series.subtitles as subtitle}
+                    <!-- <span class="subtitles-icon" title="Subtitles">
+                        CC
+                    </span> -->
+                    <span class="languages">
+                        {getLanguageName(subtitle, data.lang)}
+                    </span>
+                {/each}
+                {#if data.series.series.contentRating}
+                    <span class="content-rating">
+                        {data.series.series.contentRating}
+                    </span>
+                {/if}
+                </p>
 
                 <div class="hero-buttons">
                     <a class="play-button">▶&nbsp; {data.lang === 'ga' ? 'Féach' : 'Watch now'}</a>
@@ -508,6 +537,37 @@
 
 .episode:hover .play-icon {
     transform: scale(1.1);
+}
+
+.languages {
+    margin-right: 10px;
+}
+
+.content-rating {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 6px;
+    border: 2px solid white;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    box-sizing: border-box;
+}
+
+.subtitles-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 2px solid currentColor;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
 }
 
 /* --------------------------------

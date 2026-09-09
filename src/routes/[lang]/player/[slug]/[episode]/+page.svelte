@@ -97,7 +97,22 @@
         return `${day} ${month} ${year}`;
     }
 
-    //console.log("Episode", JSON.stringify(data, null, 2));
+    const subtitleLanguages: Record<string, Record<string, string>> = {
+        en: {
+            en: 'English',
+            ga: 'Irish'
+        },
+        ga: {
+            en: 'Béarla',
+            ga: 'Gaeilge'
+        }
+    };
+
+    function getLanguageName(code: string, lang: string) {
+        return subtitleLanguages[lang]?.[code] ?? code;
+    }
+
+    console.log("Episode Data", JSON.stringify(data, null, 2));
 </script>
 
 <section class="episode-page">
@@ -175,6 +190,24 @@
 
                 <p>{data.video.description}</p>
 
+                <p>
+                    {#if data.video.subtitles?.length}
+                        {#each data.video.subtitles as subtitle}
+                            <!-- <span class="subtitles-icon" title="Subtitles">
+                                CC
+                            </span> -->
+                            <span class="languages">
+                                {getLanguageName(subtitle, data.lang)}
+                            </span>
+                        {/each}
+                    {/if}
+                    {#if data.video.contentRating}
+                        <span class="content-rating">
+                            {data.video.contentRating}
+                        </span>
+                    {/if}
+                </p>
+
                 {#if data.video.categories?.length}
                     <div class="categories">
                         {#each data.video.categories as category}
@@ -187,7 +220,7 @@
 
                 <p>{formatDate(data.video.airDate)}</p>
 
-                <p>
+                <p><br />
                     <a
                         class="language-switch"
                         href={`/${data.lang}/player/${data.slug}`}
@@ -201,6 +234,38 @@
                 <a class="language-switch">+</a>&nbsp;<a class="language-switch">Bookmark</a>
             </div>
         </section>
+    </section>
+
+    <section class="episodes">
+        <h2>
+            {data.lang === 'ga'
+                ? 'Tuilleadh Eipeasóid'
+                : 'More episodes'}
+        </h2>
+
+        <div class="episode-grid">
+            {#each data.otherEpisodes as ep}
+                <a
+                    class="episode-card"
+                    href={`/${data.lang}/player/${data.slug}/${ep.episodeID}`}
+                >
+                    <img
+                        src={ep.prodCode
+                            ? `https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto:eco/${ep.prodCode}.jpg`
+                            : 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg'}
+                        alt={ep.title}
+                    />
+
+                    <h3>{ep.title}</h3>
+
+                    <p>
+                        {data.lang === 'ga'
+                            ? `Sraith ${ep.seriesNumber}, Eipeasóid ${ep.episodeNumber}`
+                            : `Series ${ep.seriesNumber}, Episode ${ep.episodeNumber}`}
+                    </p>
+                </a>
+            {/each}
+        </div>
     </section>
 </section>
 
@@ -315,6 +380,76 @@
 
 .categories span {
     margin-right: 10px;
+}
+
+.languages {
+    margin-right: 10px;
+}
+
+.content-rating {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 6px;
+    border: 2px solid white;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    box-sizing: border-box;
+}
+
+.subtitles-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 2px solid currentColor;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.episode-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.episode-card {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.episode-card img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+.episode-card h3 {
+    margin: 10px 0 5px;
+}
+
+.episode-card p {
+    margin: 0;
+}
+
+@media (max-width: 800px) {
+    .episode-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .episode-grid {
+        grid-template-columns: 1fr;
+    }
 }
 </style>
 

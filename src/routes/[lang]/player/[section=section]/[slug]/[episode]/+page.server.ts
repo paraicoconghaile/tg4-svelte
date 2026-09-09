@@ -1,9 +1,9 @@
 import { error } from '@sveltejs/kit';
-import { getGenre, getVideo } from '$lib/api/tg4_1';
+import { getGenre, getVideo, getSeriesVideos } from '$lib/api/tg4_1';
 import { getGenreByKey } from '$lib/config/playerNav';
 
 export async function load({ params }) {
-    //console.log("SECTION EPISODE ROUTE", params);
+    //console.log("SHORT EPISODE ROUTE", params);
 
     const categoryMap: Record<string, string> = {
         faisneis: 'documentaries',
@@ -24,42 +24,72 @@ export async function load({ params }) {
         'childrens-tv-shows': 'Cula4'
     };
 
-    const currentGenre = getGenreByKey(params.section);
+    /* const currentGenre = getGenreByKey(params.section);
 
     if (!currentGenre) {
         throw error(404, 'Unknown category');
-    }
+    } */
 
     const rawVideo = await getVideo(params.episode);
-    //console.log('Raw Video', JSON.stringify(rawVideo, null, 2));
+    console.log('Raw Video', JSON.stringify(rawVideo, null, 2));
 
     if (!rawVideo) {
         throw error(404, 'Video not found');
     }
 
     const video = {
-        videoId: rawVideo.videoId,
-        title: rawVideo.brightcoveVideo.custom_fields?.title ?? rawVideo.title,
-        seriesTitle: rawVideo.brightcoveVideo.custom_fields.seriestitle,
-        seriesNumber: rawVideo.brightcoveVideo.custom_fields.series,
-        episodeNumber: rawVideo.brightcoveVideo.custom_fields.episode,
-        description:
-            params.lang === 'ga'
-                ? rawVideo.brightcoveVideo.custom_fields?.longdescgaeilge
-                : rawVideo.description,
-        poster: rawVideo.brightcoveVideo.poster,
-        prodCode: rawVideo.brightcoveVideo.custom_fields.p_prodcode,
-        seriesCode: rawVideo.brightcoveVideo.custom_fields.s_prodcode
+        videoId: rawVideo.video.providerId,
+        title: rawVideo.video.customFields?.title ?? rawVideo.title,
+        seriesTitle: rawVideo.video.customFields.seriestitle,
+        seriesNumber: rawVideo.video.customFields.series,
+        episodeNumber: rawVideo.video.customFields.episode,
+        description: params.lang === 'ga' ? rawVideo.video.descriptionGa : rawVideo.video.descriptionEn,
+        poster: rawVideo.video.image.xLarge,
+        prodCode: rawVideo.video.customFields.p_prodcode,
+        seriesCode: rawVideo.video.customFields.s_prodcode,
+        duration: rawVideo.video.duration,
+        airDate: rawVideo.video.airDate,
+        categories: rawVideo.categories,
+        subtitles: rawVideo.video.subtitles,
+        contentRating: rawVideo.video.contentRating
     };
+
+    const rawEpisodes = await getSeriesVideos(
+        params.slug,
+        Number(rawVideo.video.customFields.series)
+    );
+
+    const otherEpisodes = (rawEpisodes?.videos ?? [])
+        .filter((ep) => {
+            const episodeId = String(ep.vid).replace(/^BC-/, '');
+            const currentId = String(video.videoId).replace(/^BC-/, '');
+
+            return episodeId !== currentId;
+        })
+        .slice(0, 4)
+        .map((ep) => ({
+            title: ep.displayName,
+            episodeID: ep.vid,
+            episodeNumber: ep.episodeNumber,
+            seriesNumber: ep.seasonNumber,
+            prodCode: ep.pCode,
+            seriesCode: ep.customFields?.s_prodcode,
+            description:
+                params.lang === 'ga'
+                    ? ep.descriptionGa
+                    : ep.descriptionEn,
+            duration: ep.duration
+        }));
 
     return {
         lang: params.lang,
         section: params.section,
         slug: params.slug,
-        backRoute: currentGenre.key[params.lang],
         backLabel: params.lang === 'ga' ? 'SIAR' : 'BACK',
-        routeGa: currentGenre.key.ga,
-        routeEn: currentGenre.key.en,
-        video
+        //backRoute: currentGenre.key[params.lang],
+        //routeGa: currentGenre.key.ga,
+        //routeEn: currentGenre.key.en,
+        video,
+        otherEpisodes
     };
 }
