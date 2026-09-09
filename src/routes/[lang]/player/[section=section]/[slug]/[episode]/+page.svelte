@@ -16,7 +16,7 @@
         return (video.poster || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg');
     }
 
-    //console.log(data);
+    //console.log("Data", JSON.stringify(data, null, 2));
 </script>
 
 <section class="episode-page">

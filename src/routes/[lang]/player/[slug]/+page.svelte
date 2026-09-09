@@ -85,7 +85,7 @@
         );
     }
 
-    console.log("Data", JSON.stringify(data, null, 2));
+    console.log("Series Data", JSON.stringify(data, null, 2));
 </script>
 
 <section class="episode-page">
@@ -199,9 +199,20 @@
                         </div>
 
                         <div class="episode-info">
-                            <h3>{data.lang === 'ga' ? 'Eipeasóid' : 'Episode'}{ep.episodeNumber}</h3>
+                            <h3>{data.lang === 'ga' ? 'Eipeasóid' : 'Episode'} {ep.episodeNumber}</h3>
 
-                            <p>S{ep.seriesNumber} E{ep.episodeNumber}</p>
+                            <p>
+                                S{ep.seriesNumber}
+                                E{ep.episodeNumber}
+                                {#if ep.duration >= 3600}
+                                    {Math.floor(ep.duration / 3600)}{data.lang === 'ga' ? 'h' : 'h'}
+                                    {#if Math.floor((ep.duration % 3600) / 60) > 0}
+                                        {Math.floor((ep.duration % 3600) / 60)}{data.lang === 'ga' ? 'm' : 'm'}
+                                    {/if}
+                                {:else}
+                                    {Math.floor(ep.duration / 60)}{data.lang === 'ga' ? 'm' : 'm'}
+                                {/if}
+                            </p>
 
                             <p>{ep.episodeDescription}</p>
                         </div>

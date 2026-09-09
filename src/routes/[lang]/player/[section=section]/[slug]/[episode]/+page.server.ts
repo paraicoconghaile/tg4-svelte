@@ -31,7 +31,7 @@ export async function load({ params }) {
     }
 
     const rawVideo = await getVideo(params.episode);
-    //console.log(JSON.stringify(rawVideo, null, 2));
+    //console.log('Raw Video', JSON.stringify(rawVideo, null, 2));
 
     if (!rawVideo) {
         throw error(404, 'Video not found');

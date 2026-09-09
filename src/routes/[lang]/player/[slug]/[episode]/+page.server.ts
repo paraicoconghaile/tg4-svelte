@@ -31,7 +31,7 @@ export async function load({ params }) {
     } */
 
     const rawVideo = await getVideo(params.episode);
-    console.log(JSON.stringify(rawVideo, null, 2));
+    //console.log('Raw Video', JSON.stringify(rawVideo, null, 2));
 
     if (!rawVideo) {
         throw error(404, 'Video not found');
@@ -44,11 +44,12 @@ export async function load({ params }) {
         seriesNumber: rawVideo.video.customFields.series,
         episodeNumber: rawVideo.video.customFields.episode,
         description: params.lang === 'ga' ? rawVideo.video.descriptionGa : rawVideo.video.descriptionEn,
-        //poster: rawVideo.video.poster,
         poster: rawVideo.video.image.xLarge,
         prodCode: rawVideo.video.customFields.p_prodcode,
         seriesCode: rawVideo.video.customFields.s_prodcode,
-        duration: rawVideo.video.duration
+        duration: rawVideo.video.duration,
+        airDate: rawVideo.video.airDate,
+        categories: rawVideo.categories
     };
 
     return {

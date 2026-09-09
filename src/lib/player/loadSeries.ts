@@ -8,7 +8,8 @@ export async function loadSeries(slug: string, lang: string) {
         throw error(404, 'Series not found');
     }
 
-    console.log("Series", series);
+    /* console.log("POCO");
+    console.log("Raw Series:", series); */
 
     // Get latest season only
     const latestSeason = series.seasons[0];
@@ -18,7 +19,6 @@ export async function loadSeries(slug: string, lang: string) {
     }
 
     const seasonNumber = latestSeason.number;
-
     //console.log("Loading latest season:", seasonNumber);
 
     const rawEpisodes = await getSeriesVideos(
@@ -26,11 +26,16 @@ export async function loadSeries(slug: string, lang: string) {
         seasonNumber
     );
 
+    //console.log("Raw Episodes:", rawEpisodes);
+
     const episodes = rawEpisodes?.videos?.map((ep) => ({
         title: ep.displayName,
         episodeID: ep.vid,
         episodeNumber: ep.episodeNumber,
         seriesNumber: ep.seasonNumber,
+        duration: ep.duration,
+        geoRestricted: ep.geoRestricted,
+        contentRating: ep.contentRating,
         prodCode: ep.pCode,
         seriesCode: ep.customFields.s_prodcode,
         seriesDescription: lang === 'ga' ? ep.customFields.seriesdescg : ep.customFields.seriesdesce,

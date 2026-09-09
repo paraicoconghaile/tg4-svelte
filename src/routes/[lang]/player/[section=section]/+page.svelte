@@ -13,7 +13,7 @@
         );
     }
 
-    console.log("Data", JSON.stringify(data, null, 2));
+    //console.log("Section Data", JSON.stringify(data, null, 2));
 </script>
 
 <section class="series-page">

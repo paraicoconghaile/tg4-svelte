@@ -8,7 +8,6 @@ export async function getSchedule(date: string, channel?: string) {
     }
 
     //console.log('SCHEDULE API URL:', url);
-
     const response = await fetch(url);
 
     if (!response.ok) {
@@ -20,9 +19,7 @@ export async function getSchedule(date: string, channel?: string) {
 
 export async function getSportSchedule() {
     const url = `${API_URL}?playercat=${encodeURIComponent('Spórt')}`;
-
-    console.log('SPORT SCHEDULE API URL:', url);
-
+    //console.log('SPORT SCHEDULE API URL:', url);
     const response = await fetch(url);
 
     if (!response.ok) {

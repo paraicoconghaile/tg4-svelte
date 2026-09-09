@@ -29,8 +29,7 @@
         'Dé Sathairn'
     ];
 
-    /*
-    $effect(() => {
+    /* $effect(() => {
         console.log(
             'SCHEDULE:',
             page.url.pathname,

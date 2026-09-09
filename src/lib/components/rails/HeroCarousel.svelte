@@ -30,7 +30,7 @@
             }))
     );
 
-    //console.log(slides);
+    //console.log("Hero Carousel", slides);
 
     let current = $state(0);
     let direction = $state<'next' | 'prev' | null>(null);

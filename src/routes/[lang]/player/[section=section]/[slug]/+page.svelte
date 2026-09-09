@@ -85,7 +85,7 @@
         );
     }
 
-    console.log("Data", JSON.stringify(data, null, 2));
+    //console.log("Data", JSON.stringify(data, null, 2));
 </script>
 
 <section class="episode-page">
@@ -199,7 +199,7 @@
                         </div>
 
                         <div class="episode-info">
-                            <h3>{data.lang === 'ga' ? 'Eipeasóid' : 'Episode'}{ep.episodeNumber}</h3>
+                            <h3>{data.lang === 'ga' ? 'Eipeasóid' : 'Episode'} {ep.episodeNumber}</h3>
 
                             <p>S{ep.seriesNumber} E{ep.episodeNumber}</p>
 

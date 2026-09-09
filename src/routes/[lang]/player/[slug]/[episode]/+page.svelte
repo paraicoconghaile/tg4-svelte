@@ -55,7 +55,49 @@
         return (data.video.poster || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg');
     }
 
-    //console.log("Data", JSON.stringify(data, null, 2));
+    const irishMonths: Record<number, string> = {
+        0: 'Eanáir',
+        1: 'Feabhra',
+        2: 'Márta',
+        3: 'Aibreán',
+        4: 'Bealtaine',
+        5: 'Meitheamh',
+        6: 'Iúil',
+        7: 'Lúnasa',
+        8: 'Meán Fómhair',
+        9: 'Deireadh Fómhair',
+        10: 'Samhain',
+        11: 'Nollaig'
+    };
+
+    const englishMonths: Record<number, string> = {
+        0: 'January',
+        1: 'February',
+        2: 'March',
+        3: 'April',
+        4: 'May',
+        5: 'June',
+        6: 'July',
+        7: 'August',
+        8: 'September',
+        9: 'October',
+        10: 'November',
+        11: 'December'
+    };
+
+    function formatDate(dateString: string) {
+        const date = new Date(dateString);
+
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        const month = data.lang === 'ga'
+            ? irishMonths[date.getUTCMonth()]
+            : englishMonths[date.getUTCMonth()];
+        const year = date.getUTCFullYear();
+
+        return `${day} ${month} ${year}`;
+    }
+
+    //console.log("Episode", JSON.stringify(data, null, 2));
 </script>
 
 <section class="episode-page">
@@ -107,13 +149,58 @@
     {/if}
 
     <section class="episodes">
-        <h1>{data.video.seriesTitle}</h1>
+        <section class="video-info">
+            <div class="video-details">
+                <h1>{data.video.seriesTitle}</h1>
 
-        <p>Season {data.video.seriesNumber}, Episode {data.video.episodeNumber}, Duration {data.video.duration}</p>
+                <h2>
+                    {data.lang === 'ga' ? 'Seasúr' : 'Season'}
+                    {data.video.seriesNumber},
+                    {data.lang === 'ga' ? 'Eipeasóid' : 'Episode'}
+                    {data.video.episodeNumber}
+                </h2>
 
-        <p>{data.video.description}</p>
+                <p>
+                    S{data.video.seriesNumber}
+                    E{data.video.episodeNumber}
+                    {#if data.video.duration >= 3600}
+                        {Math.floor(data.video.duration / 3600)}{data.lang === 'ga' ? 'h' : 'h'}
+                        {#if Math.floor((data.video.duration % 3600) / 60) > 0}
+                            {Math.floor((data.video.duration % 3600) / 60)}{data.lang === 'ga' ? 'm' : 'm'}
+                        {/if}
+                    {:else}
+                        {Math.floor(data.video.duration / 60)}{data.lang === 'ga' ? 'm' : 'm'}
+                    {/if}
+                </p>
 
-        <p><a class="language-switch" href={`/${data.lang}/player/${data.slug}`}>{data.backLabel}</a></p>
+                <p>{data.video.description}</p>
+
+                {#if data.video.categories?.length}
+                    <div class="categories">
+                        {#each data.video.categories as category}
+                            <span>
+                                {data.lang === 'ga' ? category.displayGa : category.displayEn}
+                            </span>
+                        {/each}
+                    </div>
+                {/if}
+
+                <p>{formatDate(data.video.airDate)}</p>
+
+                <p>
+                    <a
+                        class="language-switch"
+                        href={`/${data.lang}/player/${data.slug}`}
+                    >
+                        {data.backLabel}
+                    </a>
+                </p>
+            </div>
+
+            <div class="bookmark">
+                <a class="language-switch">+</a>&nbsp;<a class="language-switch">Bookmark</a>
+            </div>
+        </section>
     </section>
 </section>
 
@@ -193,8 +280,41 @@
 }
 
 .episodes {
+    width: 100%;
     margin: 0 auto;
     max-width: var(--episode-width);
+}
+
+@media (max-width: 1346px) {
+    .episodes {
+        padding-left: 20px;
+        padding-right: 20px;
+        box-sizing: border-box;
+    }
+}
+
+.video-info {
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.video-details {
+    width: 50%;
+}
+
+.bookmark {
+    cursor: pointer;
+    margin-top: 40px;
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
+.categories span {
+    margin-right: 10px;
 }
 </style>
 
