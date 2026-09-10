@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { getGenre } from '$lib/api/tg4_1';
+import { getGenre, getCategoryRails } from '$lib/api/tg4_1';
 import { slugify } from '$lib/utils/slugify';
 import { genres, getGenreByKey } from '$lib/config/playerNav';
 
@@ -35,7 +35,12 @@ export async function load({ params }) {
         throw new Error(`Unknown category: ${params.section}`);
     }
 
+    // Get the existing series/programme data
     const rawProgrammes = await getGenre(genre);
+
+    // Get the rails for this category
+    const rails = await getCategoryRails(genre);
+    
     const seriesMap = new Map();
 
     //console.log(rawProgrammes);
@@ -56,6 +61,8 @@ export async function load({ params }) {
 
     return {
         series: Array.from(seriesMap.values()),
+        // Category rails
+        rails,
         section: params.section,
         genre,
         lang: params.lang,

@@ -66,6 +66,23 @@ export async function getVideo(videoId: string) {
     return response.json();
 }
 
+export async function getSeries(slug: string) {
+    const url = `https://staging.api.tg4dev.com/api/series/${slug}`;
+
+    const response = await fetch(url, {
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': API_KEY
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error("Series not found");
+    }
+
+    return response.json();
+}
+
 export async function getRails() {
     const url = `https://staging.api.tg4dev.com/api/rails/home?api_key=d3b8f0c1-2e4a-4f5b-9c6d-7e8f9a0b1c2d`;
 
@@ -83,8 +100,8 @@ export async function getRails() {
     return response.json();
 }
 
-export async function getSeries(slug: string) {
-    const url = `https://staging.api.tg4dev.com/api/series/${slug}`;
+export async function getCategoryRails(category: string) {
+    const url = `https://staging.api.tg4dev.com/api/rails/category/${category}`;
 
     const response = await fetch(url, {
         headers: {
@@ -94,8 +111,8 @@ export async function getSeries(slug: string) {
     });
 
     if (!response.ok) {
-        throw new Error("Series not found");
+        throw new Error(`Failed to fetch category rails: ${response.status}`);
     }
 
-    return response.json();
+    return await response.json();
 }

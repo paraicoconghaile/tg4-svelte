@@ -1,4 +1,5 @@
 <script lang="ts">
+    import CardCarousel from '$lib/components/rails/CardCarousel.svelte';
   	let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
     
@@ -14,7 +15,17 @@
     }
 
     //console.log("Section Data", JSON.stringify(data, null, 2));
+    console.log('GENRE RAILS API:', data.rails);
 </script>
+
+
+<!-- CATEGORY RAILS -->
+
+{#each data.rails?.rails ?? [] as rail}
+    {#if rail.type === 'HORIZONTAL'}
+        <CardCarousel {rail} {isIrish}/>
+    {/if}
+{/each}
 
 <section class="series-page">
     <section class="episodes">
