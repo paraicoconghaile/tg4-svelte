@@ -9,7 +9,7 @@
     let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
 
-    console.log('RAILS API:', data.rails);
+    //console.log('RAILS API:', data.rails);
 </script>
 
 {#each data.rails.rails as rail}

@@ -41,7 +41,7 @@
 
 <style>
 .marketing-rail {
-    max-width: 1440px;
+    max-width: var(--page-width);
     margin: 0 auto;
     position: relative;
 }
@@ -79,7 +79,7 @@
 .marketing-button {
     display: inline-block;
     background: var(--tg4-pink);
-    color: var(--tg4-white);
+    color: white;
     padding: 12px 28px;
     text-decoration: none;
     font-weight: 700;
@@ -88,7 +88,7 @@
 }
 
 .marketing-button:hover {
-    background: #ff4b91;
+    background: rgba(0,0,0,.85);
 }
 
 .overlay {
@@ -98,19 +98,6 @@
     max-width: 500px;
     color: white;
     z-index: 2;
-}
-
-.overlay h2 {
-    font-size: clamp(2rem, 4vw, 3rem);
-    margin: 0;
-    font-weight: 700;
-    line-height: 100%;
-}
-
-.overlay p {
-    font-size: clamp(1rem, 2vw, 1.5rem);
-    margin: 0;
-    font-weight: 400;
 }
 
 @media (max-width: 600px) {

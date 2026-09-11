@@ -1,11 +1,11 @@
 .page {
-    max-width:var(--page-width);
-    margin:auto;
-    padding:0 20px;
+    max-width: var(--page-width);
+    margin: auto;
+    padding: 0 20px;
 }
 
 section {
-    margin-bottom:var(--section-gap);
+    margin-bottom: var(--section-gap);
 }
 
 section:last-child {

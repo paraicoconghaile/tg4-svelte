@@ -4,6 +4,8 @@
     --tg4-green: #009640;
     --tg4-black: #1F1F1F;
     --tg4-white: #FFFFFF;
+    --tg4-grey-1: #403f3f;
+    --tg4-grey-2: #2b2a2a;
 
     /* Greys */
     --grey-50: #FAFAFA;
@@ -17,6 +19,7 @@
     --text-primary: var(--tg4-white);
     --text-secondary: var(--grey-300);
     --link-colour: var(--tg4-pink);
+    --genre-background: var(--tg4-grey-1);
 
     /* Sizes */
     --page-width: 1440px;

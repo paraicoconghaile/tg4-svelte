@@ -15,7 +15,7 @@
     }
 
     //console.log("Section Data", JSON.stringify(data, null, 2));
-    console.log('GENRE RAILS API:', data.rails);
+    //console.log('GENRE RAILS API:', data.rails);
 </script>
 
 
@@ -48,12 +48,7 @@
     max-width: var(--page-width);
     margin: 0 auto;
     padding: 20px;
-    background-color: #403f3f;
-}
-
-.episodes {
-    margin: 0 auto;
-    max-width: var(--episode-width);
+    background-color: var(--genre-background);
 }
 
 .series-grid {
@@ -90,18 +85,6 @@
 @media(max-width:450px){
     .series-grid {grid-template-columns: 1fr;}
 }
-
-/* .language-switch {
-    background: var(--tg4-pink);
-    color: var(--tg4-white);
-    padding: 4px 18px;
-    font-weight: 700;
-    transition: background .2s ease;
-}
-
-.language-switch:hover {
-    background: #ff4b91;
-} */
 </style>
 
 <!-- <pre>

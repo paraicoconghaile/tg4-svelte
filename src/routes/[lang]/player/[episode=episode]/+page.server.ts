@@ -43,10 +43,7 @@ export async function load({ params }) {
         seriesTitle: rawVideo.video.customFields.seriestitle,
         seriesNumber: rawVideo.video.customFields.series,
         episodeNumber: rawVideo.video.customFields.episode,
-        description:
-            params.lang === 'ga'
-                ? rawVideo.video.customFields?.longdescgaeilge
-                : rawVideo.description,
+        description: params.lang === 'ga' ? rawVideo.video.customFields?.longdescgaeilge : rawVideo.description,
         poster: rawVideo.video.poster,
         prodCode: rawVideo.video.customFields.p_prodcode,
         seriesCode: rawVideo.video.customFields.s_prodcode
@@ -56,8 +53,8 @@ export async function load({ params }) {
         lang: params.lang,
         section: params.section,
         slug: params.slug,
-        //backRoute: currentGenre.key[params.lang],
         backLabel: params.lang === 'ga' ? 'SIAR' : 'BACK',
+        //backRoute: currentGenre.key[params.lang],
         //routeGa: currentGenre.key.ga,
         //routeEn: currentGenre.key.en,
         video

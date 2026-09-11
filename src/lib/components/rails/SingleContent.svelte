@@ -64,7 +64,7 @@
 <style>
 .single-content {
     position: relative;
-    max-width: 1440px;
+    max-width: var(--page-width);
     height: 500px;
     margin: 0 auto;
     overflow: hidden;
@@ -93,38 +93,8 @@
     z-index: 2;
 }
 
-.overlay h2 {
-    font-size: clamp(2rem, 4vw, 3rem);
-    margin: 0;
-    font-weight: 700;
-    line-height: 100%;
-}
-
-.overlay p {
-    font-size: clamp(1rem, 2vw, 1.5rem);
-    margin: 0;
-    font-weight: 400;
-}
-
-.play-box {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 64px;
-    height: 64px;
-    background: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all .25s ease;
-}
-
-.play-box svg {
-    width: 22px;
-    height: 32px;
-}
-
 .single-card:hover .play-box {
     transform: scale(1.1);
+    background: var(--tg4-pink);
 }
 </style>

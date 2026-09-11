@@ -4,7 +4,4 @@
     let { data } = $props();
 </script>
 
-<Schedule
-    schedule={data.schedule}
-    channel="C4"
-/>
+<Schedule schedule={data.schedule} channel="C4"/>

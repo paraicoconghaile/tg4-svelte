@@ -31,7 +31,7 @@
 
 <style>
 .category-rail {
-    max-width: 1440px;
+    max-width: var(--page-width);
     min-height: 630px;
     margin: 0 auto;
     display: grid;
@@ -41,26 +41,6 @@
 
 .intro, .category {
     border-radius: 0px;
-}
-
-.intro {
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.intro h2 {
-    font-size: clamp(2rem, 4vw, 3rem);
-    margin: 0;
-    font-weight: 700;
-    line-height: 100%;
-}
-
-.intro p {
-    font-size: clamp(1rem, 2vw, 1.5rem);
-    margin: 0;
-    font-weight: 400;
 }
 
 .category {
@@ -76,33 +56,13 @@
     overflow: hidden;
 }
 
-.category:hover {
+/* .category:hover {
     transform: translateY(-6px);
-}
-
-.play-box {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 64px;
-    height: 64px;
-    background: white;
-    color: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    font-weight: bold;
-    transition: transform .2s ease;
-}
-
-.play-box svg {
-    width: 22px;
-    height: 32px;
-}
+} */
 
 .category:hover .play-box {
     transform: scale(1.1);
+    background: var(--tg4-pink);
 }
 
 @media(max-width:1000px){

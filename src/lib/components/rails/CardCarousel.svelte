@@ -129,7 +129,7 @@
 
 <style>
 .rail {
-    max-width: 1440px;
+    max-width: var(--page-width);
     margin: 0 auto;
     position: relative;
     background-color: #2B2A2A;
@@ -194,11 +194,6 @@
     min-width: 0;
     padding-right: 6px;
 }
-
-/* .embla__slide {
-    flex: 0 0 calc((100% - 18px) / 4);
-    min-width: 0;
-} */
 
 .embla__slide img {
     width: 100%;

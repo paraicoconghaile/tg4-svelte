@@ -7,3 +7,6 @@
 @import '$lib/styles/tables.css';
 @import '$lib/styles/rails.css';
 @import '$lib/styles/utilities.css';
+@import '$lib/styles/schedule.css';
+@import '$lib/styles/series.css';
+@import '$lib/styles/player.css';

@@ -17,13 +17,7 @@ let {
     {#each rail.items as item}
         {@const series = item.series}
         <a class="content-card" href={`/${isIrish ? 'ga' : 'en'}/player/${series.slug}`}>
-            <img
-                src={
-                    series.mainImage?.large ??
-                    series.boxsetImage?.large
-                }
-                alt={series.name}
-            />
+            <img src= {series.mainImage?.large ?? series.boxsetImage?.large} alt={series.name}/>
 
             <div class="play-box">
                 <svg
@@ -47,7 +41,7 @@ let {
 
 <style>
 .double-content {
-    max-width: 1440px;
+    max-width: var(--page-width);
     min-height: 610px;
     margin: 0 auto;
     display: grid;
@@ -55,29 +49,9 @@ let {
     gap: 5px;
 }
 
-.intro {
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.intro h2 {
-    font-size: clamp(2rem, 4vw, 3rem);
-    margin: 0;
-    font-weight: 700;
-    line-height: 100%;
-}
-
-.intro p {
-    font-size: clamp(1rem, 2vw, 1.5rem);
-    margin: 0;
-    font-weight: 400;
-}
-
 .content-card {
     position: relative;
-    background: #fff;
+    background: white;
     text-decoration: none;
     color: inherit;
     overflow: hidden;
@@ -89,26 +63,9 @@ let {
     object-fit: cover;
 }
 
-.play-box {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 64px;
-    height: 64px;
-    background: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all .25s ease;
-}
-
-.play-box svg {
-    width: 22px;
-    height: 32px;
-}
-
 .content-card:hover .play-box {
     transform: scale(1.1);
+    background: var(--tg4-pink);
 }
 
 .text {

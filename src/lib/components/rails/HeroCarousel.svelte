@@ -259,7 +259,7 @@
 }
 
 .carousel {
-    width: min(1440px, 100%);
+    max-width: var(--page-width);
     margin: 0 auto;
     overflow: hidden;
     position: relative;
@@ -296,26 +296,9 @@
     flex: 1;
 }
 
-.play-box {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 64px;
-    height: 64px;
-    background: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all .25s ease;
-}
-
-.play-box svg {
-    width: 22px;
-    height: 32px;
-}
-
 .hero-card:hover .play-box, .single-hero:hover .play-box {
     transform: scale(1.1);
+    background: var(--tg4-pink);
 }
 
 .card {
@@ -346,22 +329,7 @@
     align-items: flex-start;
     padding: 40px;
     color: white;
-    background: linear-gradient(
-        rgba(0, 0, 0, .15),
-        rgba(0, 0, 0, .45)
-    );
-}
-
-.overlay h2 {
-    font-size: clamp(2rem, 4vw, 3rem);
-    margin: 0;
-    font-weight: 700;
-}
-
-.overlay p {
-    font-size: clamp(1rem, 2vw, 1.5rem);
-    margin: 0;
-    font-weight: 400;
+    background: linear-gradient(rgba(0, 0, 0, .15), rgba(0, 0, 0, .45));
 }
 
 @media (max-width: 600px) {

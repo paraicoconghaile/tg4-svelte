@@ -106,11 +106,7 @@
 <section class="episode-page">
     <!-- Hero -->
     <section class="episode-hero">
-        <img
-            class="hero-image"
-            src={poster}
-            alt={data.seriesTitle}
-        />
+        <img class="hero-image" src={poster} alt={data.seriesTitle} />
         <div class="hero-overlay">
             <div class="hero-content">
                 <h1>{data.series.series.name}</h1>
@@ -128,23 +124,17 @@
                 {/if}
                     
                 <p>
-                {#each data.series.series.subtitles as subtitle}
-                    <!-- <span class="subtitles-icon" title="Subtitles">
-                        CC
-                    </span> -->
-                    <span class="languages">
-                        {getLanguageName(subtitle, data.lang)}
-                    </span>
-                {/each}
-                {#if data.series.series.contentRating}
-                    <span class="content-rating">
-                        {data.series.series.contentRating}
-                    </span>
-                {/if}
+                    {#each data.series.series.subtitles as subtitle}
+                        <!-- <span class="subtitles-icon" title="Subtitles">CC</span> -->
+                        <span class="languages">{getLanguageName(subtitle, data.lang)}</span>
+                    {/each}
+                    {#if data.series.series.contentRating}
+                        <span class="content-rating">{data.series.series.contentRating}</span>
+                    {/if}
                 </p>
 
                 <div class="hero-buttons">
-                    <a class="play-button">▶&nbsp; {data.lang === 'ga' ? 'Féach' : 'Watch now'}</a>
+                    <a class="watch-now">▶&nbsp; {data.lang === 'ga' ? 'Féach' : 'Watch now'}</a>
                 </div>
             </div>
         </div>
@@ -155,16 +145,9 @@
         <!-- Season selector -->
         <div class="season-selector">
             <button class="season-dropdown-button" onclick={() => seasonDropdownOpen = !seasonDropdownOpen}>
-                <span>
-                    {data.lang === 'ga'
-                        ? `Sraith ${selectedSeason.seasonNumber}`
-                        : `Series ${selectedSeason.seasonNumber}`}
-                </span>
+                <span>{data.lang === 'ga' ? `Sraith ${selectedSeason.seasonNumber}` : `Series ${selectedSeason.seasonNumber}`}</span>
 
-                <span
-                    class:open={seasonDropdownOpen}
-                    class="dropdown-arrow"
-                >
+                <span class:open={seasonDropdownOpen} class="dropdown-arrow">
                     ▼
                 </span>
             </button>
@@ -173,9 +156,7 @@
                 <div class="season-dropdown-menu">
                     {#each data.series.seasons as season}
                         <button class:selected={season.number === selectedSeason.seasonNumber} onclick={() => selectSeason(season)}>
-                            {data.lang === 'ga'
-                                ? `Sraith ${season.number}`
-                                : `Series ${season.number}`}
+                            {data.lang === 'ga' ? `Sraith ${season.number}` : `Series ${season.number}`}
                         </button>
                     {/each}
                 </div>
@@ -261,366 +242,6 @@
         </section>
     </section>
 </section>
-
-<style>
-.categories {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 15px;
-}
-
-.categories span {
-    padding: 5px 10px;
-    background: var(--tg4-pink);
-    color: white;
-    font-size: 0.85rem;
-    font-weight: 700;
-}
-
-.load-more-trigger {
-    height: 1px;
-}
-
-.load-more {
-    display: flex;
-}
-
-.load-more button {
-    padding: 12px 30px;
-    background: var(--tg4-pink);
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 700;
-}
-
-.load-more button:hover {
-    opacity: 0.9;
-}
-
-.season-selector {
-    position: relative;
-    width: 220px;
-    bottom: 20px;
-}
-
-.season-dropdown-menu {
-    position: absolute;
-    top: calc(100% + 50px);
-    left: 0;
-    z-index: 100;
-}
-
-.season-dropdown-button {
-    width: 100%;
-    padding: 12px 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #2b2a2a;
-    color: white;
-    border: 1px solid #666;
-    cursor: pointer;
-    font-size: 1rem;
-    text-align: left;
-}
-
-.season-dropdown-button:hover {
-    background: #353434;
-}
-
-.dropdown-arrow {
-    font-size: 0.7rem;
-    transition: transform 0.2s ease;
-}
-
-.dropdown-arrow.open {
-    transform: rotate(180deg);
-}
-
-.season-dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    z-index: 100;
-    background: #2b2a2a;
-    border: 1px solid #666;
-    border-top: none;
-}
-
-.season-dropdown-menu button {
-    display: block;
-    width: 100%;
-    padding: 12px 15px;
-    background: transparent;
-    color: white;
-    border: none;
-    text-align: left;
-    cursor: pointer;
-    font-size: 1rem;
-}
-
-.season-dropdown-menu button:hover {
-    background: #444;
-}
-
-.season-dropdown-menu button.selected {
-    background: var(--tg4-pink);
-}
-
-.episode-page {
-    max-width: var(--page-width);
-    margin: 0 auto;
-    background-color: #403f3f;
-}
-
-.language-switch {
-    background: var(--tg4-pink);
-    color: var(--tg4-white);
-    padding: 4px 18px;
-    font-weight: 700;
-    transition: background .2s ease;
-}
-
-.language-switch:hover {
-    background: #ff4b91;
-}
-
-/* --------------------------------
-   HERO
--------------------------------- */
-.episode-hero {
-    position: relative;
-    width: 100%;
-    height: 810px;
-    overflow: hidden;
-}
-
-.hero-image {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* Dark gradient over image */
-.hero-overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: flex-end;
-    padding: 70px;
-    background:
-        linear-gradient(
-            to top,
-            rgba(0,0,0,.85) 0%,
-            rgba(0,0,0,.45) 35%,
-            rgba(0,0,0,0) 70%
-        );
-    color: white;
-}
-
-.hero-content {
-    max-width: 650px;
-}
-
-.hero-content h1 {
-    margin: 0 0 15px;
-    font-size: 3.5rem;
-    line-height: 1.05;
-}
-
-.hero-content p {
-    margin: 0 0 25px;
-    font-size: 1.2rem;
-    line-height: 1.5;
-}
-
-/* --------------------------------
-   BUTTONS
--------------------------------- */
-.hero-buttons {
-    display: flex;
-    gap: 12px;
-}
-
-.play-button, .back-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 26px;
-    text-decoration: none;
-    font-weight: 700;
-    transition: transform .2s ease, background .2s ease;
-}
-
-.play-button {
-    background: white;
-    color: #2b2a2a;
-}
-
-.back-button {
-    background: var(--tg4-pink);
-    color: white;
-}
-
-.play-button:hover, .back-button:hover {
-    transform: translateY(-2px);
-}
-
-/* --------------------------------
-   EPISODES
--------------------------------- */
-.episodes {
-    width: 100%;
-    margin: 0 auto;
-    max-width: var(--episode-width);
-}
-
-@media (max-width: 1346px) {
-    .episodes {
-        padding-left: 20px;
-        padding-right: 20px;
-        box-sizing: border-box;
-    }
-}
-
-.episodes > h2 {
-    margin: 0 0 25px;
-}
-
-.episode-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 20px;
-}
-
-.episode {
-    min-width: 0;
-}
-
-.episode-image {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    display: block;
-}
-
-.episode-info {
-    padding: 15px 0;
-}
-
-.episode-info h3 {
-    margin: 0 0 8px;
-    font-size: 1.1rem;
-}
-
-.episode-info p {
-    margin: 0 0 8px;
-}
-
-.episode-media {
-    position: relative;
-}
-
-.play-icon {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 40px;
-    height: 40px;
-    transition: transform .2s ease;
-}
-
-.episode:hover .play-icon {
-    transform: scale(1.1);
-}
-
-.languages {
-    margin-right: 10px;
-}
-
-.content-rating {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 32px;
-    height: 32px;
-    padding: 0 6px;
-    border: 2px solid white;
-    border-radius: 50%;
-    font-size: 14px;
-    font-weight: 700;
-    color: white;
-    box-sizing: border-box;
-}
-
-.subtitles-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border: 2px solid currentColor;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 700;
-}
-
-/* --------------------------------
-   MOBILE
--------------------------------- */
-@media (max-width: 900px) {
-    .episode-hero {
-        height: 650px;
-    }
-    .hero-overlay {
-        padding: 40px;
-    }
-    .hero-content h1 {
-        font-size: 2.8rem;
-    }
-}
-
-@media (max-width: 600px) {
-    .episode-hero {
-        height: 500px;
-    }
-    .hero-overlay {
-        padding: 25px;
-    }
-    .hero-content h1 {
-        font-size: 2.2rem;
-    }
-    .hero-content p {
-        font-size: 1rem;
-    }
-    .episode {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 1200px) {
-    .episode-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 800px) {
-    .episode-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 500px) {
-    .episode-grid {
-        grid-template-columns: 1fr;
-    }
-}
-</style>
 
 <!-- <pre>
     {JSON.stringify(data.episodes, null, 2)}
