@@ -215,10 +215,8 @@
                 <button class:active={index === current}
                     onclick={() => {
                         if (index === current || animating) return;
-
                         direction = index > current ? 'next' : 'prev';
                         animating = true;
-
                         setTimeout(() => {
                             current = index;
                             animating = false;
