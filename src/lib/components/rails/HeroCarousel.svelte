@@ -21,16 +21,16 @@
                     ? item.series.taglineGa
                     : item.series.taglineEn,
                 image:
-                    item.series.mainImage?.large ??
-                    item.series.boxsetImage?.large ??
-                    "/images/placeholder.jpg",
+                    item.series.heroImage?.xLarge ??
+                    item.series.mainImage?.xLarge ??
+                    item.series.poster,
                 slug: item.series.slug,
                 renderType: item.series.renderType,
                 badge: item.series.badge
             }))
     );
 
-    //console.log("Hero Carousel", slides);
+    console.log("Hero Carousel", slides);
 
     let current = $state(0);
     let direction = $state<'next' | 'prev' | null>(null);
@@ -182,13 +182,12 @@
                                 x: direction === 'next' ? -750 : 750,
                                 duration: 350
                             }}
-                            class="hero-content"
                         >
                             <img src={getSlide(0).image} alt={getSlide(0).title} />
                             <div class="overlay">
                                 <h2>{getSlide(0).title}</h2>
-                                {#if slides[0].tagline}
-                                    <p>{slides[0].tagline}</p>
+                                {#if getSlide(0).tagline}
+                                    <p>{getSlide(0).tagline}</p>
                                 {/if}
                             </div>
                         </div>

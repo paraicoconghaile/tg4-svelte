@@ -74,7 +74,7 @@
     } = $props();
 
     /* console.log('========== CARD RAIL JSON ==========');
-    console.log("Card Rail Data:", JSON.stringify(rail, null, 2));
+    console.log("Live Rail Data:", JSON.stringify(rail, null, 2));
     console.log('================================'); */
 </script>
 

@@ -5,9 +5,7 @@ let {
 } = $props();
 </script>
 
-<section
-    class="double-content"
->
+<section class="double-content">
     <!-- Intro -->
     <div class="intro" style={`background:${rail.backgroundColor}; color:${rail.textColor};`}>
         <h2>{isIrish ? rail.titleGa : rail.titleEn}</h2>

@@ -69,6 +69,8 @@
     margin: 0 auto;
     overflow: hidden;
     border-radius: 0px;
+    padding: 30px 0 20px 0;
+    background: var(--tg4-grey-2);
 }
 
 .single-content img {
@@ -81,7 +83,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,.35) 40%, rgba(0,0,0,.05) 100%);
+    //background: linear-gradient(90deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,.35) 40%, rgba(0,0,0,.05) 100%);
 }
 
 .overlay {

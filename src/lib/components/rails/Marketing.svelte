@@ -14,7 +14,7 @@
     );
 </script>
 
-<section class="marketing-rail" style={`background:${rail.backgroundColor ?? '#2B2A2A'};`}>
+<section class="marketing-rail">
     {#if image}
         <div class="marketing-image">
             <img src={image.xLarge ?? image.large} alt={altText ?? ''} />
@@ -44,6 +44,8 @@
     max-width: var(--page-width);
     margin: 0 auto;
     position: relative;
+    padding: 30px 0 20px 0;
+    background: var(--tg4-grey-2);
 }
 
 .marketing-image {
