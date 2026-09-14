@@ -30,7 +30,7 @@
             }))
     );
 
-    console.log("Hero Carousel", slides);
+    //console.log("Hero Carousel", slides);
 
     let current = $state(0);
     let direction = $state<'next' | 'prev' | null>(null);
@@ -173,16 +173,7 @@
             <div class="card hero" onpointerdown={handlePointerDown}>
                 {#key current}
                     <a class="hero-card" href={`/${isIrish ? 'ga' : 'en'}/player/${getSlide(0).slug}`} onclick={handleClick}>
-                        <div
-                            in:fly={{
-                                x: direction === 'next' ? 750 : -750,
-                                duration: 350
-                            }}
-                            out:fly={{
-                                x: direction === 'next' ? -750 : 750,
-                                duration: 350
-                            }}
-                        >
+                        <div in:fly={{x: direction === 'next' ? 750 : -750, duration: 350}} out:fly={{x: direction === 'next' ? -750 : 750, duration: 350}}>
                             <img src={getSlide(0).image} alt={getSlide(0).title} />
                             <div class="overlay">
                                 <h2>{getSlide(0).title}</h2>
@@ -221,8 +212,7 @@
 
         <div class="pagination">
             {#each slides as _, index}
-                <button
-                    class:active={index === current}
+                <button class:active={index === current}
                     onclick={() => {
                         if (index === current || animating) return;
 
