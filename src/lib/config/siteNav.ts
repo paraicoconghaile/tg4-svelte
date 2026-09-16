@@ -110,8 +110,8 @@ export const navigation: NavItem[] = [
             {
                 titleEn: 'TG4',
                 titleGa: 'TG4',
-                hrefEn: '/en/player/liveTG4',
-                hrefGa: '/ga/player/liveTG4'
+                hrefEn: '/en/player/live/TG4',
+                hrefGa: '/ga/player/live/TG4'
             },
             {
                 titleEn: 'Cúla4',
