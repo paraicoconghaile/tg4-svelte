@@ -67,12 +67,12 @@ export const navigation: NavItem[] = [
             }
         ]
     },
-    {
+    /* {
         titleEn: 'Boxsets',
         titleGa: 'Boscaí',
         hrefEn: '/en/boxsets',
         hrefGa: '/ga/boxsets'
-    },
+    }, */
     {
         titleEn: 'Schedule',
         titleGa: 'Sceideal',
@@ -95,12 +95,12 @@ export const navigation: NavItem[] = [
                 hrefEn: '/en/sport-schedule',
                 hrefGa: '/ga/sceideal-spoirt'
             },
-            {
+            /* {
                 titleEn: 'Live Sport',
                 titleGa: 'Spórt Beo',
                 hrefEn: '/en/live-sport',
                 hrefGa: '/ga/sport-beo'
-            }
+            } */
         ]
     },
     {
@@ -108,16 +108,22 @@ export const navigation: NavItem[] = [
         titleGa: 'Beo',
         children: [
             {
-                titleEn: 'TG4 Live',
-                titleGa: 'TG4 Beo',
-                hrefEn: '/en/live',
-                hrefGa: '/ga/live'
+                titleEn: 'TG4',
+                titleGa: 'TG4',
+                hrefEn: '/en/player/liveTG4',
+                hrefGa: '/ga/player/liveTG4'
             },
             {
-                titleEn: 'Cúla4 Live',
-                titleGa: 'Cúla4 Beo',
-                hrefEn: '/en/cula4-live',
-                hrefGa: '/ga/cula4-live'
+                titleEn: 'Cúla4',
+                titleGa: 'Cúla4',
+                hrefEn: '/en/player/live/CULA4',
+                hrefGa: '/ga/player/live/CULA4'
+            },
+            {
+                titleEn: 'TG4+1',
+                titleGa: 'TG4+1',
+                hrefEn: '/en/player/live/TG4PLUSONE',
+                hrefGa: '/ga/player/live/TG4PLUSONE'
             }
         ]
     }
