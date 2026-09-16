@@ -1,6 +1,7 @@
 <script lang="ts">
     import emblaCarouselSvelte from 'embla-carousel-svelte';
     import type { EmblaCarouselType } from 'embla-carousel';
+    import irelandFlag from '$lib/assets/icons/irl_icon.svg';
     import { onMount } from 'svelte';
     import { invalidateAll } from '$app/navigation';
 
@@ -32,7 +33,9 @@
 
     let streams = $state(
         rail.items.map((item: any) => item.stream)
-    ); 
+    );
+
+    let progressKey = $state(0);
 
     $effect(() => {
         streams = rail.items.map((item: any) => item.stream);
@@ -116,7 +119,7 @@
         const delay = endTime - Date.now();
 
         setTimeout(async () => {
-            console.log('Refreshing live data');
+            //console.log('Refreshing live data');
             await invalidateAll();
         }, Math.max(delay, 0));
     }
@@ -133,6 +136,7 @@
                 //console.log('Refreshing live data');
 
                 await invalidateAll();
+                progressKey++;
 
                 //console.log('Rail after refresh:', rail);
                 //console.log('Streams after refresh:', streams);
@@ -179,7 +183,7 @@
                         <a class="live-card" href={`/${isIrish ? 'ga' : 'en'}/player/live/${stream.stream}`}>
                             <div class="live-image">
                                 <img src={stream.logoUrl} alt={stream.stream} />
-                                {#key show.startTime}
+                                {#key `${show.startTime}-${progressKey}`}
                                     <div class="progress-track">
                                         <div class="progress-bar"  style={`width: 100%; animation-duration: ${new Date(show.endTime).getTime() - new Date(show.startTime).getTime()}ms; animation-delay: -${Date.now() - new Date(show.startTime).getTime()}ms;`}></div>
                                     </div>
@@ -192,7 +196,15 @@
                             </div> -->
 
                             <div class="programme">
-                                <h3>{show.title}</h3>
+                                <h3>
+                                    {show.title}
+
+                                    {#if show.availability === 'IRELAND_ONLY'}
+                                        <span class="ireland-flag">
+                                            <img src={irelandFlag} alt="Ireland only" />
+                                        </span>
+                                    {/if}
+                                </h3>
 
                                 <p>{formatTime(show.startTime)} – {formatTime(show.endTime)}</p>
 
@@ -383,6 +395,17 @@
 
 .time {
     font-size: .9rem;
+}
+
+.ireland-flag {
+    display: inline-flex;
+    margin-left: 8px;
+}
+
+.ireland-flag img {
+    width: 20px;
+    height: 20px;
+    display: block;
 }
 
 @media (max-width: 900px) {
