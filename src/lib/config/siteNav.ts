@@ -14,8 +14,8 @@ export const navigation: NavItem[] = [
         hrefGa: '/ga'
     },
     {
-        titleEn: 'Genres',
-        titleGa: 'Seánraí',
+        titleEn: 'Discover',
+        titleGa: 'Aimsigh',
         children: [
             {
                 titleEn: 'Documentaries',
