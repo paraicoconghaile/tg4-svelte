@@ -158,12 +158,6 @@
     gap: 10px;
 }
 
-/* 1330px carousel */
-.embla {
-    width: 1330px;
-    overflow: hidden;
-}
-
 .arrow {
     flex: 0 0 45px;
     width: 45px;
@@ -183,6 +177,11 @@
 
 .arrow:hover {
     background: rgba(0,0,0,.85);
+}
+
+.embla {
+    width: 1330px;
+    overflow: hidden;
 }
 
 .embla__container {
@@ -213,13 +212,13 @@
     font-weight: 700;
 }
 
-@media (max-width:900px){
+@media (max-width:900px) {
     .embla__slide{
-        flex: 0 0 calc(50% - 10px);
+        flex: 0 0 calc(50% - 0px);
     }
 }
 
-@media (max-width:600px){
+@media (max-width:600px) {
     .embla__slide{
         flex: 0 0 100%;
     }

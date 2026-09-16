@@ -1,6 +1,8 @@
 <script lang="ts">
     import emblaCarouselSvelte from 'embla-carousel-svelte';
     import type { EmblaCarouselType } from 'embla-carousel';
+    import { onMount } from 'svelte';
+    import { invalidateAll } from '$app/navigation';
 
     let emblaApi: EmblaCarouselType | undefined;
 
@@ -16,56 +18,11 @@
     }
 
     function next() {
-        //console.log('Selected Next 1:', emblaApi?.selectedScrollSnap());
         emblaApi?.scrollNext();
-
-        /* requestAnimationFrame(() => {
-            console.log('Selected:', emblaApi?.selectedScrollSnap());
-        }); */
     }
 
     function onEmblaInit(event: CustomEvent) {
         emblaApi = event.detail;
-
-        /* requestAnimationFrame(() => {
-            console.log('=== EMBLA DEBUG ===');
-
-            console.log(
-                'Carousel width:',
-                emblaApi?.rootNode().clientWidth
-            );
-
-            console.log(
-                'Container width:',
-                emblaApi?.containerNode().scrollWidth
-            );
-
-            console.log(
-                'Slide widths:',
-                emblaApi?.slideNodes().map(
-                    slide => slide.getBoundingClientRect().width
-                )
-            );
-
-            console.log(
-                'Slide positions:',
-                emblaApi?.slideNodes().map(
-                    slide => slide.getBoundingClientRect().left
-                )
-            );
-
-            console.log(
-                'Snaps:',
-                emblaApi?.scrollSnapList()
-            );
-
-            console.log(
-                'Selected:',
-                emblaApi?.selectedScrollSnap()
-            );
-
-            console.log('===================');
-        }); */
     }
 
     let {
@@ -73,57 +30,189 @@
         isIrish
     } = $props();
 
-    /* console.log('========== CARD RAIL JSON ==========');
-    console.log("Live Rail Data:", JSON.stringify(rail, null, 2));
-    console.log('================================'); */
+    let streams = $state(
+        rail.items.map((item: any) => item.stream)
+    ); 
+
+    $effect(() => {
+        streams = rail.items.map((item: any) => item.stream);
+    });
+
+    function formatTime(dateString: string) {
+        return new Date(dateString).toLocaleTimeString(
+            isIrish ? 'ga-IE' : 'en-IE',
+            {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            }
+        );
+    }
+
+    function getProgress(show: any) {
+        const start = new Date(show.startTime).getTime();
+        const end = new Date(show.endTime).getTime();
+        const now = Date.now();
+
+        const duration = end - start;
+        const elapsed = now - start;
+
+        return Math.min(
+            Math.max((elapsed / duration) * 100, 0),
+            100
+        );
+    }
+
+    /* function scheduleNextShow(stream: any) {
+        const endTime = new Date(
+            stream.currentShow.endTime
+        ).getTime();
+
+        const delay = endTime - Date.now();
+
+        setTimeout(async () => {
+            try {
+                const data = await getRails();
+
+                const liveRail = data.rails?.find(
+                    (item: any) => item.type === 'LIVE'
+                );
+
+                const updatedItem = liveRail?.items?.find(
+                    (item: any) =>
+                        item.type === 'LIVE_STREAM' &&
+                        item.stream?.stream === stream.stream
+                );
+
+                if (updatedItem?.stream) {
+                    streams = streams.map((item: any) => {
+                        if (item.stream === stream.stream) {
+                            return updatedItem.stream;
+                        }
+
+                        return item;
+                    });
+
+                    scheduleNextShow(updatedItem.stream);
+                }
+
+            } catch (error) {
+                console.error('Failed to refresh live data:', error);
+            }
+        }, Math.max(delay, 0));
+    }
+
+    onMount(() => {
+        streams.forEach((stream: any) => {
+            scheduleNextShow(stream);
+        });
+    }); */
+
+    function scheduleNextShow(stream: any) {
+        const endTime = new Date(
+            stream.currentShow.endTime
+        ).getTime();
+
+        const delay = endTime - Date.now();
+
+        setTimeout(async () => {
+            console.log('Refreshing live data');
+            await invalidateAll();
+        }, Math.max(delay, 0));
+    }
+
+    onMount(() => {
+        streams.forEach((stream: any) => {
+            scheduleNextShow(stream);
+        });
+
+        async function handleVisibilityChange() {
+            //console.log('Visibility:', document.visibilityState);
+
+            if (document.visibilityState === 'visible') {
+                //console.log('Refreshing live data');
+
+                await invalidateAll();
+
+                //console.log('Rail after refresh:', rail);
+                //console.log('Streams after refresh:', streams);
+            }
+        }
+
+        document.addEventListener(
+            'visibilitychange',
+            handleVisibilityChange
+        );
+
+        return () => {
+            document.removeEventListener(
+                'visibilitychange',
+                handleVisibilityChange
+            );
+        };
+    });
 </script>
 
-<section class:boxset-rail={rail.showItemsAsBoxset} class="rail">
-    <div class="rail-heading">
-        {#if rail.titleEn || rail.titleGa}
-            <h2>{isIrish ? rail.titleGa : rail.titleEn}</h2>
-        {/if}
-        {#if rail.subtitleEn || rail.subtitleGa}
-            <p>{isIrish ? rail.subtitleGa : rail.subtitleEn}</p>
-        {/if}
-    </div>
+<section class="rail">
+    {#if rail.titleEn || rail.titleGa || rail.subtitleEn || rail.subtitleGa}
+        <div class="rail-heading">
+            {#if rail.titleEn || rail.titleGa}
+                <h2>{isIrish ? rail.titleGa : rail.titleEn}</h2>
+            {/if}
+            {#if rail.subtitleEn || rail.subtitleGa}
+                <p>{isIrish ? rail.subtitleGa : rail.subtitleEn}</p>
+            {/if}
+        </div>
+    {/if}
 
     <div class="carousel-wrapper">
-        <button class="arrow left" onclick={previous} aria-label="Previous programmes">‹</button>
+        <button class="arrow left" onclick={previous} aria-label="Previous live channels">‹</button>
         <div class="embla" use:emblaCarouselSvelte={{options}} onemblaInit={onEmblaInit}>
             <div class="embla__container">
-                {#each rail.items as item}
-                    {@const isSeries = item.type === 'SERIES'}
-                    {@const content = isSeries ? item.series : item.video}
-
-                    {@const image = rail.showItemsAsBoxset
-                        ? (content.boxsetImage?.original ?? content.image?.original)
-                        : (content.mainImage?.large ?? content.image?.large)
-                    }
-
-                    {@const name = isSeries
-                        ? content.name
-                        : content.displayName
-                    }
+                <!-- {#each rail.items as item}
+                    {@const stream = item.stream} -->
+                {#each streams as stream}
+                    {@const show = stream.currentShow}
+                    {@const nextshow = stream.nextShow}
 
                     <div class="embla__slide">
-                        {#if isSeries}
-                            <a href={`/${isIrish ? 'ga' : 'en'}/player/${content.slug}`}>
-                                <img src={image} alt={name} />
-                                <h3>{name}</h3>
-                            </a>
-                        {:else}
-                            <!-- Keep your existing VIDEO URL here -->
-                            <a href="#">
-                                <img src={image} alt={name} />
-                                <h3>{name}</h3>
-                            </a>
-                        {/if}
+                        <a class="live-card" href={`/${isIrish ? 'ga' : 'en'}/player/live/${stream.stream}`}>
+                            <div class="live-image">
+                                <img src={stream.logoUrl} alt={stream.stream} />
+                                {#key show.startTime}
+                                    <div class="progress-track">
+                                        <div class="progress-bar"  style={`width: 100%; animation-duration: ${new Date(show.endTime).getTime() - new Date(show.startTime).getTime()}ms; animation-delay: -${Date.now() - new Date(show.startTime).getTime()}ms;`}></div>
+                                    </div>
+                                {/key}
+                            </div>
+
+                            <!-- <div class="live-status">
+                                <span class="live-dot"></span>
+                                {isIrish ? 'BEO' : 'LIVE'}
+                            </div> -->
+
+                            <div class="programme">
+                                <h3>{show.title}</h3>
+
+                                <p>{formatTime(show.startTime)} – {formatTime(show.endTime)}</p>
+
+                                <!-- <span class="time">
+                                    {formatTime(show.startTime)}
+                                    –
+                                    {formatTime(show.endTime)}
+                                </span> -->
+                            </div>
+                            <div class="nextprogramme">
+                                {#if nextshow.title}
+                                    <p>{isIrish ? 'Ag teacht:' : 'Next'} {nextshow.title}</p>
+                                {/if}
+                            </div>
+                        </a>
                     </div>
                 {/each}
             </div>
         </div>
-        <button class="arrow right" onclick={next} aria-label="Next programmes">›</button>
+        <button class="arrow right" onclick={next} aria-label="Next live channels">›</button>
     </div>
 </section>
 
@@ -158,12 +247,6 @@
     gap: 10px;
 }
 
-/* 1330px carousel */
-.embla {
-    width: 1330px;
-    overflow: hidden;
-}
-
 .arrow {
     flex: 0 0 45px;
     width: 45px;
@@ -178,11 +261,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: -40px
+    margin-top: -105px
 }
 
 .arrow:hover {
     background: rgba(0,0,0,.85);
+}
+
+.embla {
+    width: 1330px;
+    overflow: hidden;
 }
 
 .embla__container {
@@ -195,32 +283,116 @@
     padding-right: 6px;
 }
 
-.embla__slide img {
+/* Live card */
+.live-card {
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    background: #2B2A2A;
+    color: white;
+    text-decoration: none;
+    overflow: hidden;
+}
+
+.live-image {
+    position: relative;
     width: 100%;
     aspect-ratio: 16 / 9;
-    object-fit: cover;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.live-image img {
+    width: 60%;
+    height: 60%;
+    object-fit: contain;
     display: block;
 }
 
-/* Boxset / portrait images */
-.boxset-rail .embla__slide img {
-    aspect-ratio: 5 / 7;
+.progress-track {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: rgba(255, 255, 255, .25);
 }
 
-.embla__slide h3 {
-    margin: 15px 0 0;
-    font-size: clamp(1rem, 1.5vw, 1.25rem);
-    font-weight: 700;
+.progress-bar {
+    width: 100%;
+    height: 100%;
+    background: var(--tg4-pink);
+    transform-origin: left;
+    animation-name: live-progress;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
 }
 
-@media (max-width:900px){
-    .embla__slide{
-        flex: 0 0 calc(50% - 10px);
+@keyframes live-progress {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
     }
 }
 
-@media (max-width:600px){
-    .embla__slide{
+.live-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 25px;
+    font-size: .85rem;
+    font-weight: 700;
+}
+
+.live-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: red;
+}
+
+.programme {
+    margin-top: 10px;
+}
+
+.nextprogramme {
+    margin-top: 5px;
+}
+
+.programme h3 {
+    margin: 0 0 8px;
+    font-size: clamp(1.1rem, 1.5vw, 1.4rem);
+}
+
+.programme p {
+    margin: 0 0 10px;
+    font-size: .95rem;
+    font-weight: 700;
+}
+
+.nextprogramme p {
+    margin: 0;
+    font-size: .95rem;
+    font-weight: 400;
+}
+
+.time {
+    font-size: .9rem;
+}
+
+@media (max-width: 900px) {
+    .embla__slide {
+        flex: 0 0 50%;
+    }
+}
+
+@media (max-width: 600px) {
+    .embla__slide {
         flex: 0 0 100%;
     }
 }

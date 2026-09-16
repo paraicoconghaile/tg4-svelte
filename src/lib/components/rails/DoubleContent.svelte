@@ -43,7 +43,8 @@ let {
     min-height: 610px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr 359px 359px;
+    grid-template-columns: 2fr 1fr 1fr;
+    /* grid-template-columns: 1fr 359px 359px; */
     gap: 5px;
 }
 
@@ -57,7 +58,7 @@ let {
 
 .content-card img {
     width: 100%;
-    height: 610px;
+    height: 100%;
     object-fit: cover;
 }
 
@@ -81,9 +82,19 @@ let {
     overflow: hidden;
 }
 
-@media(max-width:1000px){
+@media (max-width:900px) {
     .double-content {
-        grid-template-columns: 1fr;
+        min-height: 344px;
+        grid-template-columns: 1fr 25% 25%;
+    }
+}
+
+@media(max-width:450px) {
+    .double-content {
+        grid-template-columns: 1fr 81px 81px;
+    }
+    .intro {
+        padding: 20px;
     }
 }
 </style>

@@ -65,21 +65,35 @@
     background: var(--tg4-pink);
 }
 
-@media(max-width:1000px){
+@media (max-width: 1000px) {
     .category-rail {
-        grid-template-columns: repeat(2,1fr);
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(4, 1fr);
+        min-height: 400px;
     }
+
     .intro {
-        grid-column: span 2;
+        grid-column: 1;
+        grid-row: 1 / 5;
+    }
+
+    .category {
+        grid-column: 2;
+        padding: 0 80px;
     }
 }
 
-@media(max-width:600px){
+@media(max-width:600px) {
     .category-rail {
-        grid-template-columns: 1fr;
+        min-height: 300px;
     }
     .intro {
         grid-column: auto;
+        padding: 15px;
+    }
+    .play-box {
+        width: 54px;
+        height: 54px;
     }
 }
 </style>

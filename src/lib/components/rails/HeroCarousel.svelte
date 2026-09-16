@@ -319,12 +319,6 @@
     background: linear-gradient(rgba(0, 0, 0, .15), rgba(0, 0, 0, .45));
 }
 
-@media (max-width: 600px) {
-    .overlay p {
-        display: none;
-    }
-}
-
 .arrow {
     position: absolute;
     top: 50%;
@@ -381,5 +375,18 @@
     width: 28px;
     border-radius: 0px;
     background: var(--tg4-pink);
+}
+
+@media (max-width: 750px) {
+    .play-box {
+        width: 54px;
+        height: 54px;
+    }
+}
+
+@media (max-width: 600px) {
+    .overlay p {
+        display: none;
+    }
 }
 </style>
