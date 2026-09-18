@@ -71,21 +71,21 @@ let {
     padding: 20px;
 }
 
-.text h3 {
+.intro h3 {
     margin: 0 0 10px;
 }
 
-.text p {
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+.intro p {
+    max-width: 50%;
 }
 
 @media (max-width:900px) {
     .double-content {
         min-height: 344px;
         grid-template-columns: 1fr 25% 25%;
+    }
+    .intro p {
+        max-width: 80%;
     }
 }
 

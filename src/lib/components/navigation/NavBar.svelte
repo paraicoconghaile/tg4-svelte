@@ -7,6 +7,7 @@
     let openMenu = $state<number | null>(null);
     let searchOpen = $state(false);
     let searchTerm = $state('');
+    let mobileMenuOpen = $state(false);
 
     const switchLanguage = $derived.by(() => {
         const currentPath = page.url.pathname;
@@ -36,9 +37,26 @@
 
         return translatedPath + page.url.search + page.url.hash;
     });
+
+    function closeMobileMenu() {
+        mobileMenuOpen = false;
+    }
 </script>
 
 <nav class="navbar">
+    <div class="mobile-nav">
+        <button class="mobile-menu-button" aria-label="Open menu" onclick={() => mobileMenuOpen = !mobileMenuOpen}>☰</button>
+
+        <div class="mobile-logo">
+            <a href={isIrish ? '/ga' : '/en'}>
+                <img src="/icons/TG4_Player_Logo_Pink.svg" alt="TG4 Player"/>
+            </a>
+        </div>
+
+        <div class="mobile-search">
+            <button class="search-button" aria-label="Search" onclick={() => searchOpen = !searchOpen}>🔍</button>
+        </div>
+    </div>
     <div class="nav-left">
         <div class="logo">
             <a href={isIrish ? '/ga' : '/en'}><img src="/icons/TG4_Player_Logo_Pink.svg" alt="TG4 Player"></a>
@@ -57,23 +75,15 @@
                             <ul class="dropdown">
                                 {#each item.children as child}
                                     <li>
-                                        <a
-                                            href={isIrish
-                                                ? child.hrefGa
-                                                : child.hrefEn}
-                                        >
-                                            {isIrish
-                                                ? child.titleGa
-                                                : child.titleEn}
+                                        <a href={isIrish ? child.hrefGa : child.hrefEn}>
+                                            {isIrish ? child.titleGa : child.titleEn}
                                         </a>
                                     </li>
                                 {/each}
                             </ul>
                         {/if}
                     {:else}
-                        <a href={isIrish ? item.hrefGa : item.hrefEn}>
-                            {isIrish ? item.titleGa : item.titleEn}
-                        </a>
+                        <a href={isIrish ? item.hrefGa : item.hrefEn}>{isIrish ? item.titleGa : item.titleEn}</a>
                     {/if}
                 </li>
             {/each}
@@ -82,30 +92,60 @@
     <div class="nav-right">
         <div class="search-wrapper">
             {#if searchOpen}
-                <input
-                    bind:value={searchTerm}
-                    placeholder="Search..."
-                    autofocus
-                />
+                <input bind:value={searchTerm} placeholder="Search..." autofocus/>
             {/if}
-            <button
-                class="search-button"
-                aria-label="Search"
-                onclick={() => searchOpen = !searchOpen}
-            >
-                🔍
-            </button>
+            <button class="search-button" aria-label="Search" onclick={() => searchOpen = !searchOpen}>🔍</button>
         </div>
 
-        <a href={switchLanguage} class="language-switch">
-            {isIrish ? 'English' : 'Gaeilge'}
-        </a>
+        <a href={switchLanguage} class="language-switch">{isIrish ? 'English' : 'Gaeilge'}</a>
 
-        <button class="profile">
-            Profile ▼
-        </button>
+        <button class="profile">Profile ▼</button>
     </div>
 </nav>
+
+{#if mobileMenuOpen}
+    <div class="mobile-menu">
+        <div class="mobile-menu-header">
+            <span>
+                {isIrish ? 'Menu' : 'Menu'}
+            </span>
+            <button aria-label="Close menu" onclick={closeMobileMenu}>×</button>
+        </div>
+        <ul>
+            {#each navigation as item}
+                <li>
+                    {#if item.children}
+                        <div class="mobile-menu-heading">
+                            {isIrish ? item.titleGa : item.titleEn}
+                        </div>
+
+                        <ul class="mobile-submenu">
+                            {#each item.children as child}
+                                <li>
+                                    <a href={isIrish ? child.hrefGa : child.hrefEn} onclick={closeMobileMenu}>
+                                        {isIrish ? child.titleGa : child.titleEn}
+                                    </a>
+                                </li>
+                            {/each}
+                        </ul>
+                    {:else}
+                        <a href={isIrish ? item.hrefGa : item.hrefEn} onclick={closeMobileMenu}>
+                            {isIrish ? item.titleGa : item.titleEn}
+                        </a>
+                    {/if}
+                </li>
+            {/each}
+        </ul>
+        <div class="mobile-menu-footer">
+            <a href={switchLanguage} onclick={closeMobileMenu}>
+                {isIrish ? 'English' : 'Gaeilge'}
+            </a>
+            <button class="profile">
+                Profile
+            </button>
+        </div>
+    </div>
+{/if}
 
 <style>
 .navbar {
@@ -242,5 +282,127 @@
     font-family: var(--font-body);
     background: var(--tg4-white);
     color: var(--tg4-black);
+}
+
+.mobile-nav,
+.mobile-menu {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        height: 64px;
+        padding: 0 20px;
+    }
+
+    .nav-left,
+    .nav-right {
+        display: none;
+    }
+
+    .mobile-nav {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .mobile-logo img {
+        width: 100px;
+        height: auto;
+    }
+
+    .mobile-menu-button,
+    .mobile-search .search-button {
+        background: none;
+        border: none;
+        color: var(--tg4-white);
+        cursor: pointer;
+        padding: 5px;
+        font-size: 1.5rem;
+    }
+
+    .mobile-menu-button:hover,
+    .mobile-search .search-button:hover {
+        color: var(--tg4-pink);
+    }
+
+    .mobile-menu {
+        display: block;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--tg4-black);
+        color: var(--tg4-white);
+        z-index: 2000;
+        box-shadow: 0 12px 30px rgba(0,0,0,.35);
+    }
+
+    .mobile-menu-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 20px;
+        border-bottom: 1px solid rgba(255,255,255,.15);
+        font-weight: 700;
+    }
+
+    .mobile-menu-header button {
+        background: none;
+        border: none;
+        color: var(--tg4-white);
+        font-size: 2rem;
+        cursor: pointer;
+    }
+
+    .mobile-menu ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .mobile-menu > ul > li {
+        border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+
+    .mobile-menu a,
+    .mobile-menu-heading {
+        display: block;
+        padding: 16px 20px;
+        color: var(--tg4-white);
+        text-decoration: none;
+    }
+
+    .mobile-menu a:hover {
+        background: var(--tg4-pink);
+    }
+
+    .mobile-menu-heading {
+        font-weight: 700;
+    }
+
+    .mobile-submenu {
+        padding: 0 0 8px 15px !important;
+    }
+
+    .mobile-submenu a {
+        padding: 12px 20px;
+        font-weight: 400;
+    }
+
+    .mobile-menu-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px;
+        gap: 15px;
+    }
+
+    .mobile-menu-footer a {
+        background: var(--tg4-pink);
+        padding: 8px 18px;
+        font-weight: 700;
+    }
 }
 </style>

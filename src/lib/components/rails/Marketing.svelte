@@ -17,23 +17,27 @@
 <section class="marketing-rail">
     {#if image}
         <div class="marketing-image">
-            <img src={image.xLarge ?? image.large} alt={altText ?? ''} />
-
-            <!-- {#if buttonText && buttonUrl} -->
-            {#if buttonText}
-                <div
-                    class="marketing-action"
-                    class:left={rail.actionButtonPosition === 'LEFT'}
-                    class:center={rail.actionButtonPosition === 'CENTER'}
-                    class:right={rail.actionButtonPosition === 'RIGHT'}
-                >
-                    <a href={buttonUrl} class="marketing-button">{buttonText}</a>
-                </div>
-            {/if}
+            <img
+                src={image.xLarge ?? image.large}
+                alt={altText ?? ''}
+            />
 
             <div class="overlay">
-                <h2>{isIrish ? rail.titleGa : rail.titleEn}</h2>
-                <p>{isIrish ? rail.subtitleGa : rail.subtitleEn}</p>
+                <div class="marketing-text">
+                    <h2>{isIrish ? rail.titleGa : rail.titleEn}</h2>
+                    <p>{isIrish ? rail.subtitleGa : rail.subtitleEn}</p>
+                </div>
+
+                {#if buttonText}
+                    <div class="marketing-action">
+                        <a
+                            href={buttonUrl}
+                            class="marketing-button"
+                        >
+                            {buttonText}
+                        </a>
+                    </div>
+                {/if}
             </div>
         </div>
     {/if}
@@ -59,23 +63,47 @@
     object-fit: cover;
 }
 
-.marketing-action {
+.overlay {
     position: absolute;
-    bottom: 40px;
+    inset: 0;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 70px;
+    color: white;
+    z-index: 2;
+}
+
+.marketing-text {
+    text-align: left;
+    max-width: 500px;
+}
+
+.marketing-text h2 {
+    margin: 0 0 10px;
+}
+
+.marketing-text p {
+    margin: 0;
+}
+
+.marketing-action {
+    display: flex;
+    align-items: center;
 }
 
 .marketing-action.left {
-    left: 40px;
+    margin-right: auto;
 }
 
 .marketing-action.center {
+    position: absolute;
     left: 50%;
     transform: translateX(-50%);
 }
 
 .marketing-action.right {
-    right: 40px;
+    margin-left: auto;
 }
 
 .marketing-button {
@@ -93,30 +121,37 @@
     background: rgba(0,0,0,.85);
 }
 
-.overlay {
-    position: absolute;
-    left: 70px;
-    bottom: 30%;
-    max-width: 500px;
-    color: white;
-    z-index: 2;
-}
-
 @media (max-width: 600px) {
+    .overlay {
+        padding: 0 20px;
+    }
     .marketing-action {
-        bottom: 20px;
+        /* no longer positioned from bottom */
     }
-
-    .marketing-action.left {
-        left: 20px;
-    }
-
-    .marketing-action.right {
-        right: 20px;
-    }
-
     .marketing-button {
         padding: 10px 20px;
+    }
+}
+
+@media (max-width: 450px) {
+    .marketing-text h2 {
+        margin: 0;
+    }
+    .marketing-button {
+        padding: 4px 10px;
+    }
+}
+
+@media (max-width: 330px) {
+    .marketing-text h2 {
+        font-size: 1.5rem;
+    }
+
+    .marketing-text p {
+        font-size: 0.8rem;
+    }
+    .marketing-button {
+        font-size: 0.8rem;
     }
 }
 </style>

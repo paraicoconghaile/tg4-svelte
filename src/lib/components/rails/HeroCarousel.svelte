@@ -319,6 +319,10 @@
     background: linear-gradient(rgba(0, 0, 0, .15), rgba(0, 0, 0, .45));
 }
 
+.overlay p {
+    max-width: 50%;
+}
+
 .arrow {
     position: absolute;
     top: 50%;
