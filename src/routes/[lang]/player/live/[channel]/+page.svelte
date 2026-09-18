@@ -3,7 +3,6 @@
     import { onDestroy } from 'svelte';
 
     let { data } = $props();
-
     let player: any = null;
     let brightcovePromise: Promise<void> | null = null;
 
@@ -19,17 +18,12 @@
         brightcovePromise = new Promise((resolve, reject) => {
             const script = document.createElement('script');
 
-            script.src =
-                'https://players.brightcove.net/1555966122001/D0RgRVjpd_default/index.min.js';
+            script.src = 'https://players.brightcove.net/1555966122001/D0RgRVjpd_default/index.min.js';
 
             script.onload = () => resolve();
 
             script.onerror = () => {
-                reject(
-                    new Error(
-                        'Failed to load Brightcove'
-                    )
-                );
+                reject(new Error('Failed to load Brightcove'));
             };
 
             document.head.appendChild(script);
@@ -39,67 +33,48 @@
     }
 
     async function initialisePlayer() {
+        if (player) {
+            console.log('Disposing previous Brightcove player:', data.channel);
+
+            try {
+                player.dispose();
+            } catch (error) {
+                console.error ('Error disposing previous player:', error);
+            }
+
+            player = null;
+        }
+
         await tick();
 
-        const video = document.getElementById(
-            'tg4-live-player'
-        ) as HTMLElement;
+        const video = document.getElementById('tg4-live-player') as HTMLElement;
 
         if (!video) {
-            console.error(
-                'Brightcove video element not found'
-            );
+            console.error ('Brightcove video element not found');
             return;
         }
 
-        video.setAttribute(
-            'data-account',
-            '1555966122001'
-        );
-
-        video.setAttribute(
-            'data-player',
-            'D0RgRVjpd'
-        );
-
-        video.setAttribute(
-            'data-embed',
-            'default'
-        );
-
-        video.setAttribute(
-            'data-video-id',
-            data.stream.streamId
-        );
-
-        video.setAttribute(
-            'data-live-playback-token',
-            data.stream.liveToken
-        );
+        video.setAttribute('data-account', '1555966122001');
+        video.setAttribute('data-player', 'D0RgRVjpd');
+        video.setAttribute('data-embed', 'default');
+        video.setAttribute('data-video-id', data.stream.streamId);
+        video.setAttribute('data-live-playback-token', data.stream.liveToken);
 
         await loadBrightcove();
 
         const bc = (window as any).bc;
 
         if (!bc) {
-            console.error(
-                'Brightcove bc() not available'
-            );
+            console.error ('Brightcove bc() not available');
             return;
         }
 
-        console.log(
-            'Initialising Brightcove:',
-            data.channel
-        );
+        console.log('Initialising Brightcove:', data.channel);
 
         player = bc(video);
 
         player.ready(() => {
-            console.log(
-                'Brightcove player ready:',
-                data.channel
-            );
+            console.log('Brightcove player ready:', data.channel);
 
             if (data.channel !== 'TG4PLUSONE') {
                 return;
@@ -108,21 +83,14 @@
             const liveTracker = player.liveTracker;
 
             if (!liveTracker) {
-                console.error(
-                    'Brightcove LiveTracker not available'
-                );
+                console.error ('Brightcove LiveTracker not available');
                 return;
             }
 
             const checkLiveTracker = () => {
-                const liveCurrentTime =
-                    liveTracker.liveCurrentTime();
-
-                const seekableStart =
-                    liveTracker.seekableStart();
-
-                const seekableEnd =
-                    liveTracker.seekableEnd();
+                const liveCurrentTime = liveTracker.liveCurrentTime();
+                const seekableStart = liveTracker.seekableStart();
+                const seekableEnd = liveTracker.seekableEnd();
 
                 console.log(
                     'LiveTracker values:',
@@ -141,32 +109,21 @@
                     return;
                 }
 
-                const offsetSeconds =
-                    data.stream.offsetSeconds ?? 3600;
-
-                const targetTime =
-                    liveCurrentTime - offsetSeconds;
+                const offsetSeconds = data.stream.offsetSeconds ?? 3600;
+                const targetTime = liveCurrentTime - offsetSeconds;
 
                 if (
                     targetTime < seekableStart ||
                     targetTime > seekableEnd
                 ) {
-                    console.error(
-                        'TG4+1 target is outside seekable range'
-                    );
+                    console.error ('TG4+1 target is outside seekable range');
                     return;
                 }
 
-                console.log(
-                    'TG4+1 waiting for player to start before seeking:',
-                    targetTime
-                );
+                console.log('TG4+1 waiting for player to start before seeking:', targetTime);
 
                 const seekToOffset = () => {
-                    console.log(
-                        'Seeking TG4+1 to:',
-                        targetTime
-                    );
+                    console.log('Seeking TG4+1 to:', targetTime);
 
                     player.currentTime(targetTime);
                 };
@@ -179,17 +136,15 @@
         });
 
         player.on('error', () => {
-            console.error(
-                'Brightcove error:',
-                player.error()
-            );
+            console.error ('Brightcove error:', player.error());
         });
     }
 
     $effect(() => {
         const streamId = data.stream?.streamId;
+        const channel = data.channel;
 
-        if (!streamId) {
+        if (!streamId || !channel) {
             return;
         }
 
@@ -203,10 +158,7 @@
             try {
                 player.dispose();
             } catch (error) {
-                console.error(
-                    'Error disposing Brightcove player:',
-                    error
-                );
+                console.error ('Error disposing Brightcove player:', error);
             }
 
             player = null;
@@ -216,7 +168,7 @@
 
 <section class="live-page">
     <div class="player-container">
-        {#key data.stream.streamId}
+        {#key data.channel + '-' + data.stream.streamId}
             <video-js
                 id="tg4-live-player"
                 class="video-js vjs-big-play-centered"
@@ -230,15 +182,15 @@
 </section>
 
 <style>
-    .live-page {
-        max-width: var(--page-width);
-        margin: 0 auto;
-        background-color: var(--genre-background);
-    }
+.live-page {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    background-color: var(--genre-background);
+}
 
-    .player-container :global(.video-js),
-    .player-container :global(.vjs-tech) {
-        width: 100%;
-        height: 100%;
-    }
+.player-container :global(.video-js),
+.player-container :global(.vjs-tech) {
+    width: 100%;
+    height: 100%;
+}
 </style>
