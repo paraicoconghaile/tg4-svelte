@@ -28,7 +28,8 @@
 
     let {
         rail,
-        isIrish
+        isIrish,
+        showNext = true
     } = $props();
 
     let streams = $state(
@@ -66,51 +67,6 @@
         );
     }
 
-    /* function scheduleNextShow(stream: any) {
-        const endTime = new Date(
-            stream.currentShow.endTime
-        ).getTime();
-
-        const delay = endTime - Date.now();
-
-        setTimeout(async () => {
-            try {
-                const data = await getRails();
-
-                const liveRail = data.rails?.find(
-                    (item: any) => item.type === 'LIVE'
-                );
-
-                const updatedItem = liveRail?.items?.find(
-                    (item: any) =>
-                        item.type === 'LIVE_STREAM' &&
-                        item.stream?.stream === stream.stream
-                );
-
-                if (updatedItem?.stream) {
-                    streams = streams.map((item: any) => {
-                        if (item.stream === stream.stream) {
-                            return updatedItem.stream;
-                        }
-
-                        return item;
-                    });
-
-                    scheduleNextShow(updatedItem.stream);
-                }
-
-            } catch (error) {
-                console.error('Failed to refresh live data:', error);
-            }
-        }, Math.max(delay, 0));
-    }
-
-    onMount(() => {
-        streams.forEach((stream: any) => {
-            scheduleNextShow(stream);
-        });
-    }); */
-
     function scheduleNextShow(stream: any) {
         const endTime = new Date(
             stream.currentShow.endTime
@@ -125,8 +81,14 @@
     }
 
     onMount(() => {
-        streams.forEach((stream: any) => {
-            scheduleNextShow(stream);
+        streams
+            .filter(
+                (stream: any) =>
+                    stream.state === 'ONAIR' &&
+                    stream.currentShow
+            )
+            .forEach((stream: any) => {
+                scheduleNextShow(stream);
         });
 
         async function handleVisibilityChange() {
@@ -175,7 +137,7 @@
             <div class="embla__container">
                 <!-- {#each rail.items as item}
                     {@const stream = item.stream} -->
-                {#each streams as stream}
+                {#each streams.filter((stream: any) => stream.state === 'ONAIR' && stream.currentShow) as stream}
                     {@const show = stream.currentShow}
                     {@const nextshow = stream.nextShow}
 
@@ -214,11 +176,11 @@
                                     {formatTime(show.endTime)}
                                 </span> -->
                             </div>
-                            <div class="nextprogramme">
-                                {#if nextshow.title}
+                            {#if showNext && nextshow?.title}
+                                <div class="nextprogramme">
                                     <p>{isIrish ? 'Ag teacht:' : 'Next'} {nextshow.title}</p>
-                                {/if}
-                            </div>
+                                </div>
+                            {/if}
                         </a>
                     </div>
                 {/each}

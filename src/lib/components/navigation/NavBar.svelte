@@ -54,7 +54,9 @@
         </div>
 
         <div class="mobile-search">
-            <button class="search-button" aria-label="Search" onclick={() => searchOpen = !searchOpen}>🔍</button>
+            <button class="search-button" aria-label="Search" onclick={() => searchOpen = !searchOpen}><svg width="12" height="16" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M6.91031 0.00528926C6.83613 0.00264463 6.76196 0 6.68648 0C6.67476 0 6.66175 0 6.65004 0C6.63833 0 6.62531 0 6.6136 0C6.53812 0 6.46394 0.00264463 6.38976 0.00528926C3.5892 0.113719 1.30008 2.24264 1.30008 5.42017C1.30008 7.19207 2.02755 8.69686 3.2144 9.67802C3.28207 9.73355 3.35235 9.78777 3.42262 9.84066L0 16H2.82399L5.71435 10.806C5.80414 10.8218 5.89394 10.8364 5.98634 10.8483C6.11908 10.8641 6.25312 10.8774 6.38976 10.884C6.47565 10.8893 6.56285 10.8919 6.65004 10.8932C6.73723 10.8932 6.82442 10.8893 6.91031 10.884C9.85143 10.7279 12 8.46678 12 5.42149C12 2.3762 9.70958 0.112397 6.91031 0.00528926ZM6.91031 8.77223C6.82442 8.78149 6.73853 8.78678 6.65004 8.78942C6.56154 8.78678 6.47565 8.78016 6.38976 8.77223C4.7253 8.6043 3.57749 7.27405 3.57749 5.46777C3.57749 3.66149 4.73181 2.22149 6.38976 2.11041C6.46134 2.10512 6.53291 2.10248 6.60709 2.10248C6.62141 2.10248 6.63572 2.10248 6.65004 2.1038C6.66435 2.1038 6.67867 2.10248 6.69298 2.10248C6.76586 2.10248 6.83874 2.10512 6.91031 2.11041C8.56957 2.22149 9.72389 3.59669 9.72389 5.46777C9.72389 7.33884 8.57477 8.60297 6.91031 8.77223Z" fill="white"/>
+</svg>  {isIrish ? 'Cuardaigh' : 'Search'}</button>
         </div>
     </div>
     <div class="nav-left">
@@ -92,9 +94,11 @@
     <div class="nav-right">
         <div class="search-wrapper">
             {#if searchOpen}
-                <input bind:value={searchTerm} placeholder="Search..." autofocus/>
+                <input bind:value={searchTerm} placeholder="{isIrish ? 'Cuardaigh' : 'Search'}..." autofocus/>
             {/if}
-            <button class="search-button" aria-label="Search" onclick={() => searchOpen = !searchOpen}>🔍</button>
+            <button class="search-button" aria-label="Search" onclick={() => searchOpen = !searchOpen}><svg width="12" height="16" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M6.91031 0.00528926C6.83613 0.00264463 6.76196 0 6.68648 0C6.67476 0 6.66175 0 6.65004 0C6.63833 0 6.62531 0 6.6136 0C6.53812 0 6.46394 0.00264463 6.38976 0.00528926C3.5892 0.113719 1.30008 2.24264 1.30008 5.42017C1.30008 7.19207 2.02755 8.69686 3.2144 9.67802C3.28207 9.73355 3.35235 9.78777 3.42262 9.84066L0 16H2.82399L5.71435 10.806C5.80414 10.8218 5.89394 10.8364 5.98634 10.8483C6.11908 10.8641 6.25312 10.8774 6.38976 10.884C6.47565 10.8893 6.56285 10.8919 6.65004 10.8932C6.73723 10.8932 6.82442 10.8893 6.91031 10.884C9.85143 10.7279 12 8.46678 12 5.42149C12 2.3762 9.70958 0.112397 6.91031 0.00528926ZM6.91031 8.77223C6.82442 8.78149 6.73853 8.78678 6.65004 8.78942C6.56154 8.78678 6.47565 8.78016 6.38976 8.77223C4.7253 8.6043 3.57749 7.27405 3.57749 5.46777C3.57749 3.66149 4.73181 2.22149 6.38976 2.11041C6.46134 2.10512 6.53291 2.10248 6.60709 2.10248C6.62141 2.10248 6.63572 2.10248 6.65004 2.1038C6.66435 2.1038 6.67867 2.10248 6.69298 2.10248C6.76586 2.10248 6.83874 2.10512 6.91031 2.11041C8.56957 2.22149 9.72389 3.59669 9.72389 5.46777C9.72389 7.33884 8.57477 8.60297 6.91031 8.77223Z" fill="white"/>
+</svg></button>
         </div>
 
         <a href={switchLanguage} class="language-switch">{isIrish ? 'English' : 'Gaeilge'}</a>
@@ -155,7 +159,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #2B2A2A;
+    background: var(--tg4-grey-2);
     padding: 0 55px;
     box-sizing: border-box;
 }
@@ -181,7 +185,7 @@
     display: flex;
     align-items: center;
     list-style: none;
-    gap: 40px;
+    gap: 30px;
     margin: 0;
     padding: 0;
 }
@@ -264,10 +268,11 @@
 .search-button {
     background: none;
     border: none;
-    padding: 0;
+    padding: 4px 18px;
     color: var(--tg4-white);
-    font-size: 1.4rem;
+    font-size: 1rem;
     cursor: pointer;
+    background: var(--tg4-grey-1);
 }
 
 .search-button:hover {
@@ -275,9 +280,9 @@
 }
 
 .search-wrapper input {
-    width: 220px;
+    width: 180px;
     margin-right: 12px;
-    padding: 10px 15px;
+    padding: 6px 12px;
     border: 1px solid var(--grey-300);
     font-family: var(--font-body);
     background: var(--tg4-white);
@@ -319,7 +324,7 @@
         color: var(--tg4-white);
         cursor: pointer;
         padding: 5px;
-        font-size: 1.5rem;
+        font-size: 1rem;
     }
 
     .mobile-menu-button:hover,

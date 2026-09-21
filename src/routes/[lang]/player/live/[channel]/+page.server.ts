@@ -16,6 +16,7 @@ export async function load({ params }) {
     return {
         lang: params.lang,
         channel: params.channel,
-        stream
+        stream,
+        liveStreams: data.streams
     };
 }

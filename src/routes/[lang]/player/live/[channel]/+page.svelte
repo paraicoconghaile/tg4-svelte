@@ -1,10 +1,14 @@
 <script lang="ts">
     import { tick } from 'svelte';
     import { onDestroy } from 'svelte';
+    import LiveCarousel from '$lib/components/rails/LiveCarousel.svelte';
 
     let { data } = $props();
+    let videoElement: HTMLElement | null = null;
     let player: any = null;
     let brightcovePromise: Promise<void> | null = null;
+    let initId = 0;
+    let destroyed = false;
 
     function loadBrightcove(): Promise<void> {
         if ((window as any).bc) {
@@ -33,6 +37,8 @@
     }
 
     async function initialisePlayer() {
+        const thisInit = ++initId;
+
         if (player) {
             console.log('Disposing previous Brightcove player:', data.channel);
 
@@ -47,7 +53,11 @@
 
         await tick();
 
-        const video = document.getElementById('tg4-live-player') as HTMLElement;
+        if (destroyed || thisInit !== initId) {
+            return;
+        }
+
+        const video = videoElement;
 
         if (!video) {
             console.error ('Brightcove video element not found');
@@ -62,6 +72,10 @@
 
         await loadBrightcove();
 
+        if (destroyed || thisInit !== initId) {
+            return;
+        }
+
         const bc = (window as any).bc;
 
         if (!bc) {
@@ -74,6 +88,10 @@
         player = bc(video);
 
         player.ready(() => {
+            if (destroyed || thisInit !== initId) {
+                return;
+            }
+            
             console.log('Brightcove player ready:', data.channel);
 
             if (data.channel !== 'TG4PLUSONE') {
@@ -140,6 +158,8 @@
         });
     }
 
+    let lastStreamKey = '';
+
     $effect(() => {
         const streamId = data.stream?.streamId;
         const channel = data.channel;
@@ -148,10 +168,21 @@
             return;
         }
 
+        const streamKey = `${channel}-${streamId}`;
+
+        if (streamKey === lastStreamKey) {
+            return;
+        }
+
+        lastStreamKey = streamKey;
+
         initialisePlayer();
     });
 
     onDestroy(() => {
+        destroyed = true;
+        initId++;
+
         if (player) {
             console.log('Disposing Brightcove player');
 
@@ -163,13 +194,28 @@
 
             player = null;
         }
+
+        videoElement = null;
     });
 </script>
 
 <section class="live-page">
+    <LiveCarousel
+        rail={{
+            type: 'LIVE',
+            items: data.liveStreams.map((stream: any) => ({
+                type: 'LIVE_STREAM',
+                stream
+            }))
+        }}
+        isIrish={data.lang === 'ga'}
+        showNext={false}
+    />
+
     <div class="player-container">
         {#key data.channel + '-' + data.stream.streamId}
             <video-js
+                bind:this={videoElement}
                 id="tg4-live-player"
                 class="video-js vjs-big-play-centered"
                 controls
