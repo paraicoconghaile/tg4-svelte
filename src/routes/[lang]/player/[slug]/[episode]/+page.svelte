@@ -40,7 +40,7 @@
             script
         );
 
-       //console.log('6. SCRIPT INSERTED');
+        //console.log('6. SCRIPT INSERTED');
     }
 
     function getImageUrl(data: any) {
