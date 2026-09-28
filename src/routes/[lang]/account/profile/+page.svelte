@@ -4,55 +4,216 @@
 
     let loading = true;
     let error = '';
+
+    let pu: any = null;
     let profile: any = null;
+
+    // Email
+    let newEmail = '';
+    let emailPassword = '';
+    let emailMessage = '';
+    let updatingEmail = false;
+
+    // Password
+    let currentPassword = '';
+    let newPassword = '';
+    let passwordMessage = '';
+    let updatingPassword = false;
 
     onMount(async () => {
         try {
-            const pu = await loadPeachUser();
+            pu = await loadPeachUser();
 
             profile = await pu.getCombinedSessionAndPreferenceProfile();
 
             console.log('PROFILE:', profile);
 
+            newEmail = profile.profile.contactEmail;
+
             loading = false;
         } catch (err) {
             console.error('Profile error:', err);
-
             error = err instanceof Error ? err.message : String(err);
             loading = false;
         }
     });
+
+    async function changeEmail() {
+        emailMessage = '';
+
+        if (!newEmail.trim()) {
+            emailMessage = 'Please enter an email address.';
+            return;
+        }
+
+        if (!emailPassword) {
+            emailMessage = 'Please enter your current password.';
+            return;
+        }
+
+        updatingEmail = true;
+
+        try {
+            const response = await pu.changeEmail(
+                newEmail.trim(),
+                emailPassword
+            );
+
+            console.log('CHANGE EMAIL RESPONSE:', response);
+
+            emailMessage = 'Email address updated.';
+            emailPassword = '';
+        } catch (err) {
+            console.error('Change email error:', err);
+            emailMessage = 'Unable to update email address.';
+        } finally {
+            updatingEmail = false;
+        }
+    }
+
+    async function changePassword() {
+        passwordMessage = '';
+
+        if (!currentPassword || !newPassword) {
+            passwordMessage = 'Please enter your current and new password.';
+            return;
+        }
+
+        updatingPassword = true;
+
+        try {
+            const response = await pu.updatePassword(
+                profile.profile.contactEmail,
+                newPassword,
+                currentPassword
+            );
+
+            console.log('CHANGE PASSWORD RESPONSE:', response);
+
+            passwordMessage = 'Password updated.';
+
+            currentPassword = '';
+            newPassword = '';
+        } catch (err) {
+            console.error('Change password error:', err);
+            passwordMessage = 'Unable to update password.';
+        } finally {
+            updatingPassword = false;
+        }
+    }
 </script>
 
-<div class="account-page">
+{#if loading}
 
-    {#if loading}
-        <p>Loading profile...</p>
+    <p>Loading...</p>
 
-    {:else if error}
-        <p class="error">{error}</p>
+{:else if error}
 
-    {:else}
-        <h1>Profile</h1>
+    <p>{error}</p>
 
-        <pre>{JSON.stringify(profile, null, 2)}</pre>
-    {/if}
+{:else}
 
-</div>
+    <section class="account">
 
-<style>
-    .account-page {
-        max-width: 1000px;
-        margin: 100px auto;
-        padding: 20px;
-    }
+        <h2>Account</h2>
 
-    .error {
-        color: red;
-    }
+        <!-- EMAIL -->
 
-    pre {
-        white-space: pre-wrap;
-        word-break: break-word;
-    }
-</style>
+        <div class="account-section">
+
+            <h3>Email address</h3>
+
+            <form
+                onsubmit={(event) => {
+                    event.preventDefault();
+                    changeEmail();
+                }}
+            >
+
+                <label for="email">
+                    Email address
+                </label>
+
+                <input
+                    id="email"
+                    type="email"
+                    bind:value={newEmail}
+                />
+
+                <label for="email-password">
+                    Current password
+                </label>
+
+                <input
+                    id="email-password"
+                    type="password"
+                    bind:value={emailPassword}
+                />
+
+                <button
+                    type="submit"
+                    disabled={updatingEmail}
+                >
+                    {updatingEmail ? 'Updating...' : 'Update email'}
+                </button>
+
+            </form>
+
+            {#if emailMessage}
+                <p>{emailMessage}</p>
+            {/if}
+
+        </div>
+
+
+        <!-- PASSWORD -->
+
+        <div class="account-section">
+
+            <h3>Password</h3>
+
+            <form
+                onsubmit={(event) => {
+                    event.preventDefault();
+                    changePassword();
+                }}
+            >
+
+                <label for="current-password">
+                    Current password
+                </label>
+
+                <input
+                    id="current-password"
+                    type="password"
+                    bind:value={currentPassword}
+                />
+
+                <label for="new-password">
+                    New password
+                </label>
+
+                <input
+                    id="new-password"
+                    type="password"
+                    bind:value={newPassword}
+                />
+
+                <button
+                    type="submit"
+                    disabled={updatingPassword}
+                >
+                    {updatingPassword ? 'Updating...' : 'Update password'}
+                </button>
+
+            </form>
+
+            {#if passwordMessage}
+                <p>{passwordMessage}</p>
+            {/if}
+
+        </div>
+
+    </section>
+
+{/if}

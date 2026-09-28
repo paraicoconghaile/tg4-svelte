@@ -17,5 +17,8 @@ export default defineConfig({
 			//adapter: adapter()
 		}) */
         sveltekit()
-	]
+	], 
+	server: {
+        port: 3001
+    }
 });
