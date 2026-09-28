@@ -44,11 +44,30 @@
         loggingIn = true;
 
         try {
-            /* await pu.login(email, password);
-            window.location.href = `/${page.params.lang}/account/profile/`; */
-
             const response = await pu.login(email, password);
+
             console.log('LOGIN RESPONSE:', response);
+
+            if (response.status !== 204) {
+                error = 'Invalid email address or password.';
+                loggingIn = false;
+                return;
+            }
+
+            console.log('LOGIN SUCCESS');
+
+            try {
+                const profile = await pu.getCombinedSessionAndPreferenceProfile();
+
+                console.log('PROFILE:', profile);
+            } catch (err) {
+                console.error('PROFILE ERROR:', err);
+            }
+
+            loggingIn = false;
+
+            /* window.location.href = `/${page.params.lang}/account/profile/`; */
+
         } catch (err) {
             console.error('Login error:', err);
 
