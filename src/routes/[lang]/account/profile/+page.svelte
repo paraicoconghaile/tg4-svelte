@@ -61,8 +61,38 @@
 
             console.log('CHANGE EMAIL RESPONSE:', response);
 
-            emailMessage = 'Email address updated.';
-            emailPassword = '';
+            switch (response.status) {
+                case 200:
+                    emailMessage = 'Email Changed!';
+                    break;
+
+                case 204:
+                    emailMessage =
+                        'Email with verification link sent to new email address.';
+                    break;
+
+                case 400:
+                    emailMessage = 'New Email already taken.';
+                    break;
+
+                case 401:
+                    emailMessage = 'Current Password is incorrect.';
+                    break;
+
+                case 429:
+                    emailMessage =
+                        'Too many requests. Please try later.';
+                    break;
+
+                default:
+                    emailMessage =
+                        'Unable to update email address.';
+            }
+
+            if (response.status === 200 || response.status === 204) {
+                emailPassword = '';
+            }
+
         } catch (err) {
             console.error('Change email error:', err);
             emailMessage = 'Unable to update email address.';
