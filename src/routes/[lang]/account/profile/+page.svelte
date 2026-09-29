@@ -20,6 +20,39 @@
     let passwordMessage = '';
     let updatingPassword = false;
 
+    const accountMessages = {
+        en: {
+            password: {
+                changed: 'Password Changed!',
+                incorrect: 'Current Password is incorrect.',
+                weak: 'New Password is not strong enough.'
+            },
+            email: {
+                changed: 'Email Changed!',
+                verification: 'Email with verification link sent to new email address.',
+                taken: 'New Email already taken.',
+                incorrect: 'Current Password is incorrect.',
+                tooMany: 'Too many requests. Please try later.'
+            }
+        },
+        ga: {
+            password: {
+                changed: 'Athraíodh an pasfhocal!',
+                incorrect: 'Tá an pasfhocal reatha mícheart.',
+                weak: 'Níl an pasfhocal nua sách láidir.'
+            },
+            email: {
+                changed: 'Athraíodh an seoladh ríomhphoist!',
+                verification: 'Seoladh ríomhphost le nasc fíoraithe chuig an seoladh ríomhphoist nua.',
+                taken: 'Tá an seoladh ríomhphoist nua in úsáid cheana féin.',
+                incorrect: 'Tá an pasfhocal reatha mícheart.',
+                tooMany: 'An iomarca iarratas. Bain triail eile as ar ball.'
+            }
+        }
+    };
+
+    const messages = accountMessages[isIrish ? 'ga' : 'en'];
+
     onMount(async () => {
         try {
             pu = await loadPeachUser();
@@ -54,39 +87,34 @@
         updatingEmail = true;
 
         try {
-            const response = await pu.changeEmail(
-                newEmail.trim(),
-                emailPassword
-            );
+            const response = await pu.changeEmail(newEmail.trim(), emailPassword);
 
             console.log('CHANGE EMAIL RESPONSE:', response);
 
             switch (response) {
                 case 200:
-                    emailMessage = 'Email Changed!';
+                    emailMessage = messages.email.changed;
                     break;
 
                 case 204:
-                    emailMessage =
-                        'Email with verification link sent to new email address.';
+                    emailMessage = messages.email.verification;
                     break;
 
                 case 400:
-                    emailMessage = 'New Email already taken.';
+                    emailMessage = messages.email.taken;
                     break;
 
                 case 401:
-                    emailMessage = 'Current Password is incorrect.';
+                    emailMessage = messages.email.incorrect;
                     break;
 
                 case 429:
-                    emailMessage =
-                        'Too many requests. Please try later.';
+                    emailMessage = messages.email.tooMany;
                     break;
 
                 default:
-                    emailMessage =
-                        'Unable to update email address.';
+                    emailMessage = 'Unable to update email address.';
+                    break;
             }
 
             if (response.status === 200 || response.status === 204) {
@@ -120,10 +148,27 @@
 
             console.log('CHANGE PASSWORD RESPONSE:', response);
 
-            passwordMessage = 'Password updated.';
+            switch (response) {
+                case 200:
+                case 204:
+                    passwordMessage = messages.password.changed;
+                    currentPassword = '';
+                    newPassword = '';
+                    break;
 
-            currentPassword = '';
-            newPassword = '';
+                case 401:
+                    passwordMessage = messages.password.incorrect;
+                    break;
+
+                case 500:
+                    passwordMessage = messages.password.weak;
+                    break;
+
+                default:
+                    passwordMessage = 'Unable to update password.';
+                    break;
+            }
+            
         } catch (err) {
             console.error('Change password error:', err);
             passwordMessage = 'Unable to update password.';
@@ -133,117 +178,68 @@
     }
 </script>
 
-{#if loading}
+<section class="profile-page">
+    {#if loading}
+        <p>Loading...</p>
+    {:else if error}
+        <p>{error}</p>
+    {:else}
+        <section class="account">
+            <h2>Account</h2>
 
-    <p>Loading...</p>
+            <!-- EMAIL -->
+            <div class="account-section">
+                <h3>Email address</h3>
+                <form onsubmit={(event) => {event.preventDefault(); changeEmail();}}>
+                    <label for="email">Email address</label>
 
-{:else if error}
+                    <input id="email" type="email" bind:value={newEmail}/>
 
-    <p>{error}</p>
+                    <label for="email-password">Current password</label>
 
-{:else}
+                    <input id="email-password" type="password" bind:value={emailPassword}/>
 
-    <section class="account">
+                    <button type="submit" disabled={updatingEmail}>
+                        {updatingEmail ? 'Updating...' : 'Update email'}
+                    </button>
+                </form>
 
-        <h2>Account</h2>
+                {#if emailMessage}
+                    <p>{emailMessage}</p>
+                {/if}
+            </div>
 
-        <!-- EMAIL -->
+            <!-- PASSWORD -->
+            <div class="account-section">
+                <h3>Password</h3>
 
-        <div class="account-section">
+                <form onsubmit={(event) => {event.preventDefault(); changePassword();}}>
+                    <label for="current-password">Current password</label>
 
-            <h3>Email address</h3>
+                    <input id="current-password" type="password" bind:value={currentPassword}/>
 
-            <form
-                onsubmit={(event) => {
-                    event.preventDefault();
-                    changeEmail();
-                }}
-            >
+                    <label for="new-password">New password</label>
 
-                <label for="email">
-                    Email address
-                </label>
+                    <input id="new-password" type="password" bind:value={newPassword}/>
 
-                <input
-                    id="email"
-                    type="email"
-                    bind:value={newEmail}
-                />
+                    <button type="submit" disabled={updatingPassword}>
+                        {updatingPassword ? 'Updating...' : 'Update password'}
+                    </button>
 
-                <label for="email-password">
-                    Current password
-                </label>
+                </form>
 
-                <input
-                    id="email-password"
-                    type="password"
-                    bind:value={emailPassword}
-                />
+                {#if passwordMessage}
+                    <p>{passwordMessage}</p>
+                {/if}
+            </div>
+        </section>
+    {/if}
+</section>
 
-                <button
-                    type="submit"
-                    disabled={updatingEmail}
-                >
-                    {updatingEmail ? 'Updating...' : 'Update email'}
-                </button>
-
-            </form>
-
-            {#if emailMessage}
-                <p>{emailMessage}</p>
-            {/if}
-
-        </div>
-
-
-        <!-- PASSWORD -->
-
-        <div class="account-section">
-
-            <h3>Password</h3>
-
-            <form
-                onsubmit={(event) => {
-                    event.preventDefault();
-                    changePassword();
-                }}
-            >
-
-                <label for="current-password">
-                    Current password
-                </label>
-
-                <input
-                    id="current-password"
-                    type="password"
-                    bind:value={currentPassword}
-                />
-
-                <label for="new-password">
-                    New password
-                </label>
-
-                <input
-                    id="new-password"
-                    type="password"
-                    bind:value={newPassword}
-                />
-
-                <button
-                    type="submit"
-                    disabled={updatingPassword}
-                >
-                    {updatingPassword ? 'Updating...' : 'Update password'}
-                </button>
-
-            </form>
-
-            {#if passwordMessage}
-                <p>{passwordMessage}</p>
-            {/if}
-
-        </div>
-
-    </section>
-
-{/if}
+<style>
+.profile-page {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    background-color: var(--genre-background);
+}
+</style>
