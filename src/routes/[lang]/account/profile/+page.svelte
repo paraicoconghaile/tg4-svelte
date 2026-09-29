@@ -248,8 +248,9 @@
 
 <style>
 .profile-page {
-    max-width: var(--page-width);
+    max-width: 700px;
     margin: 0 auto;
+    padding: 20px;
     background-color: var(--genre-background);
 }
 </style>

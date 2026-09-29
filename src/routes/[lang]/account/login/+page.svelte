@@ -66,7 +66,7 @@
 
             loggingIn = false;
 
-            /* window.location.href = `/${page.params.lang}/account/profile/`; */
+            window.location.href = `/${page.params.lang}/account/profile/`; /* */
 
         } catch (err) {
             console.error('Login error:', err);
@@ -128,9 +128,10 @@
 
 <style>
 .account-page {
-    max-width: 500px;
-    margin: 100px auto;
+    max-width: 700px;
+    margin: 0 auto;
     padding: 20px;
+    background-color: var(--genre-background);
 }
 
 .form-field {
