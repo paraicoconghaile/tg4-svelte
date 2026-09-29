@@ -55,18 +55,27 @@
     const messages = $derived(accountMessages[page.params.lang === 'ga' ? 'ga' : 'en']);
 
     onMount(async () => {
+        console.log('ACCOUNT: onMount');
+
         try {
+            console.log('ACCOUNT: loading Peach User');
+
             pu = await loadPeachUser();
+
+            console.log('ACCOUNT: Peach User loaded', pu);
 
             profile = await pu.getCombinedSessionAndPreferenceProfile();
 
-            console.log('PROFILE:', profile);
+            console.log('ACCOUNT: PROFILE:', profile);
 
             newEmail = profile.profile.contactEmail;
 
             loading = false;
+
+            console.log('ACCOUNT: loading complete');
+
         } catch (err) {
-            console.error('Profile error:', err);
+            console.error('ACCOUNT: Profile error:', err);
             error = err instanceof Error ? err.message : String(err);
             loading = false;
         }
@@ -118,7 +127,7 @@
                     break;
             }
 
-            if (response.status === 200 || response.status === 204) {
+            if (response === 200 || response === 204) {
                 emailPassword = '';
             }
 
