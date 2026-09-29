@@ -209,7 +209,7 @@
 
                     <input id="email-password" type="password" bind:value={emailPassword}/>
 
-                    <button type="submit" disabled={updatingEmail}>
+                    <button type="submit" disabled={updatingEmail} class="language-switch">
                         {updatingEmail ? 'Updating...' : 'Update email'}
                     </button>
                 </form>
@@ -232,7 +232,7 @@
 
                     <input id="new-password" type="password" bind:value={newPassword}/>
 
-                    <button type="submit" disabled={updatingPassword}>
+                    <button type="submit" disabled={updatingPassword} class="language-switch">
                         {updatingPassword ? 'Updating...' : 'Update password'}
                     </button>
 
@@ -252,5 +252,25 @@
     margin: 0 auto;
     padding: 20px;
     background-color: var(--genre-background);
+}
+
+.account-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.account-section label {
+    margin-top: 5px;
+}
+
+.account-section input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.account-section button {
+    align-self: flex-start;
+    margin-top: 10px;
 }
 </style>

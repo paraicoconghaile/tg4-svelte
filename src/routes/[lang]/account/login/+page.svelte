@@ -116,7 +116,7 @@
                 <p class="error">{error}</p>
             {/if}
 
-            <button type="submit" disabled={loggingIn}>
+            <button type="submit" disabled={loggingIn} class="language-switch">
                 {loggingIn ? 'Logging in...' : 'Login'}
             </button>
 
@@ -147,10 +147,6 @@ input {
     width: 100%;
     box-sizing: border-box;
     padding: 10px;
-}
-
-button {
-    padding: 10px 25px;
 }
 
 .error {
