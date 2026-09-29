@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { loadPeachUser } from '$lib/sso/peach';
+    import { page } from '$app/state';
 
     let loading = true;
     let error = '';
@@ -51,7 +52,7 @@
         }
     };
 
-    const messages = accountMessages[isIrish ? 'ga' : 'en'];
+    const messages = $derived(accountMessages[page.params.lang === 'ga' ? 'ga' : 'en']);
 
     onMount(async () => {
         try {
@@ -168,7 +169,7 @@
                     passwordMessage = 'Unable to update password.';
                     break;
             }
-            
+
         } catch (err) {
             console.error('Change password error:', err);
             passwordMessage = 'Unable to update password.';
