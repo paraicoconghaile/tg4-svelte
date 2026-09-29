@@ -52,7 +52,7 @@
         }
     };
 
-    const messages = $derived(accountMessages[page.params.lang === 'ga' ? 'ga' : 'en']);
+    const messages = accountMessages[page.params.lang === 'ga' ? 'ga' : 'en'];
 
     onMount(async () => {
         console.log('ACCOUNT: onMount');
