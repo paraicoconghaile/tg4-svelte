@@ -61,7 +61,7 @@
 
             console.log('CHANGE EMAIL RESPONSE:', response);
 
-            switch (response.status) {
+            switch (response) {
                 case 200:
                     emailMessage = 'Email Changed!';
                     break;
