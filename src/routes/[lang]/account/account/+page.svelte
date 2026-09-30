@@ -227,18 +227,11 @@
     {:else}
         <section class="account">
             <nav class="account-tabs">
-                <a href={`/${page.params.lang}/account`} class="active">
-                    {messages.labels.account}
-                </a>
-
-                <a href={`/${page.params.lang}/account/profile`}>
-                    {messages.labels.profile}
-                </a>
-
-                <a href={`/${page.params.lang}/account/preferences`}>
-                    {messages.labels.preferences}
-                </a>
+                <a href={`/${page.params.lang}/account/account`} class="active">{messages.labels.account}</a>
+                <a href={`/${page.params.lang}/account/profile`}>{messages.labels.profile}</a>
+                <a href={`/${page.params.lang}/account/preferences`}>{messages.labels.preferences}</a>
             </nav>
+
             <h2>{messages.labels.account}</h2>
 
             <!-- EMAIL -->

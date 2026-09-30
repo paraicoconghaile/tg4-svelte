@@ -6,7 +6,7 @@
     <h2>Preferences</h2>
 
     <nav class="account-tabs">
-        <a href={`/${page.params.lang}/account`}>Account</a>
+        <a href={`/${page.params.lang}/account/account`}>Account</a>
         <a href={`/${page.params.lang}/account/profile`}>Profile</a>
         <a href={`/${page.params.lang}/account/preferences`} class="active">Preferences</a>
     </nav>
