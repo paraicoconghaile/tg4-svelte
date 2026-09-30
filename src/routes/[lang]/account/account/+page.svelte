@@ -1,8 +1,8 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { loadPeachUser } from '$lib/sso/peach';
-    import { goto } from '$app/navigation';
     import { page } from '$app/state';
+    import { goto } from '$app/navigation';
+    import { loadPeachUser } from '$lib/sso/peach';
 
     let loading = $state(true);
     let error = $state('');
@@ -93,9 +93,9 @@
 
     onMount(async () => {
         try {
-            console.log('ACCOUNT: loading Peach User');
+            //console.log('ACCOUNT: loading Peach User');
             pu = await loadPeachUser();
-            console.log('ACCOUNT: Peach User loaded', pu);
+            //console.log('ACCOUNT: Peach User loaded', pu);
             profile = await pu.getCombinedSessionAndPreferenceProfile();
             console.log('PROFILE:', profile);
 
@@ -110,7 +110,7 @@
 
             newEmail = profile.profile.contactEmail;
             loading = false;
-            console.log('ACCOUNT: loading complete');
+            //console.log('ACCOUNT: loading complete');
         } catch (err) {
             console.error('Profile error:', err);
             error = err instanceof Error ? err.message : String(err);
@@ -226,13 +226,13 @@
         <p>{error}</p>
     {:else}
         <section class="account">
+            <h2>{messages.labels.account}</h2>
+
             <nav class="account-tabs">
                 <a href={`/${page.params.lang}/account/account`} class="active">{messages.labels.account}</a>
                 <a href={`/${page.params.lang}/account/profile`}>{messages.labels.profile}</a>
                 <a href={`/${page.params.lang}/account/preferences`}>{messages.labels.preferences}</a>
             </nav>
-
-            <h2>{messages.labels.account}</h2>
 
             <!-- EMAIL -->
             <div class="account-section">

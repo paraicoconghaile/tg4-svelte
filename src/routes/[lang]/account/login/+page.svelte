@@ -93,7 +93,7 @@
                 console.log('LOGIN: ALREADY LOGGED IN');
 
                 // If this succeeds, they're already logged in
-                window.location.href = `/${page.params.lang}/account/profile/`;
+                window.location.href = `/${page.params.lang}/account/account/`;
                 return;
 
             } catch {
