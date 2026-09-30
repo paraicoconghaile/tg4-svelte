@@ -4,23 +4,23 @@
     import { goto } from '$app/navigation';
     import { page } from '$app/state';
 
-    let loading = true;
-    let error = '';
+    let loading = $state(true);
+    let error = $state('');
 
-    let pu: any = null;
-    let profile: any = null;
+    let pu: $state<any>(null);
+    let profile: $state<any>(null);
 
     // Email
-    let newEmail = '';
-    let emailPassword = '';
-    let emailMessage = '';
-    let updatingEmail = false;
+    let newEmail = $state('');
+    let emailPassword = $state('');
+    let emailMessage = $state('');
+    let updatingEmail = $state(false);
 
     // Password
-    let currentPassword = '';
-    let newPassword = '';
-    let passwordMessage = '';
-    let updatingPassword = false;
+    let currentPassword = $state('');
+    let newPassword = $state('');
+    let passwordMessage = $state('');
+    let updatingPassword = $state(false);
 
     const accountMessages = {
         en: {

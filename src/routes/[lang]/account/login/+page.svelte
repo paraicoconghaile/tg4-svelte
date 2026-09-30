@@ -3,14 +3,14 @@
     import { page } from '$app/state';
     import { loadPeachUser } from '$lib/sso/peach';
 
-    let email = '';
-    let password = '';
+    let email = $state('');
+    let password = $state('');
 
-    let loading = true;
-    let loggingIn = false;
-    let error = '';
+    let checkingAuth = $state(true);
+    let loggingIn = $state(false);
+    let error = $state('');
 
-    let pu: any;
+    let pu = $state<any>(null);
 
     const loginMessages = {
         en: {
@@ -23,7 +23,9 @@
                 updateEmail: 'Update email',
                 updatePassword: 'Update password',
                 updating: 'Updating...',
-                loading: 'Loading...'
+                loading: 'Loading...',
+                login: 'Login',
+                loggingIn: 'Logging in...'
             },
             password: {
                 required: 'Please enter your current and new password.',
@@ -53,7 +55,9 @@
                 updateEmail: 'Nuashonraigh an seoladh ríomhphoist',
                 updatePassword: 'Nuashonraigh an pasfhocal',
                 updating: 'Á nuashonrú...',
-                loading: 'Á luchtú...'
+                loading: 'Ag lódáil...',
+                login: 'Logáil isteach',
+                loggingIn: 'Ag logáil isteach...'
             },
             password: {
                 required: 'Cuir isteach do phasfhocal reatha agus do phasfhocal nua, le do thoil.',
@@ -78,23 +82,28 @@
     const messages = $derived(loginMessages[page.params.lang === 'ga' ? 'ga' : 'en']);
 
     onMount(async () => {
+        console.log('LOGIN MOUNT', page.url.pathname);
         try {
             pu = await loadPeachUser();
+            console.log('LOGIN PEACH LOADED');
 
             // Already logged in?
             try {
                 await pu.isAuthorized();
+                console.log('LOGIN: ALREADY LOGGED IN');
 
                 // If this succeeds, they're already logged in
                 window.location.href = `/${page.params.lang}/account/profile/`;
+                return;
+
             } catch {
                 // Not logged in - that's fine
-                loading = false;
             }
         } catch (err) {
             console.error('Peach User error:', err);
             error = 'Unable to initialise login.';
-            loading = false;
+        }    finally {
+            checkingAuth = false;
         }
     });
 
@@ -143,13 +152,12 @@
 </script>
 
 <div class="account-page">
-    {#if loading}
-        <p>Loading...</p>
+    {#if checkingAuth}
+        <p>{messages.labels.loading}</p>
     {:else}
-        <h1>Login</h1>
+        <h1>{messages.labels.login}</h1>
 
         <form onsubmit={(event) => { event.preventDefault(); login(); }}>
-
             <div class="form-field">
                 <label for="loginEmail">{messages.labels.email}</label>
                 <input id="loginEmail" type="email" bind:value={email} autocomplete="email" />
@@ -164,10 +172,10 @@
             {/if}
 
             <button type="submit" disabled={loggingIn} class="language-switch">
-                {loggingIn ? 'Logging in...' : 'Login'}
+                {loggingIn ? messages.labels.loggingIn : messages.labels.login}
             </button>
-
         </form>
+
     {/if}
 </div>
 
