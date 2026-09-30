@@ -218,7 +218,7 @@
 
         <a href={switchLanguage} class="language-switch">{isIrish ? 'English' : 'Gaeilge'}</a>
 
-        <button class="profile">Profile ▼</button>
+        <a href={isIrish ? '/ga/account/login' : '/en/account/login'}><img src="/icons/profile.svg" alt="TG4 Account" class="sso_logo"></a>
     </div>
 </nav>
 
@@ -256,12 +256,8 @@
             {/each}
         </ul>
         <div class="mobile-menu-footer">
-            <a href={switchLanguage} onclick={closeMobileMenu}>
-                {isIrish ? 'English' : 'Gaeilge'}
-            </a>
-            <button class="profile">
-                Profile
-            </button>
+            <a href={switchLanguage} onclick={closeMobileMenu}>{isIrish ? 'English' : 'Gaeilge'}</a>
+            <a href={isIrish ? '/ga/account/login' : '/en/account/login'}><img src="/icons/profile.svg" alt="TG4 Account" class="sso_logo"></a>
         </div>
     </div>
 {/if}
@@ -437,6 +433,12 @@
     font-family: var(--font-body);
     background: var(--tg4-white);
     color: var(--tg4-black);
+}
+
+.sso_logo {
+    display: block;
+    width: 45px;
+    cursor: pointer;
 }
 
 .mobile-nav,
