@@ -3,6 +3,7 @@
     import { page } from '$app/state';
     import { goto } from '$app/navigation';
     import { loadPeachUser } from '$lib/sso/peach';
+    import { countries } from '$lib/data/countries';
 
     let pu: any;
     let profile: any = null;
@@ -89,7 +90,6 @@
         }}>
             <fieldset>
                 <legend>Edit Profile</legend>
-
                 <div class="form-row">
                     <div class="form-field">
                         <label for="firstName">First name</label>
@@ -101,7 +101,6 @@
                         <input id="lastName" type="text" bind:value={lastName} />
                     </div>
                 </div>
-
                 <div class="form-field">
                     <label for="displayName">Display name *</label>
                     <input
@@ -111,7 +110,6 @@
                         required
                     />
                 </div>
-
                 <div class="form-field">
                     <label>Age</label>
 
@@ -125,7 +123,6 @@
                         <span class="toggle-label">Over 18</span>
                     </label>
                 </div>
-
                 <div class="form-field">
                     <label>Gender</label>
 
@@ -149,7 +146,6 @@
                         Prefer not to Say
                     </label>
                 </div>
-
                 <div class="form-field">
                     <label>Level of Irish</label>
 
@@ -173,27 +169,28 @@
                         Fluent
                     </label>
                 </div>
-
                 <div class="form-field">
                     <label for="nationality">Nationality</label>
+
                     <select id="nationality" bind:value={nationality}>
                         <option value="">Select nationality</option>
-                        <option value="IE">Ireland</option>
-                        <option value="GB">United Kingdom</option>
-                        <option value="US">United States</option>
+
+                        {#each countries as country}
+                            <option value={country.code}>{country.name}</option>
+                        {/each}
                     </select>
                 </div>
-
                 <div class="form-field">
                     <label for="residence">Country of Residence</label>
+
                     <select id="residence" bind:value={residence}>
                         <option value="">Select country of residence</option>
-                        <option value="IE">Ireland</option>
-                        <option value="GB">United Kingdom</option>
-                        <option value="US">United States</option>
+
+                        {#each countries as country}
+                            <option value={country.code}>{country.name}</option>
+                        {/each}
                     </select>
                 </div>
-
                 <div class="form-field">
                     <label class="toggle">
                         <input
@@ -208,9 +205,7 @@
                     </label>
                 </div>
 
-                <button type="submit" disabled={saving}>
-                    {saving ? 'Saving...' : 'Save'}
-                </button>
+                <button type="submit" disabled={saving}> {saving ? 'Saving...' : 'Save'}</button>
 
                 {#if saved}
                     <p>Profile saved.</p>
