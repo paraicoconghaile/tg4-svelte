@@ -12,6 +12,71 @@
 
     let pu: any;
 
+    const loginMessages = {
+        en: {
+            labels: {
+                account: 'Account',
+                email: 'Email address',
+                password: 'Password',
+                currentPassword: 'Current password',
+                newPassword: 'New password',
+                updateEmail: 'Update email',
+                updatePassword: 'Update password',
+                updating: 'Updating...',
+                loading: 'Loading...'
+            },
+            password: {
+                required: 'Please enter your current and new password.',
+                changed: 'Password Changed!',
+                incorrect: 'Current Password is incorrect.',
+                weak: 'New Password is not strong enough.',
+                error: 'Unable to update password.'
+            },
+            email: {
+                required: 'Please enter an email address.',
+                passwordRequired: 'Please enter your current password.',
+                changed: 'Email Changed!',
+                verification: 'Email with verification link sent to new email address.',
+                taken: 'New Email already taken.',
+                incorrect: 'Current Password is incorrect.',
+                tooMany: 'Too many requests. Please try later.',
+                error: 'Unable to update email address.'
+            }
+        },
+        ga: {
+            labels: {
+                account: 'Cuntas',
+                email: 'Seoladh ríomhphoist',
+                password: 'Pasfhocal',
+                currentPassword: 'Pasfhocal reatha',
+                newPassword: 'Pasfhocal nua',
+                updateEmail: 'Nuashonraigh an seoladh ríomhphoist',
+                updatePassword: 'Nuashonraigh an pasfhocal',
+                updating: 'Á nuashonrú...',
+                loading: 'Á luchtú...'
+            },
+            password: {
+                required: 'Cuir isteach do phasfhocal reatha agus do phasfhocal nua, le do thoil.',
+                changed: 'Athraíodh an pasfhocal!',
+                incorrect: 'Tá an pasfhocal reatha mícheart.',
+                weak: 'Níl an pasfhocal nua sách láidir.',
+                error: 'Níorbh fhéidir an pasfhocal a athrú.'
+            },
+            email: {
+                required: 'Cuir isteach seoladh ríomhphoist, le do thoil.',
+                passwordRequired: 'Cuir isteach do phasfhocal reatha, le do thoil.',
+                changed: 'Athraíodh an seoladh ríomhphoist!',
+                verification: 'Seoladh ríomhphost le nasc fíoraithe chuig an seoladh ríomhphoist nua.',
+                taken: 'Tá an seoladh ríomhphoist nua in úsáid cheana féin.',
+                incorrect: 'Tá an pasfhocal reatha mícheart.',
+                tooMany: 'An iomarca iarratas. Bain triail eile as ar ball.',
+                error: 'Níorbh fhéidir an seoladh ríomhphoist a athrú.'
+            }
+        }
+    };
+
+    const messages = $derived(loginMessages[page.params.lang === 'ga' ? 'ga' : 'en']);
+
     onMount(async () => {
         try {
             pu = await loadPeachUser();
@@ -78,38 +143,20 @@
 </script>
 
 <div class="account-page">
-
     {#if loading}
         <p>Loading...</p>
     {:else}
-
         <h1>Login</h1>
 
-        <form onsubmit={(event) => {
-            event.preventDefault();
-            login();
-        }}>
+        <form onsubmit={(event) => { event.preventDefault(); login(); }}>
 
             <div class="form-field">
-                <label for="loginEmail">Email</label>
-
-                <input
-                    id="loginEmail"
-                    type="email"
-                    bind:value={email}
-                    autocomplete="email"
-                />
+                <label for="loginEmail">{messages.labels.email}</label>
+                <input id="loginEmail" type="email" bind:value={email} autocomplete="email" />
             </div>
-
             <div class="form-field">
-                <label for="loginPassword">Password</label>
-
-                <input
-                    id="loginPassword"
-                    type="password"
-                    bind:value={password}
-                    autocomplete="current-password"
-                />
+                <label for="loginPassword">{messages.labels.password}</label>
+                <input id="loginPassword" type="password" bind:value={password} autocomplete="current-password" />
             </div>
 
             {#if error}
@@ -121,9 +168,7 @@
             </button>
 
         </form>
-
     {/if}
-
 </div>
 
 <style>

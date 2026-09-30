@@ -85,7 +85,7 @@
         }
     };
 
-    const messages = accountMessages[page.params.lang === 'ga' ? 'ga' : 'en'];
+    const messages = $derived(accountMessages[page.params.lang === 'ga' ? 'ga' : 'en']);
 
     onMount(async () => {
         try {
@@ -227,6 +227,7 @@
             <!-- EMAIL -->
             <div class="account-section">
                 <h3>{messages.labels.email}</h3>
+
                 <form onsubmit={(event) => {event.preventDefault(); changeEmail();}}>
                     <label for="email">{messages.labels.email}</label>
                     <input id="email" type="email" bind:value={newEmail}/>
@@ -256,9 +257,8 @@
                     <input id="new-password" type="password" bind:value={newPassword}/>
 
                     <button type="submit" disabled={updatingPassword} class="language-switch">
-                        {updatingPassword ? 'messages.labels.updating' : 'messages.labels.updatePassword'}
+                        {updatingPassword ? messages.labels.updating : messages.labels.updatePassword}
                     </button>
-
                 </form>
 
                 {#if passwordMessage}
