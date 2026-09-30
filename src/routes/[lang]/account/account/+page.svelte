@@ -239,15 +239,17 @@
                 <h3>{messages.labels.email}</h3>
 
                 <form onsubmit={(event) => {event.preventDefault(); changeEmail();}}>
-                    <label for="email">{messages.labels.email}</label>
-                    <input id="email" type="email" bind:value={newEmail}/>
-
-                    <label for="email-password">{messages.labels.currentPassword}</label>
-                    <input id="email-password" type="password" bind:value={emailPassword}/>
-
-                    <button type="submit" disabled={updatingEmail} class="language-switch">
-                        {updatingEmail ? messages.labels.updating : messages.labels.updateEmail}
-                    </button>
+                    <div class="form-field">
+                        <label for="email">{messages.labels.email}</label>
+                        <input id="email" type="email" bind:value={newEmail}/>
+                    </div>
+                    <div class="form-field">
+                        <label for="email-password">{messages.labels.currentPassword}</label>
+                        <input id="email-password" type="password" bind:value={emailPassword}/>
+                    </div>
+                    <div class="form-field">
+                        <button type="submit" disabled={updatingEmail} class="language-switch">{updatingEmail ? messages.labels.updating : messages.labels.updateEmail}</button>
+                    </div>
                 </form>
 
                 {#if emailMessage}
@@ -260,15 +262,17 @@
                 <h3>{messages.labels.currentPassword}</h3>
 
                 <form onsubmit={(event) => {event.preventDefault(); changePassword();}}>
-                    <label for="current-password">{messages.labels.currentPassword}</label>
-                    <input id="current-password" type="password" bind:value={currentPassword}/>
-
-                    <label for="new-password">{messages.labels.newPassword}</label>
-                    <input id="new-password" type="password" bind:value={newPassword}/>
-
-                    <button type="submit" disabled={updatingPassword} class="language-switch">
-                        {updatingPassword ? messages.labels.updating : messages.labels.updatePassword}
-                    </button>
+                    <div class="form-field">
+                        <label for="current-password">{messages.labels.currentPassword}</label>
+                        <input id="current-password" type="password" bind:value={currentPassword}/>
+                    </div>
+                    <div class="form-field">
+                        <label for="new-password">{messages.labels.newPassword}</label>
+                        <input id="new-password" type="password" bind:value={newPassword}/>
+                    </div>
+                    <div class="form-field">
+                        <button type="submit" disabled={updatingPassword} class="language-switch">{updatingPassword ? messages.labels.updating : messages.labels.updatePassword}</button>
+                    </div>
                 </form>
 
                 {#if passwordMessage}
@@ -323,5 +327,21 @@
 .account-tabs a.active {
     font-weight: bold;
     border-bottom: 3px solid currentColor;
+}
+
+.form-field {
+    margin-bottom: 20px;
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.form-field input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
 }
 </style>

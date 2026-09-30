@@ -166,16 +166,15 @@
                 <label for="loginPassword">{messages.labels.password}</label>
                 <input id="loginPassword" type="password" bind:value={password} autocomplete="current-password" />
             </div>
-
-            {#if error}
-                <p class="error">{error}</p>
-            {/if}
-
-            <button type="submit" disabled={loggingIn} class="language-switch">
-                {loggingIn ? messages.labels.loggingIn : messages.labels.login}
-            </button>
+            <div class="form-field">
+                <button type="submit" disabled={loggingIn} class="language-switch">{loggingIn ? messages.labels.loggingIn : messages.labels.login}</button>
+            </div>
+            <div class="form-field">
+                {#if error}
+                    <p class="error">{error}</p>
+                {/if}
+            </div>
         </form>
-
     {/if}
 </div>
 
@@ -204,5 +203,21 @@ input {
 
 .error {
     color: red;
+}
+
+.form-field {
+    margin-bottom: 20px;
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.form-field input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
 }
 </style>
