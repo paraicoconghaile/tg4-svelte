@@ -24,6 +24,17 @@
 
     const accountMessages = {
         en: {
+            labels: {
+                account: 'Account',
+                email: 'Email address',
+                password: 'Password',
+                currentPassword: 'Current password',
+                newPassword: 'New password',
+                updateEmail: 'Update email',
+                updatePassword: 'Update password',
+                updating: 'Updating...',
+                loading: 'Loading...'
+            },
             password: {
                 required: 'Please enter your current and new password.',
                 changed: 'Password Changed!',
@@ -43,6 +54,17 @@
             }
         },
         ga: {
+            labels: {
+                account: 'Cuntas',
+                email: 'Seoladh ríomhphoist',
+                password: 'Pasfhocal',
+                currentPassword: 'Pasfhocal reatha',
+                newPassword: 'Pasfhocal nua',
+                updateEmail: 'Nuashonraigh an seoladh ríomhphoist',
+                updatePassword: 'Nuashonraigh an pasfhocal',
+                updating: 'Á nuashonrú...',
+                loading: 'Á luchtú...'
+            },
             password: {
                 required: 'Cuir isteach do phasfhocal reatha agus do phasfhocal nua, le do thoil.',
                 changed: 'Athraíodh an pasfhocal!',
@@ -200,22 +222,20 @@
         <p>{error}</p>
     {:else}
         <section class="account">
-            <h2>Account</h2>
+            <h2>{messages.labels.account}</h2>
 
             <!-- EMAIL -->
             <div class="account-section">
-                <h3>Email address</h3>
+                <h3>{messages.labels.email}</h3>
                 <form onsubmit={(event) => {event.preventDefault(); changeEmail();}}>
-                    <label for="email">Email address</label>
-
+                    <label for="email">{messages.labels.email}</label>
                     <input id="email" type="email" bind:value={newEmail}/>
 
-                    <label for="email-password">Current password</label>
-
+                    <label for="email-password">{messages.labels.currentPassword}</label>
                     <input id="email-password" type="password" bind:value={emailPassword}/>
 
                     <button type="submit" disabled={updatingEmail} class="language-switch">
-                        {updatingEmail ? 'Updating...' : 'Update email'}
+                        {updatingEmail ? messages.labels.updating : messages.labels.updateEmail}
                     </button>
                 </form>
 
@@ -226,19 +246,17 @@
 
             <!-- PASSWORD -->
             <div class="account-section">
-                <h3>Password</h3>
+                <h3>{messages.labels.currentPassword}</h3>
 
                 <form onsubmit={(event) => {event.preventDefault(); changePassword();}}>
-                    <label for="current-password">Current password</label>
-
+                    <label for="current-password">{messages.labels.currentPassword}</label>
                     <input id="current-password" type="password" bind:value={currentPassword}/>
 
-                    <label for="new-password">New password</label>
-
+                    <label for="new-password">{messages.labels.newPassword}</label>
                     <input id="new-password" type="password" bind:value={newPassword}/>
 
                     <button type="submit" disabled={updatingPassword} class="language-switch">
-                        {updatingPassword ? 'Updating...' : 'Update password'}
+                        {updatingPassword ? 'messages.labels.updating' : 'messages.labels.updatePassword'}
                     </button>
 
                 </form>
