@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { loadPeachUser } from '$lib/sso/peach';
+    import { goto } from '$app/navigation';
     import { page } from '$app/state';
 
     let loading = true;
@@ -24,30 +25,40 @@
     const accountMessages = {
         en: {
             password: {
+                required: 'Please enter your current and new password.',
                 changed: 'Password Changed!',
                 incorrect: 'Current Password is incorrect.',
-                weak: 'New Password is not strong enough.'
+                weak: 'New Password is not strong enough.',
+                error: 'Unable to update password.'
             },
             email: {
+                required: 'Please enter an email address.',
+                passwordRequired: 'Please enter your current password.',
                 changed: 'Email Changed!',
                 verification: 'Email with verification link sent to new email address.',
                 taken: 'New Email already taken.',
                 incorrect: 'Current Password is incorrect.',
-                tooMany: 'Too many requests. Please try later.'
+                tooMany: 'Too many requests. Please try later.',
+                error: 'Unable to update email address.'
             }
         },
         ga: {
             password: {
+                required: 'Cuir isteach do phasfhocal reatha agus do phasfhocal nua, le do thoil.',
                 changed: 'Athraíodh an pasfhocal!',
                 incorrect: 'Tá an pasfhocal reatha mícheart.',
-                weak: 'Níl an pasfhocal nua sách láidir.'
+                weak: 'Níl an pasfhocal nua sách láidir.',
+                error: 'Níorbh fhéidir an pasfhocal a athrú.'
             },
             email: {
+                required: 'Cuir isteach seoladh ríomhphoist, le do thoil.',
+                passwordRequired: 'Cuir isteach do phasfhocal reatha, le do thoil.',
                 changed: 'Athraíodh an seoladh ríomhphoist!',
                 verification: 'Seoladh ríomhphost le nasc fíoraithe chuig an seoladh ríomhphoist nua.',
                 taken: 'Tá an seoladh ríomhphoist nua in úsáid cheana féin.',
                 incorrect: 'Tá an pasfhocal reatha mícheart.',
-                tooMany: 'An iomarca iarratas. Bain triail eile as ar ball.'
+                tooMany: 'An iomarca iarratas. Bain triail eile as ar ball.',
+                error: 'Níorbh fhéidir an seoladh ríomhphoist a athrú.'
             }
         }
     };
@@ -55,27 +66,27 @@
     const messages = accountMessages[page.params.lang === 'ga' ? 'ga' : 'en'];
 
     onMount(async () => {
-        console.log('ACCOUNT: onMount');
-
         try {
             console.log('ACCOUNT: loading Peach User');
-
             pu = await loadPeachUser();
-
             console.log('ACCOUNT: Peach User loaded', pu);
-
             profile = await pu.getCombinedSessionAndPreferenceProfile();
+            console.log('PROFILE:', profile);
 
-            console.log('ACCOUNT: PROFILE:', profile);
+            const unauthorized =
+                profile?.profile?.error === 'Unauthorized' ||
+                profile?.preferences?.error === 'Unauthorized';
+
+            if (unauthorized) {
+                await goto(`/${page.params.lang}/account/login`);
+                return;
+            }
 
             newEmail = profile.profile.contactEmail;
-
             loading = false;
-
             console.log('ACCOUNT: loading complete');
-
         } catch (err) {
-            console.error('ACCOUNT: Profile error:', err);
+            console.error('Profile error:', err);
             error = err instanceof Error ? err.message : String(err);
             loading = false;
         }
@@ -85,12 +96,12 @@
         emailMessage = '';
 
         if (!newEmail.trim()) {
-            emailMessage = 'Please enter an email address.';
+            emailMessage = messages.email.required;
             return;
         }
 
         if (!emailPassword) {
-            emailMessage = 'Please enter your current password.';
+            emailMessage = messages.email.passwordRequired;
             return;
         }
 
@@ -104,10 +115,12 @@
             switch (response) {
                 case 200:
                     emailMessage = messages.email.changed;
+                    emailPassword = '';
                     break;
 
                 case 204:
                     emailMessage = messages.email.verification;
+                    emailPassword = '';
                     break;
 
                 case 400:
@@ -123,17 +136,13 @@
                     break;
 
                 default:
-                    emailMessage = 'Unable to update email address.';
+                    emailMessage = messages.email.error;
                     break;
-            }
-
-            if (response === 200 || response === 204) {
-                emailPassword = '';
             }
 
         } catch (err) {
             console.error('Change email error:', err);
-            emailMessage = 'Unable to update email address.';
+            emailMessage = messages.email.error;
         } finally {
             updatingEmail = false;
         }
@@ -143,18 +152,14 @@
         passwordMessage = '';
 
         if (!currentPassword || !newPassword) {
-            passwordMessage = 'Please enter your current and new password.';
+            passwordMessage = messages.password.required;
             return;
         }
 
         updatingPassword = true;
 
         try {
-            const response = await pu.updatePassword(
-                profile.profile.contactEmail,
-                newPassword,
-                currentPassword
-            );
+            const response = await pu.updatePassword(profile.profile.contactEmail, newPassword, currentPassword);
 
             console.log('CHANGE PASSWORD RESPONSE:', response);
 
@@ -175,13 +180,13 @@
                     break;
 
                 default:
-                    passwordMessage = 'Unable to update password.';
+                    passwordMessage = messages.password.error;
                     break;
             }
 
         } catch (err) {
             console.error('Change password error:', err);
-            passwordMessage = 'Unable to update password.';
+            passwordMessage = messages.password.error;
         } finally {
             updatingPassword = false;
         }
