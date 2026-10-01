@@ -24,7 +24,10 @@
     let newPassword = $state('');
     let passwordMessage = $state('');
     let updatingPassword = $state(false);
-    let showPassword = $state(false);
+
+    let showEmailPassword = $state(false);
+    let showCurrentPassword = $state(false);
+    let showNewPassword = $state(false);
 
     const accountMessages = {
         en: {
@@ -258,9 +261,9 @@
                     <div class="form-field">
                         <label for="email-password">{messages.labels.currentPassword}</label>
                         <div class="password-input">
-                            <input id="email-password" type={showPassword ? 'text' : 'password'} bind:value={emailPassword}/>
-                            <button type="button" class="password-toggle" onclick={() => showPassword = !showPassword} aria-label={showPassword ? 'Hide password' : 'Show password'}>
-                            {#if showPassword}
+                            <input id="email-password" type={showEmailPassword  ? 'text' : 'password'} bind:value={emailPassword} />
+                            <button type="button" class="password-toggle" onclick={() => showEmailPassword  = !showEmailPassword } aria-label={showEmailPassword  ? 'Hide password' : 'Show password'}>
+                            {#if showEmailPassword }
                                 <EyeOff />
                             {:else}
                                 <Eye />
@@ -285,11 +288,30 @@
                 <form onsubmit={(event) => {event.preventDefault(); changePassword();}}>
                     <div class="form-field">
                         <label for="current-password">{messages.labels.currentPassword}</label>
+                        <div class="password-input">
+                            <input id="current-password" type={showCurrentPassword ? 'text' : 'password'} bind:value={currentPassword} />
+                            <button type="button" class="password-toggle" onclick={() => showCurrentPassword = !showCurrentPassword} aria-label={showCurrentPassword ? 'Hide password' : 'Show password'}>
+                                {#if showCurrentPassword}
+                                    <EyeOff />
+                                {:else}
+                                    <Eye />
+                                {/if}
+                            </button>
+                        </div>
                         <input id="current-password" type="password" bind:value={currentPassword}/>
                     </div>
                     <div class="form-field">
                         <label for="new-password">{messages.labels.newPassword}</label>
-                        <input id="new-password" type="password" bind:value={newPassword}/>
+                        <div class="password-input">
+                            <input id="new-password" type={showNewPassword ? 'text' : 'password'} bind:value={newPassword} />
+                            <button type="button" class="password-toggle" onclick={() => showNewPassword = !showNewPassword} aria-label={showNewPassword ? 'Hide password' : 'Show password'}>
+                                {#if showNewPassword}
+                                    <EyeOff />
+                                {:else}
+                                    <Eye />
+                                {/if}
+                            </button>
+                        </div>
                     </div>
                     <div class="form-field">
                         <button type="submit" disabled={updatingPassword} class="language-switch">{updatingPassword ? messages.labels.updating : messages.labels.updatePassword}</button>
@@ -364,5 +386,25 @@
     width: 100%;
     box-sizing: border-box;
     padding: 10px;
+}
+
+.password-input {
+    position: relative;
+}
+
+.password-input input {
+    width: 100%;
+    padding-right: 45px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0;
+    background: none;
+    padding: 5px;
+    cursor: pointer;
 }
 </style>
