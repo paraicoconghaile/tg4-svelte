@@ -36,11 +36,11 @@
                 profile: 'Profile',
                 preferences: 'Preferences',
                 email: 'Email address',
+                updateEmail: 'Update Email',
+                updatePassword: 'Update Password',
                 password: 'Password',
                 currentPassword: 'Current password',
                 newPassword: 'New password',
-                updateEmail: 'Update email',
-                updatePassword: 'Update password',
                 updating: 'Updating...',
                 loading: 'Loading...'
             },
@@ -67,12 +67,12 @@
                 account: 'Cuntas',
                 profile: 'Próifíl',
                 preferences: 'Sainrogha phearsanta',
+                updateEmail: 'Athraigh Ríomhphost',
+                updatePassword: 'Athraigh Pasfhocal',
                 email: 'Seoladh ríomhphoist',
                 password: 'Pasfhocal',
                 currentPassword: 'Pasfhocal reatha',
                 newPassword: 'Pasfhocal nua',
-                updateEmail: 'Nuashonraigh an seoladh ríomhphoist',
-                updatePassword: 'Nuashonraigh an pasfhocal',
                 updating: 'Á nuashonrú...',
                 loading: 'Á luchtú...'
             },
@@ -251,7 +251,7 @@
 
             <!-- EMAIL -->
             <div class="account-section">
-                <h3>{messages.labels.email}</h3>
+                <h3>{messages.labels.updateEmail}</h3>
 
                 <form onsubmit={(event) => {event.preventDefault(); changeEmail();}}>
                     <div class="form-field">
@@ -283,7 +283,7 @@
 
             <!-- PASSWORD -->
             <div class="account-section">
-                <h3>{messages.labels.currentPassword}</h3>
+                <h3>{messages.labels.updatePassword}</h3>
 
                 <form onsubmit={(event) => {event.preventDefault(); changePassword();}}>
                     <div class="form-field">
