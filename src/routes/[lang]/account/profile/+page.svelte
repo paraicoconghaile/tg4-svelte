@@ -67,38 +67,6 @@
         }
     });
 
-    /* onMount(async () => {
-        try {
-            pu = await loadPeachUser();
-            profile = await pu.getCombinedSessionAndPreferenceProfile();
-
-            const unauthorized =
-                profile?.profile?.error === 'Unauthorized' ||
-                profile?.preferences?.error === 'Unauthorized';
-
-            if (unauthorized) {
-                await goto(`/${page.params.lang}/account/login`);
-                return;
-            }
-
-            firstName = profile.profile.firstName ?? '';
-            lastName = profile.profile.lastName ?? '';
-            displayName = profile.preferences.displayName ?? '';
-            age = profile.preferences.age ?? false;
-            gender = profile.preferences.gender ?? '';
-            irish = profile.preferences.irish ?? '';
-            nationality = profile.preferences.nationality ?? '';
-            residence = profile.preferences.residence ?? '';
-            newsletter = profile.preferences.newsletter ?? false;
-
-            loading = false;
-        } catch (err) {
-            console.error('Profile error:', err);
-            error = err instanceof Error ? err.message : String(err);
-            loading = false;
-        }
-    }); */
-
     function handleSubmit() {
         saved = false;
         console.log({
@@ -129,10 +97,7 @@
     {:else if error}
         <p>{error}</p>
     {:else}
-        <form onsubmit={(event) => {
-            event.preventDefault();
-            handleSubmit();
-        }}>
+        <form onsubmit={(event) => {event.preventDefault(); handleSubmit();}}>
             <fieldset>
                 <legend>Edit Profile</legend>
                 <div class="form-row">
