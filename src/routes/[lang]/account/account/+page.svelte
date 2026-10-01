@@ -95,7 +95,7 @@
         try {
             pu = await loadPeachUser();
 
-            // Check authentication first
+            // First check whether the user is authenticated
             try {
                 await pu.isAuthorized();
             } catch {
@@ -103,19 +103,23 @@
                 return;
             }
 
-            // Now load the user's profile
+            // User is authenticated, so load their profile
             profile = await pu.getCombinedSessionAndPreferenceProfile();
 
             console.log('PROFILE:', profile);
 
-            const profileError =
-                profile?.profile?.error ||
-                profile?.preferences?.error;
+            const unauthorized = profile?.profile?.error === 'Unauthorized' || profile?.preferences?.error === 'Unauthorized';
 
-            if (profileError) {
-                console.error('Profile data error:', profile);
-                error = 'Unable to load your profile.';
-                loading = false;
+            if (unauthorized) {
+                console.warn('Session is stale - logging out');
+
+                try {
+                    await pu.logout();
+                } catch (err) {
+                    console.error('Logout error:', err);
+                }
+
+                await goto(`/${page.params.lang}/account/login`);
                 return;
             }
 

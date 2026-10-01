@@ -140,7 +140,7 @@
 
             loggingIn = false;
 
-            window.location.href = `/${page.params.lang}/account/profile/`; /* */
+            window.location.href = `/${page.params.lang}/account/account/`; /* */
 
         } catch (err) {
             console.error('Login error:', err);
