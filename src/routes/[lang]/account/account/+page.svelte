@@ -93,24 +93,34 @@
 
     onMount(async () => {
         try {
-            //console.log('ACCOUNT: loading Peach User');
             pu = await loadPeachUser();
-            //console.log('ACCOUNT: Peach User loaded', pu);
+
+            // First check whether the user is authenticated
+            try {
+                await pu.isAuthorized();
+            } catch {
+                await goto(`/${page.params.lang}/account/login`);
+                return;
+            }
+
+            // User is authenticated, so load their profile
             profile = await pu.getCombinedSessionAndPreferenceProfile();
+
             console.log('PROFILE:', profile);
 
-            const unauthorized =
-                profile?.profile?.error === 'Unauthorized' ||
-                profile?.preferences?.error === 'Unauthorized';
-
-            if (unauthorized) {
-                await goto(`/${page.params.lang}/account/login`);
+            // Profile retrieval failed even though the user is authenticated
+            if (
+                profile?.profile?.error ||
+                profile?.preferences?.error
+            ) {
+                console.error('Profile data error:', profile);
+                error = 'Unable to load your profile.';
                 return;
             }
 
             newEmail = profile.profile.contactEmail;
             loading = false;
-            //console.log('ACCOUNT: loading complete');
+
         } catch (err) {
             console.error('Profile error:', err);
             error = err instanceof Error ? err.message : String(err);
