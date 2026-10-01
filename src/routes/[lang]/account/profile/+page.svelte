@@ -4,6 +4,7 @@
     import { goto } from '$app/navigation';
     import { loadPeachUser } from '$lib/sso/peach';
     import { countries } from '$lib/data/countries';
+    import { requireAuthentication } from '$lib/sso/auth';
 
     let pu: any;
     let profile: any = null;
@@ -23,6 +24,50 @@
     let newsletter = $state(false);
 
     onMount(async () => {
+        try {
+            pu = await requireAuthentication(page.params.lang);
+            if (!pu) return;
+
+            // User is authenticated, so load their profile
+            profile = await pu.getCombinedSessionAndPreferenceProfile();
+
+            console.log('PROFILE:', profile);
+
+            const unauthorized = profile?.profile?.error === 'Unauthorized' || profile?.preferences?.error === 'Unauthorized';
+
+            if (unauthorized) {
+                console.warn('Session is stale - logging out');
+
+                try {
+                    await pu.logout();
+                } catch (err) {
+                    console.error('Logout error:', err);
+                }
+
+                await goto(`/${page.params.lang}/account/login`);
+                return;
+            }
+
+            firstName = profile.profile.firstName ?? '';
+            lastName = profile.profile.lastName ?? '';
+            displayName = profile.preferences.displayName ?? '';
+            age = profile.preferences.age ?? false;
+            gender = profile.preferences.gender ?? '';
+            irish = profile.preferences.irish ?? '';
+            nationality = profile.preferences.nationality ?? '';
+            residence = profile.preferences.residence ?? '';
+            newsletter = profile.preferences.newsletter ?? false;
+
+            loading = false;
+
+        } catch (err) {
+            console.error('Profile error:', err);
+            error = err instanceof Error ? err.message : String(err);
+            loading = false;
+        }
+    });
+
+    /* onMount(async () => {
         try {
             pu = await loadPeachUser();
             profile = await pu.getCombinedSessionAndPreferenceProfile();
@@ -52,7 +97,7 @@
             error = err instanceof Error ? err.message : String(err);
             loading = false;
         }
-    });
+    }); */
 
     function handleSubmit() {
         saved = false;

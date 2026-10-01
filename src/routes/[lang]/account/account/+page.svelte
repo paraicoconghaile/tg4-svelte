@@ -4,6 +4,8 @@
     import { goto } from '$app/navigation';
     import { loadPeachUser } from '$lib/sso/peach';
     import { requireAuthentication } from '$lib/sso/auth';
+    import Eye from '$lib/components/icons/Eye.svelte';
+    import EyeOff from '$lib/components/icons/EyeOff.svelte';
 
     let loading = $state(true);
     let error = $state('');
@@ -22,6 +24,7 @@
     let newPassword = $state('');
     let passwordMessage = $state('');
     let updatingPassword = $state(false);
+    let showPassword = $state(false);
 
     const accountMessages = {
         en: {
@@ -254,7 +257,16 @@
                     </div>
                     <div class="form-field">
                         <label for="email-password">{messages.labels.currentPassword}</label>
-                        <input id="email-password" type="password" bind:value={emailPassword}/>
+                        <div class="password-input">
+                            <input id="email-password" type={showPassword ? 'text' : 'password'} bind:value={emailPassword}/>
+                            <button type="button" class="password-toggle" onclick={() => showPassword = !showPassword} aria-label={showPassword ? 'Hide password' : 'Show password'}>
+                            {#if showPassword}
+                                <EyeOff />
+                            {:else}
+                                <Eye />
+                            {/if}
+                            </button>
+                        </div>
                     </div>
                     <div class="form-field">
                         <button type="submit" disabled={updatingEmail} class="language-switch">{updatingEmail ? messages.labels.updating : messages.labels.updateEmail}</button>

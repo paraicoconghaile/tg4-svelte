@@ -2,6 +2,8 @@
     import { onMount } from 'svelte';
     import { page } from '$app/state';
     import { loadPeachUser } from '$lib/sso/peach';
+    import Eye from '$lib/components/icons/Eye.svelte';
+    import EyeOff from '$lib/components/icons/EyeOff.svelte';
 
     let email = $state('');
     let password = $state('');
@@ -11,6 +13,8 @@
     let error = $state('');
 
     let pu = $state<any>(null);
+
+    let showPassword = $state(false);
 
     const loginMessages = {
         en: {
@@ -164,7 +168,16 @@
             </div>
             <div class="form-field">
                 <label for="loginPassword">{messages.labels.password}</label>
-                <input id="loginPassword" type="password" bind:value={password} autocomplete="current-password" />
+                <div class="password-input">
+                    <input id="loginPassword" type={showPassword ? 'text' : 'password'} bind:value={password} autocomplete="current-password" />
+                    <button type="button" class="password-toggle" onclick={() => showPassword = !showPassword} aria-label={showPassword ? 'Hide password' : 'Show password'}>
+                    {#if showPassword}
+                        <EyeOff />
+                    {:else}
+                        <Eye />
+                    {/if}
+                    </button>
+                </div>
             </div>
             <div class="form-field">
                 <button type="submit" disabled={loggingIn} class="language-switch">{loggingIn ? messages.labels.loggingIn : messages.labels.login}</button>
@@ -219,5 +232,25 @@ input {
     width: 100%;
     box-sizing: border-box;
     padding: 10px;
+}
+
+.password-input {
+    position: relative;
+}
+
+.password-input input {
+    width: 100%;
+    padding-right: 45px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0;
+    background: none;
+    padding: 5px;
+    cursor: pointer;
 }
 </style>

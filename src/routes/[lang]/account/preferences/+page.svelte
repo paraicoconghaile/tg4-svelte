@@ -13,28 +13,28 @@
 </section>
 
 <style>
-    .profile-page {
-        max-width: 700px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: var(--genre-background);
-    }
+.profile-page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--genre-background);
+}
 
-    .account-tabs {
-        display: flex;
-        gap: 5px;
-        margin-bottom: 30px;
-        border-bottom: 1px solid #ccc;
-    }
+.account-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #ccc;
+}
 
-    .account-tabs a {
-        padding: 10px 15px;
-        text-decoration: none;
-        color: inherit;
-    }
+.account-tabs a {
+    padding: 10px 15px;
+    text-decoration: none;
+    color: inherit;
+}
 
-    .account-tabs a.active {
-        font-weight: bold;
-        border-bottom: 3px solid currentColor;
-    }
+.account-tabs a.active {
+    font-weight: bold;
+    border-bottom: 3px solid currentColor;
+}
 </style>
