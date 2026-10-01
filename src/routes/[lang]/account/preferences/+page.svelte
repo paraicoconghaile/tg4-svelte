@@ -32,6 +32,41 @@
         { value: 'cula4', label: 'Cúla4' }
     ];
 
+    const prefMessages = {
+        en: {
+            labels: {
+                account: 'Account',
+                profile: 'Profile',
+                preferences: 'Preferences',
+                ads: 'Ads',
+                subtitles: 'Subtitles',
+                promos: 'Promos',
+                credits: 'Credits',
+                nextEpisode: 'Next Episode',
+                accessibilityView: 'Accessibility View',
+                updating: 'Updating...',
+                loading: 'Loading...'
+            }
+        },
+        ga: {
+            labels: {
+                account: 'Cuntas',
+                profile: 'Próifíl',
+                preferences: 'Preferences',
+                ads: 'Fógraí',
+                subtitles: 'Fotheidil',
+                promos: 'Promos',
+                credits: 'Credits',
+                nextEpisode: 'Next Episode',
+                accessibilityView: 'Accessibility View',
+                updating: 'Á nuashonrú...',
+                loading: 'Á luchtú...'
+            }
+        }
+    };
+
+    const messages = $derived(prefMessages [page.params.lang === 'ga' ? 'ga' : 'en']);
+
     onMount(async () => {
         try {
             pu = await requireAuthentication(page.params.lang);
