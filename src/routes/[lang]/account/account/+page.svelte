@@ -298,7 +298,6 @@
                                 {/if}
                             </button>
                         </div>
-                        <input id="current-password" type="password" bind:value={currentPassword}/>
                     </div>
                     <div class="form-field">
                         <label for="new-password">{messages.labels.newPassword}</label>
@@ -351,7 +350,7 @@
 
 .account-section button {
     align-self: flex-start;
-    margin-top: 10px;
+    margin-top: 0;
 }
 
 .account-tabs {
