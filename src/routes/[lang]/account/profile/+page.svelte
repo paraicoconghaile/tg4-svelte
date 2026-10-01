@@ -31,7 +31,7 @@
                 preferences: 'Preferences',
                 updateProfile: 'Update Profile',
                 firstname: 'First Name',
-                lastname: 'Surname',
+                surname: 'Surname',
                 displayname: 'Display Name',
                 age: 'Age',
                 gender: 'Gender',
@@ -49,7 +49,8 @@
                 newsletter: 'Subscribe to the newsletter',
                 savebutton: 'Save',
                 updating: 'Updating...',
-                loading: 'Loading...'
+                loading: 'Loading...',
+                profileSaved: 'Profile Saved'
             },
             password: {
                 required: 'Please enter your current and new password.',
@@ -76,7 +77,7 @@
                 preferences: 'Sainrogha phearsanta',
                 updateProfile: 'Athraigh Próifíl',
                 firstname: 'Chéad Ainm',
-                lastname: 'Sloinne',
+                surname: 'Sloinne',
                 displayname: 'Display Name',
                 age: 'Aois',
                 gender: 'Inscne',
@@ -94,7 +95,8 @@
                 newsletter: 'Cláraigh don Nuachtlitir ',
                 savebutton: 'Sabháil',
                 updating: 'Á nuashonrú...',
-                loading: 'Á luchtú...'
+                loading: 'Á luchtú...',
+                profileSaved: 'Próifíl Athruithe'
             },
             password: {
                 required: 'Cuir isteach do phasfhocal reatha agus do phasfhocal nua, le do thoil.',
@@ -188,8 +190,8 @@
             <h2>{messages.labels.profile}</h2>
 
             <nav class="account-tabs">
-                <a href={`/${page.params.lang}/account/account`} class="active">{messages.labels.account}</a>
-                <a href={`/${page.params.lang}/account/profile`}>{messages.labels.profile}</a>
+                <a href={`/${page.params.lang}/account/account`}>{messages.labels.account}</a>
+                <a href={`/${page.params.lang}/account/profile`} class="active">{messages.labels.profile}</a>
                 <a href={`/${page.params.lang}/account/preferences`}>{messages.labels.preferences}</a>
             </nav>
 
@@ -306,15 +308,15 @@
                                 />
                                 <span class="toggle-switch"></span>
                                 <span class="toggle-label">
-                                    Subscribe to the newsletter
+                                    {messages.labels.newsletter}
                                 </span>
                             </label>
                         </div>
 
-                        <button type="submit" disabled={saving}> {saving ? 'Saving...' : 'Save'}</button>
+                        <button type="submit" class="language-switch" disabled={saving}> {saving ? 'Saving...' : messages.labels.savebutton}</button>
 
                         {#if saved}
-                            <p>Profile saved.</p>
+                            <p>{messages.labels.profileSaved}</p>
                         {/if}
                     </fieldset>
                 </form>

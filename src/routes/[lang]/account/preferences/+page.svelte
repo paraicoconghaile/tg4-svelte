@@ -182,7 +182,7 @@
                     </div>
                 </div>
 
-                <button type="submit" disabled={saving}> {saving ? 'Saving...' : 'Save'}</button>
+                <button type="submit" class="language-switch" disabled={saving}> {saving ? 'Saving...' : 'Save'}</button>
 
                 {#if saved}
                     <p>Profile saved.</p>
