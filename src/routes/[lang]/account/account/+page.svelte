@@ -95,7 +95,7 @@
         try {
             pu = await loadPeachUser();
 
-            // First check whether the user is authenticated
+            // Check authentication first
             try {
                 await pu.isAuthorized();
             } catch {
@@ -103,18 +103,19 @@
                 return;
             }
 
-            // User is authenticated, so load their profile
+            // Now load the user's profile
             profile = await pu.getCombinedSessionAndPreferenceProfile();
 
             console.log('PROFILE:', profile);
 
-            // Profile retrieval failed even though the user is authenticated
-            if (
+            const profileError =
                 profile?.profile?.error ||
-                profile?.preferences?.error
-            ) {
+                profile?.preferences?.error;
+
+            if (profileError) {
                 console.error('Profile data error:', profile);
                 error = 'Unable to load your profile.';
+                loading = false;
                 return;
             }
 
