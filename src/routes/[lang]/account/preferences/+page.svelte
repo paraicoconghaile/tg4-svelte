@@ -52,15 +52,15 @@
             labels: {
                 account: 'Cuntas',
                 profile: 'Próifíl',
-                preferences: 'Preferences',
+                preferences: 'Sainrogha phearsanta',
                 ads: 'Fógraí',
                 subtitles: 'Fotheidil',
                 promos: 'Promos',
                 credits: 'Credits',
                 nextEpisode: 'Next Episode',
                 accessibilityView: 'Accessibility View',
-                updating: 'Á nuashonrú...',
-                loading: 'Á luchtú...'
+                updating: 'Ag uasdhátú...',
+                loading: 'Ag lódáil...'
             }
         }
     };
@@ -114,9 +114,9 @@
     <h2>Preferences</h2>
 
     <nav class="account-tabs">
-        <a href={`/${page.params.lang}/account/account`}>Account</a>
-        <a href={`/${page.params.lang}/account/profile`}>Profile</a>
-        <a href={`/${page.params.lang}/account/preferences`} class="active">Preferences</a>
+        <a href={`/${page.params.lang}/account/account`}>{messages.labels.account}</a>
+                <a href={`/${page.params.lang}/account/profile`}>{messages.labels.profile}</a>
+                <a href={`/${page.params.lang}/account/preferences`} class="active">{messages.labels.preferences}</a>
     </nav>
 
     {#if loading}
@@ -182,7 +182,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="language-switch" disabled={saving}> {saving ? 'Saving...' : 'Save'}</button>
+                <button type="submit" class="language-switch" disabled={saving}>{saving ? messages.labels.updating : messages.labels.savebutton}</button>
 
                 {#if saved}
                     <p>Profile saved.</p>

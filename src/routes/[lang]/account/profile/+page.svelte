@@ -34,6 +34,7 @@
                 surname: 'Surname',
                 displayname: 'Display Name',
                 age: 'Age',
+                over18: 'Over 18',
                 gender: 'Gender',
                 male: 'Male',
                 female: 'Female',
@@ -80,6 +81,7 @@
                 surname: 'Sloinne',
                 displayname: 'Display Name',
                 age: 'Aois',
+                over18: 'Os Cionn 18',
                 gender: 'Inscne',
                 male: 'Fireann',
                 female: 'Baineann',
@@ -94,8 +96,8 @@
                 country: 'Tír a bhfuil cónaí ort',
                 newsletter: 'Cláraigh don Nuachtlitir ',
                 savebutton: 'Sabháil',
-                updating: 'Á nuashonrú...',
-                loading: 'Á luchtú...',
+                updating: 'Ag uasdhátú...',
+                loading: 'Ag lódáil...',
                 profileSaved: 'Próifíl Athruithe'
             },
             password: {
@@ -228,7 +230,7 @@
                                     bind:checked={age}
                                 />
                                 <span class="toggle-switch"></span>
-                                <span class="toggle-label">Over 18</span>
+                                <span class="toggle-label">{messages.labels.over18}</span>
                             </label>
                         </div>
                         <div class="form-field">
@@ -313,7 +315,7 @@
                             </label>
                         </div>
 
-                        <button type="submit" class="language-switch" disabled={saving}> {saving ? 'Saving...' : messages.labels.savebutton}</button>
+                        <button type="submit" class="language-switch" disabled={saving}>{saving ? messages.labels.updating : messages.labels.savebutton}</button>
 
                         {#if saved}
                             <p>{messages.labels.profileSaved}</p>

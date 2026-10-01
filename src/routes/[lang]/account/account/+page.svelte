@@ -73,8 +73,8 @@
                 password: 'Pasfhocal',
                 currentPassword: 'Pasfhocal reatha',
                 newPassword: 'Pasfhocal nua',
-                updating: 'Á nuashonrú...',
-                loading: 'Á luchtú...'
+                updating: 'Ag uasdhátú...',
+                loading: 'Ag lódáil...'
             },
             password: {
                 required: 'Cuir isteach do phasfhocal reatha agus do phasfhocal nua, le do thoil.',
