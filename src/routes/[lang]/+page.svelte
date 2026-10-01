@@ -6,6 +6,7 @@
     import SingleContent from '$lib/components/rails/SingleContent.svelte';
     import Marketing from '$lib/components/rails/Marketing.svelte';
     import LiveCarousel from '$lib/components/rails/LiveCarousel.svelte';
+    import LuckyDipCarousel from '$lib/components/rails/LuckyDipCarousel.svelte';
 
     let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
@@ -28,6 +29,8 @@
         <Marketing {rail} {isIrish} />
     {:else if rail.type === 'LIVE'}
         <LiveCarousel {rail} {isIrish} />
+    {:else if rail.type === 'LUCKY_DIP'}
+        <LuckyDipCarousel {rail} {isIrish} />
     {/if}
 {/each}
 

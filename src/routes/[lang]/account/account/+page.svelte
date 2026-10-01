@@ -3,6 +3,7 @@
     import { page } from '$app/state';
     import { goto } from '$app/navigation';
     import { loadPeachUser } from '$lib/sso/peach';
+    import { requireAuthentication } from '$lib/sso/auth';
 
     let loading = $state(true);
     let error = $state('');
@@ -93,15 +94,8 @@
 
     onMount(async () => {
         try {
-            pu = await loadPeachUser();
-
-            // First check whether the user is authenticated
-            try {
-                await pu.isAuthorized();
-            } catch {
-                await goto(`/${page.params.lang}/account/login`);
-                return;
-            }
+            pu = await requireAuthentication(page.params.lang);
+            if (!pu) return;
 
             // User is authenticated, so load their profile
             profile = await pu.getCombinedSessionAndPreferenceProfile();
