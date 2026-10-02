@@ -27,7 +27,8 @@
         en: {
             labels: {
                 account: 'Account',
-                profile: 'Profile',
+                profile: 'Edit your profile',
+                profileLink: 'Profile',
                 preferences: 'Preferences',
                 updateProfile: 'Update Profile',
                 firstname: 'First Name',
@@ -74,7 +75,8 @@
         ga: {
             labels: {
                 account: 'Cuntas',
-                profile: 'Próifíl',
+                profile: 'Athraigh Próifíl',
+                profileLink: 'Próifíl',
                 preferences: 'Sainrogha phearsanta',
                 updateProfile: 'Athraigh Próifíl',
                 firstname: 'Chéad Ainm',
@@ -183,174 +185,210 @@
 </script>
 
 <section class="profile-page">
-    {#if loading}
-        <p>Loading...</p>
-    {:else if error}
-        <p>{error}</p>
-    {:else}
-        <section class="account">
-            <h2>{messages.labels.profile}</h2>
+    <section class="episodes">
+        {#if loading}
+            <p>Loading...</p>
+        {:else if error}
+            <p>{error}</p>
+        {:else}
+            <section class="account">
+                <div class="account-layout">
+                    <!-- LEFT COLUMN -->
+                    <nav class="account-tabs">
+                        <a href={`/${page.params.lang}/account/account`}>{messages.labels.account}</a>
+                        <a href={`/${page.params.lang}/account/profile`} class="active">{messages.labels.profileLink}</a>
+                        <a href={`/${page.params.lang}/account/preferences`}>{messages.labels.preferences}</a>
+                    </nav>
 
-            <nav class="account-tabs">
-                <a href={`/${page.params.lang}/account/account`}>{messages.labels.account}</a>
-                <a href={`/${page.params.lang}/account/profile`} class="active">{messages.labels.profile}</a>
-                <a href={`/${page.params.lang}/account/preferences`}>{messages.labels.preferences}</a>
-            </nav>
+                    <!-- MIDDLE COLUMN -->
+                    <div class="account-content">
+                        <h1>{messages.labels.profile}</h1>
+                            <form onsubmit={(event) => {event.preventDefault(); handleSubmit();}}>
+                                <fieldset>
+                                    <div class="form-row">
+                                        <div class="form-field">
+                                            <label for="firstName">{messages.labels.firstname}</label>
+                                            <input id="firstName" type="text" bind:value={firstName} />
+                                        </div>
+                                        <div class="form-field">
+                                            <label for="lastName">{messages.labels.surname}</label>
+                                            <input id="lastName" type="text" bind:value={lastName} />
+                                        </div>
+                                    </div>
+                                    <div class="form-field">
+                                        <label for="displayName">Display name *</label>
+                                        <input id="displayName" type="text" bind:value={displayName} required />
+                                    </div>
+                                    <div class="form-field">
+                                        <label>{messages.labels.age}</label>
 
-            {#if loading}
-                <p>Loading...</p>
-            {:else if error}
-                <p>{error}</p>
-            {:else}
-                <form onsubmit={(event) => {event.preventDefault(); handleSubmit();}}>
-                    <fieldset>
-                        <legend>{messages.labels.updateProfile}</legend>
-                        <div class="form-row">
-                            <div class="form-field">
-                                <label for="firstName">{messages.labels.firstname}</label>
-                                <input id="firstName" type="text" bind:value={firstName} />
-                            </div>
+                                        <label class="toggle">
+                                            <input class="toggle-checkbox" type="checkbox" bind:checked={age} />
+                                            <span class="toggle-switch"></span>
+                                            <span class="toggle-label">{messages.labels.over18}</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-field">
+                                        <label>{messages.labels.gender}</label>
 
-                            <div class="form-field">
-                                <label for="lastName">{messages.labels.surname}</label>
-                                <input id="lastName" type="text" bind:value={lastName} />
-                            </div>
+                                        <div class="radio-options">
+                                            <label>
+                                                <input type="radio" bind:group={gender} value="1" />
+                                                {messages.labels.female}
+                                            </label>
+
+                                            <label>
+                                                <input type="radio" bind:group={gender} value="2" />
+                                                {messages.labels.male}
+                                            </label>
+
+                                            <label>
+                                                <input type="radio" bind:group={gender} value="3" />
+                                                {messages.labels.nonBinary}
+                                            </label>
+
+                                            <label>
+                                                <input type="radio" bind:group={gender} value="4" />
+                                                {messages.labels.noSay}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-field">
+                                        <label>{messages.labels.irishLevel}</label>
+
+                                        <div class="irish-options">
+                                            <label class:selected={irish === '1'}>
+                                                <input type="radio" bind:group={irish} value="1" />
+                                                <span>{messages.labels.none}</span>
+                                            </label>
+
+                                            <label class:selected={irish === '2'}>
+                                                <input type="radio" bind:group={irish} value="2" />
+                                                <span>{messages.labels.learner}</span>
+                                            </label>
+
+                                            <label class:selected={irish === '3'}>
+                                                <input type="radio" bind:group={irish} value="3" />
+                                                <span>{messages.labels.intermediate}</span>
+                                            </label>
+
+                                            <label class:selected={irish === '4'}>
+                                                <input type="radio" bind:group={irish} value="4" />
+                                                <span>{messages.labels.fluent}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-field">
+                                        <label for="nationality">{messages.labels.nationality}</label>
+
+                                        <select id="nationality" bind:value={nationality}>
+                                            <option value="">Select nationality</option>
+
+                                            {#each countries as country}
+                                                <option value={country.code}>{country.name}</option>
+                                            {/each}
+                                        </select>
+                                    </div>
+                                    <div class="form-field">
+                                        <label for="residence">{messages.labels.country}</label>
+
+                                        <select id="residence" bind:value={residence}>
+                                            <option value="">Select country of residence</option>
+
+                                            {#each countries as country}
+                                                <option value={country.code}>{country.name}</option>
+                                            {/each}
+                                        </select>
+                                    </div>
+                                    <div class="form-field">
+                                        <label></label>
+                                        <label class="toggle">
+                                            <input class="toggle-checkbox" type="checkbox" bind:checked={newsletter} />
+                                            <span class="toggle-switch"></span>
+                                            <span class="toggle-label">{messages.labels.newsletter}</span>
+                                        </label>
+                                    </div>
+
+                                    <button type="submit" class="form-button" disabled={saving}>{saving ? messages.labels.updating : messages.labels.savebutton}</button>
+
+                                    {#if saved}
+                                        <p>{messages.labels.profileSaved}</p>
+                                    {/if}
+                                </fieldset>
+                            </form>
                         </div>
-                        <div class="form-field">
-                            <label for="displayName">Display name *</label>
-                            <input id="displayName" type="text" bind:value={displayName} required />
-                        </div>
-                        <div class="form-field">
-                            <label>{messages.labels.age}</label>
+                    </div>
 
-                            <label class="toggle">
-                                <input
-                                    class="toggle-checkbox"
-                                    type="checkbox"
-                                    bind:checked={age}
-                                />
-                                <span class="toggle-switch"></span>
-                                <span class="toggle-label">{messages.labels.over18}</span>
-                            </label>
-                        </div>
-                        <div class="form-field">
-                            <label>{messages.labels.gender}</label>
-
-                            <label>
-                                <input type="radio" bind:group={gender} value="1" />
-                                {messages.labels.female}
-                            </label>
-
-                            <label>
-                                <input type="radio" bind:group={gender} value="2" />
-                                {messages.labels.male}
-                            </label>
-
-                            <label>
-                                <input type="radio" bind:group={gender} value="3" />
-                                {messages.labels.nonBinary}
-                            </label>
-
-                            <label>
-                                <input type="radio" bind:group={gender} value="4" />
-                                {messages.labels.noSay}
-                            </label>
-                        </div>
-                        <div class="form-field">
-                            <label>{messages.labels.irishLevel}</label>
-
-                            <label>
-                                <input type="radio" bind:group={irish} value="1" />
-                                {messages.labels.none}
-                            </label>
-
-                            <label>
-                                <input type="radio" bind:group={irish} value="2" />
-                                {messages.labels.learner}
-                            </label>
-
-                            <label>
-                                <input type="radio" bind:group={irish} value="3" />
-                                {messages.labels.intermediate}
-                            </label>
-
-                            <label>
-                                <input type="radio" bind:group={irish} value="4" />
-                                {messages.labels.fluent}
-                            </label>
-                        </div>
-                        <div class="form-field">
-                            <label for="nationality">{messages.labels.nationality}</label>
-
-                            <select id="nationality" bind:value={nationality}>
-                                <option value="">Select nationality</option>
-
-                                {#each countries as country}
-                                    <option value={country.code}>{country.name}</option>
-                                {/each}
-                            </select>
-                        </div>
-                        <div class="form-field">
-                            <label for="residence">{messages.labels.country}</label>
-
-                            <select id="residence" bind:value={residence}>
-                                <option value="">Select country of residence</option>
-
-                                {#each countries as country}
-                                    <option value={country.code}>{country.name}</option>
-                                {/each}
-                            </select>
-                        </div>
-                        <div class="form-field">
-                            <label class="toggle">
-                                <input
-                                    class="toggle-checkbox"
-                                    type="checkbox"
-                                    bind:checked={newsletter}
-                                />
-                                <span class="toggle-switch"></span>
-                                <span class="toggle-label">
-                                    {messages.labels.newsletter}
-                                </span>
-                            </label>
-                        </div>
-
-                        <button type="submit" class="language-switch" disabled={saving}>{saving ? messages.labels.updating : messages.labels.savebutton}</button>
-
-                        {#if saved}
-                            <p>{messages.labels.profileSaved}</p>
-                        {/if}
-                    </fieldset>
-                </form>
-            {/if}
-        </section>
-    {/if}
+                    <!-- RIGHT COLUMN -->
+                    <div class="account-sidebar"></div>
+            </section>
+        {/if}
+    </section>
 </section>
 
 <style>
 .profile-page {
-    max-width: 700px;
+    max-width: var(--page-width);
     margin: 0 auto;
     padding: 20px;
     background-color: var(--genre-background);
 }
 
+.account-layout {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 600px) 180px;
+    gap: 40px;
+    align-items: start;
+}
+
 .account-tabs {
     display: flex;
+    flex-direction: column;
     gap: 5px;
-    margin-bottom: 30px;
-    border-bottom: 1px solid #ccc;
+    padding-top: 32px;
 }
 
 .account-tabs a {
-    padding: 10px 15px;
+    position: relative;
+    width: fit-content;
+    padding: 10px 0;
     text-decoration: none;
     color: inherit;
 }
 
 .account-tabs a.active {
     font-weight: bold;
-    border-bottom: 3px solid currentColor;
+}
+
+.account-tabs a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background-color: var(--link-colour);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.account-tabs a:hover::after,
+.account-tabs a.active::after {
+    opacity: 1;
+}
+
+.account-content {
+    min-width: 0;
+}
+
+.account-section {
+    margin-bottom: 40px;
+}
+
+.account-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 fieldset {
@@ -359,10 +397,14 @@ fieldset {
     margin: 0;
 }
 
-legend {
-    font-size: 1.25rem;
-    font-weight: bold;
+.form-field {
     margin-bottom: 20px;
+}
+
+.form-field > label:first-child {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: bold;
 }
 
 .form-row {
@@ -374,16 +416,6 @@ legend {
     flex: 1;
 }
 
-.form-field {
-    margin-bottom: 20px;
-}
-
-.form-field > label:first-child {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-}
-
 input[type="text"],
 select {
     width: 100%;
@@ -391,12 +423,124 @@ select {
     padding: 10px;
 }
 
-.form-field > label:not(:first-child) {
-    display: block;
-    margin-bottom: 8px;
+/* Gender */
+
+.radio-options {
+    display: flex;
+    width: 100%;
+    margin-top: 8px;
 }
 
-button {
+.radio-options label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.radio-options input {
+    width: auto;
+    padding: 0;
+}
+
+/* Toggle switches */
+
+.toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.toggle-checkbox {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+    background: #aaa;
+    border-radius: 24px;
+    transition: background-color 0.2s ease;
+}
+
+.toggle-switch::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+}
+
+.toggle-checkbox:checked + .toggle-switch {
+    background-color: var(--link-colour);
+}
+
+.toggle-checkbox:checked + .toggle-switch::after {
+    transform: translateX(20px);
+}
+
+.toggle-checkbox:focus-visible + .toggle-switch {
+    outline: 2px solid var(--link-colour);
+    outline-offset: 2px;
+}
+
+.toggle-label {
+    font-weight: normal;
+}
+
+/* Irish level */
+
+.irish-options {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.irish-options label {
+    cursor: pointer;
+}
+
+.irish-options input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.irish-options span {
+    display: block;
     padding: 10px 20px;
+    border: 1px solid var(--link-colour);
+    background: transparent;
+    color: var(--link-colour);
+    border-radius: 4px;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.irish-options label.selected span {
+    background-color: var(--link-colour);
+    color: white;
 }
 </style>

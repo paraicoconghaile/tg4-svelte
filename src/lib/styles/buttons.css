@@ -25,3 +25,12 @@
 .language-switch:hover {
     background: #ff4b91;
 }
+
+.form-button {
+    background: var(--tg4-pink);
+    color: var(--tg4-white);
+    padding: 6px 12px;
+    font-weight: 700;
+    border: 0px !important;
+    transition: background .2s ease;
+}

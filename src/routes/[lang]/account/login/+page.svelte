@@ -180,7 +180,7 @@
                 </div>
             </div>
             <div class="form-field">
-                <button type="submit" disabled={loggingIn} class="language-switch">{loggingIn ? messages.labels.loggingIn : messages.labels.login}</button>
+                <button type="submit" disabled={loggingIn} class="form-button">{loggingIn ? messages.labels.loggingIn : messages.labels.login}</button>
             </div>
             <div class="form-field">
                 {#if error}

@@ -32,7 +32,8 @@
     const accountMessages = {
         en: {
             labels: {
-                account: 'Account',
+                account: 'Edit account details',
+                accountLink: 'Account',
                 profile: 'Profile',
                 preferences: 'Preferences',
                 email: 'Email address',
@@ -64,7 +65,8 @@
         },
         ga: {
             labels: {
-                account: 'Cuntas',
+                account: 'Athraigh do chuntas',
+                accountLink: 'Cuntas',
                 profile: 'Próifíl',
                 preferences: 'Sainrogha phearsanta',
                 updateEmail: 'Athraigh Ríomhphost',
@@ -234,103 +236,187 @@
     }
 </script>
 
-<section class="profile-page">
-    {#if loading}
-        <p>Loading...</p>
-    {:else if error}
-        <p>{error}</p>
-    {:else}
-        <section class="account">
-            <h2>{messages.labels.account}</h2>
+<section class="account-page">
+    <section class="episodes">
+        {#if loading}
+            <p>Loading...</p>
+        {:else if error}
+            <p>{error}</p>
+        {:else}
+            <section class="account">
+                <div class="account-layout">
+                    <!-- LEFT COLUMN -->
+                    <nav class="account-tabs">
+                        <a href={`/${page.params.lang}/account/account`} class="active">
+                            {messages.labels.accountLink}
+                        </a>
+                        <a href={`/${page.params.lang}/account/profile`}>
+                            {messages.labels.profile}
+                        </a>
+                        <a href={`/${page.params.lang}/account/preferences`}>
+                            {messages.labels.preferences}
+                        </a>
+                    </nav>
 
-            <nav class="account-tabs">
-                <a href={`/${page.params.lang}/account/account`} class="active">{messages.labels.account}</a>
-                <a href={`/${page.params.lang}/account/profile`}>{messages.labels.profile}</a>
-                <a href={`/${page.params.lang}/account/preferences`}>{messages.labels.preferences}</a>
-            </nav>
+                    <!-- MIDDLE COLUMN -->
+                    <div class="account-content">
+                        <h1>{messages.labels.account}</h1>
 
-            <!-- EMAIL -->
-            <div class="account-section">
-                <h3>{messages.labels.updateEmail}</h3>
+                        <!-- EMAIL -->
+                        <div class="account-section">
+                            <form onsubmit={(event) => { event.preventDefault(); changeEmail(); }}>
+                                <div class="form-field">
+                                    <label for="email">{messages.labels.email}</label>
+                                    <input id="email" type="email" bind:value={newEmail} />
+                                </div>
 
-                <form onsubmit={(event) => {event.preventDefault(); changeEmail();}}>
-                    <div class="form-field">
-                        <label for="email">{messages.labels.email}</label>
-                        <input id="email" type="email" bind:value={newEmail}/>
-                    </div>
-                    <div class="form-field">
-                        <label for="email-password">{messages.labels.currentPassword}</label>
-                        <div class="password-input">
-                            <input id="email-password" type={showEmailPassword  ? 'text' : 'password'} bind:value={emailPassword} />
-                            <button type="button" class="password-toggle" onclick={() => showEmailPassword  = !showEmailPassword } aria-label={showEmailPassword  ? 'Hide password' : 'Show password'}>
-                            {#if showEmailPassword }
-                                <EyeOff />
-                            {:else}
-                                <Eye />
+                                <div class="form-field">
+                                    <label for="email-password">
+                                        {messages.labels.currentPassword}
+                                    </label>
+
+                                    <div class="password-input">
+                                        <input id="email-password" type={showEmailPassword ? 'text' : 'password'} bind:value={emailPassword} />
+
+                                        <button type="button" class="password-toggle" onclick={() => showEmailPassword = !showEmailPassword} aria-label={showEmailPassword ? 'Hide password' : 'Show password'}>
+                                            {#if showEmailPassword}
+                                                <EyeOff />
+                                            {:else}
+                                                <Eye />
+                                            {/if}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="form-field">
+                                    <button type="submit" disabled={updatingEmail} class="form-button">
+                                        {updatingEmail ? messages.labels.updating : messages.labels.updateEmail}
+                                    </button>
+                                </div>
+                            </form>
+
+                            {#if emailMessage}
+                                <p>{emailMessage}</p>
                             {/if}
-                            </button>
+                        </div>
+
+                        <!-- PASSWORD -->
+                        <div class="account-section">
+                            <form onsubmit={(event) => { event.preventDefault(); changePassword(); }}>
+                                <div class="form-field">
+                                    <label for="current-password">
+                                        {messages.labels.currentPassword}
+                                    </label>
+
+                                    <div class="password-input">
+                                        <input id="current-password" type={showCurrentPassword ? 'text' : 'password'} bind:value={currentPassword} />
+
+                                        <button type="button" class="password-toggle" onclick={() => showCurrentPassword = !showCurrentPassword} aria-label={showCurrentPassword ? 'Hide password' : 'Show password'}>
+                                            {#if showCurrentPassword}
+                                                <EyeOff />
+                                            {:else}
+                                                <Eye />
+                                            {/if}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="new-password">
+                                        {messages.labels.newPassword}
+                                    </label>
+
+                                    <div class="password-input">
+                                        <input id="new-password" type={showNewPassword ? 'text' : 'password'} bind:value={newPassword} />
+
+                                        <button type="button" class="password-toggle" onclick={() => showNewPassword = !showNewPassword} aria-label={showNewPassword ? 'Hide password' : 'Show password'}>
+                                            {#if showNewPassword}
+                                                <EyeOff />
+                                            {:else}
+                                                <Eye />
+                                            {/if}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="form-field">
+                                    <button type="submit" disabled={updatingPassword} class="form-button">
+                                        {updatingPassword ? messages.labels.updating : messages.labels.updatePassword}
+                                    </button>
+                                </div>
+                            </form>
+
+                            {#if passwordMessage}
+                                <p>{passwordMessage}</p>
+                            {/if}
                         </div>
                     </div>
-                    <div class="form-field">
-                        <button type="submit" disabled={updatingEmail} class="language-switch">{updatingEmail ? messages.labels.updating : messages.labels.updateEmail}</button>
-                    </div>
-                </form>
 
-                {#if emailMessage}
-                    <p>{emailMessage}</p>
-                {/if}
-            </div>
-
-            <!-- PASSWORD -->
-            <div class="account-section">
-                <h3>{messages.labels.updatePassword}</h3>
-
-                <form onsubmit={(event) => {event.preventDefault(); changePassword();}}>
-                    <div class="form-field">
-                        <label for="current-password">{messages.labels.currentPassword}</label>
-                        <div class="password-input">
-                            <input id="current-password" type={showCurrentPassword ? 'text' : 'password'} bind:value={currentPassword} />
-                            <button type="button" class="password-toggle" onclick={() => showCurrentPassword = !showCurrentPassword} aria-label={showCurrentPassword ? 'Hide password' : 'Show password'}>
-                                {#if showCurrentPassword}
-                                    <EyeOff />
-                                {:else}
-                                    <Eye />
-                                {/if}
-                            </button>
-                        </div>
-                    </div>
-                    <div class="form-field">
-                        <label for="new-password">{messages.labels.newPassword}</label>
-                        <div class="password-input">
-                            <input id="new-password" type={showNewPassword ? 'text' : 'password'} bind:value={newPassword} />
-                            <button type="button" class="password-toggle" onclick={() => showNewPassword = !showNewPassword} aria-label={showNewPassword ? 'Hide password' : 'Show password'}>
-                                {#if showNewPassword}
-                                    <EyeOff />
-                                {:else}
-                                    <Eye />
-                                {/if}
-                            </button>
-                        </div>
-                    </div>
-                    <div class="form-field">
-                        <button type="submit" disabled={updatingPassword} class="language-switch">{updatingPassword ? messages.labels.updating : messages.labels.updatePassword}</button>
-                    </div>
-                </form>
-
-                {#if passwordMessage}
-                    <p>{passwordMessage}</p>
-                {/if}
-            </div>
-        </section>
-    {/if}
+                    <!-- RIGHT COLUMN -->
+                    <div class="account-sidebar"></div>
+                </div>
+            </section>
+        {/if}
+    </section>
 </section>
 
 <style>
-.profile-page {
-    max-width: 700px;
+.account-page {
+    max-width: var(--page-width);
     margin: 0 auto;
     padding: 20px;
     background-color: var(--genre-background);
+}
+
+.account-layout {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 600px) 180px;
+    gap: 40px;
+    align-items: start;
+}
+
+.account-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-top: 32px;
+}
+
+.account-tabs a {
+    position: relative;
+    width: fit-content;
+    padding: 10px 0px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.account-tabs a.active {
+    font-weight: bold;
+}
+
+.account-tabs a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background-color: var(--link-colour);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.account-tabs a:hover::after,
+.account-tabs a.active::after {
+    opacity: 1;
+}
+
+.account-content {
+    min-width: 0;
+}
+
+.account-section {
+    margin-bottom: 40px;
 }
 
 .account-section form {
@@ -339,45 +425,13 @@
     gap: 10px;
 }
 
-.account-section label {
-    margin-top: 5px;
-}
-
-.account-section input {
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.account-section button {
-    align-self: flex-start;
-    margin-top: 0;
-}
-
-.account-tabs {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 30px;
-    border-bottom: 1px solid #ccc;
-}
-
-.account-tabs a {
-    padding: 10px 15px;
-    text-decoration: none;
-    color: inherit;
-}
-
-.account-tabs a.active {
-    font-weight: bold;
-    border-bottom: 3px solid currentColor;
-}
-
 .form-field {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .form-field label {
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     font-weight: bold;
 }
 
