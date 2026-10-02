@@ -18,7 +18,6 @@
     let credits = $state(true);
     let nextEpisode = $state(true);
     let accessibilityView = $state(false);
-
     let genres = $state<string[]>([]);
 
     const availableGenres = [
@@ -47,7 +46,8 @@
                 accessibilityView: 'Accessibility View',
                 updating: 'Updating...',
                 loading: 'Loading...',
-                savebutton: 'Save'
+                savebutton: 'Save',
+                preferenceSaved: 'Preferences Saved'
             }
         },
         ga: {
@@ -64,7 +64,8 @@
                 accessibilityView: 'Accessibility View',
                 updating: 'Ag uasdhátú...',
                 loading: 'Ag lódáil...',
-                savebutton: 'Sabháil'
+                savebutton: 'Sabháil',
+                preferenceSaved: 'Sainrogha Phearsanta Athruithe'
             }
         }
     };
@@ -112,6 +113,43 @@
             loading = false;
         }
     });
+
+    async function handleSubmit() {
+        saved = false;
+        saving = true;
+
+        try {
+            const updatedProfile = {
+                ...profile,
+
+                preferences: {
+                    ...profile.preferences,
+
+                    extraPref: {
+                        ...profile.preferences.extraPref,
+                        ads,
+                        subtitles,
+                        promos,
+                        credits,
+                        nextEpisode,
+                        accessibilityView,
+                        genres
+                    }
+                }
+            };
+
+            console.log('Saving preferences:', updatedProfile);
+
+            await pu.setCombinedSessionAndPreferenceProfile('profile_preference_key', updatedProfile);
+            profile = updatedProfile;
+            saved = true;
+
+        } catch (err) {
+            console.error('Preferences update error:', err);
+        } finally {
+            saving = false;
+        }
+    }
 </script>
 
 <section class="preference-page">
@@ -228,7 +266,7 @@
                                     <button type="submit" class="form-button" disabled={saving}>{saving ? messages.labels.updating : messages.labels.savebutton}</button>
 
                                     {#if saved}
-                                        <p>Profile saved.</p>
+                                        <p class="notification">{messages.labels.preferenceSaved}</p>
                                     {/if}
                                 </fieldset>
                             </form>
@@ -411,5 +449,16 @@ fieldset {
 
 .toggle-label {
     font-weight: normal;
+}
+
+.notification {
+    display: block;
+    padding: 10px 20px;
+    background: var(--tg4-grey-2);
+    color: white;
+    border-radius: 0px;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
 }
 </style>

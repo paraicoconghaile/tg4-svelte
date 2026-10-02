@@ -367,7 +367,7 @@
                                     <button type="submit" class="form-button" disabled={saving}>{saving ? messages.labels.updating : messages.labels.savebutton}</button>
 
                                     {#if saved}
-                                        <p>{messages.labels.profileSaved}</p>
+                                        <p class="notification">{messages.labels.profileSaved}</p>
                                     {/if}
                                 </fieldset>
                             </form>
@@ -596,5 +596,16 @@ select {
 .irish-options label.selected span {
     background-color: var(--link-colour);
     color: white;
+}
+
+.notification {
+    display: block;
+    padding: 10px 20px;
+    background: var(--tg4-grey-2);
+    color: white;
+    border-radius: 0px;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
 }
 </style>

@@ -296,7 +296,7 @@
                             </form>
 
                             {#if emailMessage}
-                                <p>{emailMessage}</p>
+                                <p class="notification">{emailMessage}</p>
                             {/if}
                         </div>
 
@@ -347,7 +347,7 @@
                             </form>
 
                             {#if passwordMessage}
-                                <p>{passwordMessage}</p>
+                                <p class="notification">{passwordMessage}</p>
                             {/if}
                         </div>
                     </div>
@@ -459,5 +459,16 @@
     background: none;
     padding: 5px;
     cursor: pointer;
+}
+
+.notification {
+    display: block;
+    padding: 10px 20px;
+    background: var(--tg4-grey-2);
+    color: white;
+    border-radius: 0px;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
 }
 </style>
