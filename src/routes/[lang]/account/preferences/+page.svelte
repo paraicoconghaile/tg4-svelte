@@ -22,13 +22,13 @@
     let genres = $state<string[]>([]);
 
     const availableGenres = [
-        { value: 'faisneis', label: 'Faisnéis' },
-        { value: 'ceol', label: 'Ceol' },
-        { value: 'drama', label: 'Dráma' },
-        { value: 'cursai-reatha', label: 'Cúrsaí reatha' },
-        { value: 'siamsaiocht', label: 'Siamsaíocht' },
-        { value: 'sport', label: 'Spórt' },
-        { value: 'saolchlar', label: 'Saolchlár' },
+        { value: 'faisneis', label: page.params.lang === 'ga' ? 'Faisnéis' : 'News' },
+        { value: 'ceol', label: page.params.lang === 'ga' ? 'Ceol' : 'Music' },
+        { value: 'drama', label: page.params.lang === 'ga' ? 'Dráma' : 'Drama' },
+        { value: 'cursai-reatha', label: page.params.lang === 'ga' ? 'Cúrsaí Reatha' : 'Current Affairs' },
+        { value: 'siamsaiocht', label: page.params.lang === 'ga' ? 'Siamsaíocht' : 'Entertainment' },
+        { value: 'sport', label: page.params.lang === 'ga' ? 'Spórt' : 'Sport' },
+        { value: 'saolchlar', label: page.params.lang === 'ga' ? 'Saolchlár' : 'Lifestyle' },
         { value: 'cula4', label: 'Cúla4' }
     ];
 

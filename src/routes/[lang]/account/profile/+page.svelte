@@ -168,19 +168,73 @@
         }
     });
 
-    function handleSubmit() {
+    async function handleSubmit() {
         saved = false;
-        console.log({
-            firstName,
-            lastName,
-            displayName,
-            age,
-            gender,
-            irish,
-            nationality,
-            residence,
-            newsletter
-        });
+        saving = true;
+
+        try {
+            const accessLevel =
+                firstName !== '' &&
+                lastName !== '' &&
+                age !== '' &&
+                gender !== '' &&
+                nationality !== '' &&
+                residence !== '' &&
+                irish !== '' &&
+                newsletter === true
+                    ? 4
+                    : firstName !== '' &&
+                        lastName !== '' &&
+                        age !== '' &&
+                        gender !== '' &&
+                        nationality !== '' &&
+                        residence !== '' &&
+                        irish !== ''
+                        ? 3
+                        : firstName !== '' &&
+                            lastName !== '' &&
+                            age !== '' &&
+                            gender !== ''
+                            ? 2
+                            : 1;
+
+            const updatedProfile = {
+                ...profile,
+
+                profile: {
+                    ...profile.profile,
+                    firstName,
+                    lastName
+                },
+
+                preferences: {
+                    ...profile.preferences,
+                    displayName,
+                    age,
+                    gender,
+                    irish,
+                    nationality,
+                    residence,
+                    newsletter,
+                    accessLevel
+                }
+            };
+
+            console.log('Saving profile:', updatedProfile);
+
+            await pu.setCombinedSessionAndPreferenceProfile(
+                'profile_preference_key',
+                updatedProfile
+            );
+
+            profile = updatedProfile;
+            saved = true;
+
+        } catch (err) {
+            console.error('Profile update error:', err);
+        } finally {
+            saving = false;
+        }
     }
 </script>
 
