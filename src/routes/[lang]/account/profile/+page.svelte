@@ -173,40 +173,45 @@
         saving = true;
 
         try {
-            const accessLevel =
+            let accessLevel = 1;
+
+            if (
                 firstName !== '' &&
                 lastName !== '' &&
-                age !== '' &&
+                age &&
                 gender !== '' &&
                 nationality !== '' &&
                 residence !== '' &&
                 irish !== '' &&
-                newsletter === true
-                    ? 4
-                    : firstName !== '' &&
-                        lastName !== '' &&
-                        age !== '' &&
-                        gender !== '' &&
-                        nationality !== '' &&
-                        residence !== '' &&
-                        irish !== ''
-                        ? 3
-                        : firstName !== '' &&
-                            lastName !== '' &&
-                            age !== '' &&
-                            gender !== ''
-                            ? 2
-                            : 1;
+                newsletter
+            ) {
+                accessLevel = 4;
+            } else if (
+                firstName !== '' &&
+                lastName !== '' &&
+                age &&
+                gender !== '' &&
+                nationality !== '' &&
+                residence !== '' &&
+                irish !== ''
+            ) {
+                accessLevel = 3;
+            } else if (
+                firstName !== '' &&
+                lastName !== '' &&
+                age &&
+                gender !== ''
+            ) {
+                accessLevel = 2;
+            }
 
             const updatedProfile = {
                 ...profile,
-
                 profile: {
                     ...profile.profile,
                     firstName,
                     lastName
                 },
-
                 preferences: {
                     ...profile.preferences,
                     displayName,
@@ -222,11 +227,7 @@
 
             console.log('Saving profile:', updatedProfile);
 
-            await pu.setCombinedSessionAndPreferenceProfile(
-                'profile_preference_key',
-                updatedProfile
-            );
-
+            await pu.setCombinedSessionAndPreferenceProfile('profile_preference_key', updatedProfile);
             profile = updatedProfile;
             saved = true;
 
