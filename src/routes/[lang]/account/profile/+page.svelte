@@ -2,7 +2,6 @@
     import { onMount } from 'svelte';
     import { page } from '$app/state';
     import { goto } from '$app/navigation';
-    import { loadPeachUser } from '$lib/sso/peach';
     import { countries } from '$lib/data/countries';
     import { requireAuthentication } from '$lib/sso/auth';
 

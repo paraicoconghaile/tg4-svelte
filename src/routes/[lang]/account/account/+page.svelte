@@ -2,7 +2,6 @@
     import { onMount } from 'svelte';
     import { page } from '$app/state';
     import { goto } from '$app/navigation';
-    import { loadPeachUser } from '$lib/sso/peach';
     import { requireAuthentication } from '$lib/sso/auth';
     import Eye from '$lib/components/icons/Eye.svelte';
     import EyeOff from '$lib/components/icons/EyeOff.svelte';
