@@ -460,4 +460,32 @@ fieldset {
         background-color 0.2s ease,
         color 0.2s ease;
 }
+
+@media (max-width: 1160px) {
+    .account-layout {
+        grid-template-columns: 200px minmax(0, 700px);
+        gap: 20px;
+    }
+
+    .account-sidebar {
+        display: none;
+    }
+}
+
+@media (max-width: 800px) {
+    .account-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .account-tabs {
+        flex-direction: row;
+        gap: 25px;
+        padding-top: 0;
+    }
+
+    .account-sidebar {
+        display: none;
+    }
+}
 </style>
