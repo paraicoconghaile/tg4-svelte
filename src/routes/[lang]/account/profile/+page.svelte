@@ -471,7 +471,7 @@ select {
     width: 44px;
     height: 24px;
     flex-shrink: 0;
-    background: #aaa;
+    background: var(--tg4-grey-2);
     border-radius: 24px;
     transition: background-color 0.2s ease;
 }
@@ -530,10 +530,9 @@ select {
 .irish-options span {
     display: block;
     padding: 10px 20px;
-    border: 1px solid var(--link-colour);
-    background: transparent;
-    color: var(--link-colour);
-    border-radius: 4px;
+    background: var(--tg4-grey-2);
+    color: white;
+    border-radius: 0px;
     transition:
         background-color 0.2s ease,
         color 0.2s ease;

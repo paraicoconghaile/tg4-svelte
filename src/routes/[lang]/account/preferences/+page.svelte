@@ -344,49 +344,16 @@ fieldset {
 }
 
 .genre-options span {
+    background: var(--tg4-grey-2);
     display: block;
     padding: 10px 16px;
-    border: 1px solid currentColor;
-    border-radius: 4px;
+    border-radius: 0px;
     cursor: pointer;
 }
 
 .genre-options label.selected span {
-    background: currentColor;
-    color: var(--genre-background);
-}
-.preference-options,
-.genre-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.preference-options label,
-.genre-options label {
-    cursor: pointer;
-}
-
-.preference-options input,
-.genre-options input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-}
-
-.preference-options span,
-.genre-options span {
-    display: block;
-    padding: 10px 16px;
-    border: 1px solid currentColor;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.preference-options label.selected span,
-.genre-options label.selected span {
-    background: currentColor;
-    color: var(--genre-background);
+    background-color: var(--link-colour);
+    color: white;
 }
 
 .toggle {
@@ -412,7 +379,7 @@ fieldset {
     width: 44px;
     height: 24px;
     flex-shrink: 0;
-    background: #aaa;
+    background: var(--tg4-grey-2);
     border-radius: 24px;
     transition: background-color 0.2s ease;
 }
