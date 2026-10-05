@@ -7,15 +7,30 @@ let {
 
 <section class="double-content">
     <!-- Intro -->
-    <div class="intro" style={`background:${rail.backgroundColor}; color:${rail.textColor};`}>
+    <div
+        class="intro"
+        style={`background:${rail.backgroundColor}; color:${rail.textColor};`}
+    >
         <h2>{isIrish ? rail.titleGa : rail.titleEn}</h2>
         <p>{isIrish ? rail.subtitleGa : rail.subtitleEn}</p>
     </div>
 
     {#each rail.items as item}
-        {@const series = item.series}
-        <a class="content-card" href={`/${isIrish ? 'ga' : 'en'}/player/${series.slug}`}>
-            <img src= {series.mainImage?.large ?? series.boxsetImage?.large} alt={series.name}/>
+
+        {@const content = item.type === 'SERIES' ? item.series : item.video}
+
+        {@const image = item.type === 'SERIES'
+            ? content.mainImage?.large ?? content.boxsetImage?.large
+            : content.image?.large}
+
+        {@const title = content.name}
+
+        {@const href = item.type === 'SERIES'
+            ? `/${isIrish ? 'ga' : 'en'}/player/${content.slug}`
+            : `/${isIrish ? 'ga' : 'en'}/player/${content.vid}`}
+
+        <a class="content-card" href={href}>
+            <img src={image} alt={title} />
 
             <div class="play-box">
                 <svg
@@ -24,16 +39,18 @@ let {
                     height="28"
                     aria-hidden="true"
                 >
-                    <path d="M55.9383 27.9696L46.9742 19.3235L35.2362 30.6515L18.6702 46.6389L27.6318 55.2875L55.9383 27.9696Z" fill="#2B2A2A"/>
-                    <path d="M46.9354 36.6571L55.8945 28.0061L44.1565 16.6781L27.5905 0.690705L18.6289 9.33929L46.9354 36.6571Z" fill="#2B2A2A"/>
+                    <path
+                        d="M55.9383 27.9696L46.9742 19.3235L35.2362 30.6515L18.6702 46.6389L27.6318 55.2875L55.9383 27.9696Z"
+                        fill="#2B2A2A"
+                    />
+                    <path
+                        d="M46.9354 36.6571L55.8945 28.0061L44.1565 16.6781L27.5905 0.690705L18.6289 9.33929L46.9354 27.9696Z"
+                        fill="#2B2A2A"
+                    />
                 </svg>
             </div>
-
-            <!-- <div class="text">
-                <h3>{series.name}</h3>
-                <p>{isIrish ? series.descGa : series.descEn}</p>
-            </div> -->
         </a>
+
     {/each}
 </section>
 
