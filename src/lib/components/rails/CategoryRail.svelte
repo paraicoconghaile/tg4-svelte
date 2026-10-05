@@ -92,8 +92,8 @@
         padding: 15px;
     }
     .play-box {
-        width: 54px;
-        height: 54px;
+        width: 34px;
+        height: 34px;
     }
 }
 </style>

@@ -392,5 +392,9 @@
     .overlay p {
         display: none;
     }
+    .play-box {
+        width: 34px;
+        height: 34px;
+    }
 }
 </style>

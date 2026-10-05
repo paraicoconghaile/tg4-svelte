@@ -69,7 +69,6 @@
     margin: 0 auto;
     overflow: hidden;
     border-radius: 0px;
-    padding: 30px 0 20px 0;
     background: var(--tg4-grey-2);
 }
 
