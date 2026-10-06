@@ -8,6 +8,7 @@
     import Marketing from '$lib/components/rails/Marketing.svelte';
     import LiveCarousel from '$lib/components/rails/LiveCarousel.svelte';
     import LuckyDipCarousel from '$lib/components/rails/LuckyDipCarousel.svelte';
+    //import ContinueWatching from '$lib/components/rails/ContinueWatching.svelte';
 
     let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
@@ -34,6 +35,8 @@
         <LiveCarousel {rail} {isIrish} />
     {:else if rail.type === 'LUCKY_DIP'}
         <LuckyDipCarousel {rail} {isIrish} />
+    {:else if rail.type === 'CONTINUE_WATCHING' && rail.items.length > 0}
+        <CardCarousel {rail} {isIrish}/>
     {/if}
 {/each}
 

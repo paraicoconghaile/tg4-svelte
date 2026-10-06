@@ -153,3 +153,31 @@ export async function getCategoryRails(category: string) {
 
     return await response.json();
 }
+
+export async function getContinueWatching(peachSid: string) {
+    const url = `https://api.tg4dev.com/api/user/continue-watching`;
+
+    const response = await fetch(url, {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Peach-Authorization': peachSid
+        }
+    });
+
+    if (response.status === 401) {
+        return [];
+    }
+
+    if (!response.ok) {
+        const body = await response.text();
+
+        console.error('TG4 CONTINUE WATCHING API ERROR');
+        console.error('URL:', url);
+        console.error('Status:', response.status);
+        console.error('Response:', body);
+
+        throw new Error(`API Error: ${response.status}`);
+    }
+
+    return response.json();
+}
