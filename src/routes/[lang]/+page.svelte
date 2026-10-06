@@ -1,6 +1,7 @@
 <script lang="ts">
     import HeroCarousel from '$lib/components/rails/HeroCarousel.svelte';
     import CardCarousel from '$lib/components/rails/CardCarousel.svelte';
+    import CardCarouselPortrait from '$lib/components/rails/CardCarouselPortrait.svelte';
     import CategoryRail from '$lib/components/rails/CategoryRail.svelte';
     import DoubleContent from '$lib/components/rails/DoubleContent.svelte';
     import SingleContent from '$lib/components/rails/SingleContent.svelte';
@@ -17,8 +18,10 @@
 {#each data.rails.rails as rail}
     {#if rail.type === 'CAROUSEL'}
         <HeroCarousel {rail} {isIrish}/>
-    {:else if rail.type === 'HORIZONTAL'}
+    {:else if rail.type === 'HORIZONTAL' && rail.showItemsAsBoxset === false}
         <CardCarousel {rail} {isIrish}/>
+    {:else if rail.type === 'HORIZONTAL' && rail.showItemsAsBoxset === true}
+        <CardCarouselPortrait {rail} {isIrish}/>
     {:else if rail.type === 'CATEGORY_RAIL'}
         <CategoryRail {rail} {isIrish}/>
     {:else if rail.type === 'DOUBLE_CONTENT'}

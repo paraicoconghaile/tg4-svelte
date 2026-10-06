@@ -99,4 +99,13 @@
     transform: scale(1.1);
     background: var(--tg4-pink);
 }
+@media (max-width: 600px) {
+    .play-box {
+        width: 34px;
+        height: 34px;
+    }
+    .single-content {
+        height: 250px;
+    }
+}
 </style>
