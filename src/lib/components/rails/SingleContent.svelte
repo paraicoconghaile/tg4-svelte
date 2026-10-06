@@ -76,6 +76,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    margin: 10px 0
 }
 
 .single-content::before {

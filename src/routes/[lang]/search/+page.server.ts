@@ -12,7 +12,7 @@ export async function load({ url, params, fetch }) {
     }
 
     const response = await fetch(
-        `https://staging.api.tg4dev.com/api/search/advanced?query=${encodeURIComponent(query)}`
+        `https://api.tg4dev.com/api/search/advanced?query=${encodeURIComponent(query)}`
     );
 
     if (!response.ok) {

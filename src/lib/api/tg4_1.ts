@@ -3,7 +3,7 @@ const API_KEY = env.TG4_API_KEY;
 const NEW_API_KEY = env.TG4_NEW_API_KEY;
 
 export async function getGenre(genre: string) {
-    const response = await fetch(`https://staging.api.tg4dev.com/api/series?limit=150&category=${genre}`,
+    const response = await fetch(`https://api.tg4dev.com/api/series?limit=150&category=${genre}`,
         {
             headers: {
             'Content-Type': 'application/json',
@@ -21,7 +21,7 @@ export async function getGenre(genre: string) {
 
 export async function getSeriesVideos(seriesTitle: string, seasonNumber: number) {
     //const url = `https://playerapi.tg4tech.com/series/videos` + `?seriesTitle=${encodeURIComponent(seriesTitle)}` + `&seriesNumber=` + `&sort=desc`;
-    const url = `https://staging.api.tg4dev.com/api/series/${seriesTitle}/${seasonNumber}`;
+    const url = `https://api.tg4dev.com/api/series/${seriesTitle}/${seasonNumber}`;
 
     //console.log('getSeriesVideos URL:', url);
 
@@ -46,7 +46,7 @@ export async function getSeriesVideos(seriesTitle: string, seasonNumber: number)
 }
 
 export async function getVideo(videoId: string) {
-    const url = `https://staging.api.tg4dev.com/api/videos/${videoId}`;
+    const url = `https://api.tg4dev.com/api/videos/${videoId}`;
 
     const response = await fetch(url, {
         headers: {
@@ -67,7 +67,7 @@ export async function getVideo(videoId: string) {
 }
 
 export async function getSeries(slug: string) {
-    const url = `https://staging.api.tg4dev.com/api/series/${slug}`;
+    const url = `https://api.tg4dev.com/api/series/${slug}`;
 
     const response = await fetch(url, {
         headers: {
@@ -85,7 +85,7 @@ export async function getSeries(slug: string) {
 
 export async function getRails() {
     //throw new Error('TEST: getRails() was called');
-    const url = `https://staging.api.tg4dev.com/api/rails/home?api_key=d3b8f0c1-2e4a-4f5b-9c6d-7e8f9a0b1c2d`;
+    const url = `https://api.tg4dev.com/api/rails/home?api_key=d3b8f0c1-2e4a-4f5b-9c6d-7e8f9a0b1c2d`;
 
     const response = await fetch(url, {
         /* headers: {
@@ -112,7 +112,7 @@ export async function getRails() {
 
 export async function getCurrentEPG() {
     const url =
-        `https://staging.api.tg4dev.com/api/epg/current`;
+        `https://api.tg4dev.com/api/epg/current`;
 
     const response = await fetch(url, {
         headers: {
@@ -138,7 +138,7 @@ export async function getCurrentEPG() {
 }
 
 export async function getCategoryRails(category: string) {
-    const url = `https://staging.api.tg4dev.com/api/rails/category/${category}`;
+    const url = `https://api.tg4dev.com/api/rails/category/${category}`;
 
     const response = await fetch(url, {
         headers: {
