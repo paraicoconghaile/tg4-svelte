@@ -1,5 +1,6 @@
 <script lang="ts">
-    import CardCarousel from '$lib/components/rails/CardCarousel.svelte';
+    import CardCarouselPortrait from '$lib/components/rails/CardCarouselPortrait.svelte';
+    import CardCarousel from '$lib/components/rails/CardCarousel.svelte'
   	let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
     
@@ -22,7 +23,9 @@
 <!-- CATEGORY RAILS -->
 
 {#each data.rails?.rails ?? [] as rail}
-    {#if rail.type === 'HORIZONTAL'}
+    {#if rail.type === 'HORIZONTAL' && rail.showItemsAsBoxset}
+        <CardCarouselPortrait {rail} {isIrish}/>
+    {:else if  rail.type === 'HORIZONTAL'}
         <CardCarousel {rail} {isIrish}/>
     {/if}
 {/each}

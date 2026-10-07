@@ -94,7 +94,7 @@
             <div class="embla__container">
                 {#each rail.items as item}
                     {@const isSeries = item.type === 'SERIES'}
-                    {@const content = isSeries ? item.series : item.video}
+                    {@const content = isSeries ? item.series : item.video ?? item}
 
                     {@const image = rail.showItemsAsBoxset
                         ? (content.boxsetImage?.original ?? content.image?.original)
@@ -103,19 +103,38 @@
 
                     {@const name = isSeries
                         ? content.name
-                        : content.displayName
-                    }
+                        : content.displayName}
 
                     <div class="embla__slide">
                         {#if isSeries}
                             <a href={`/${isIrish ? 'ga' : 'en'}/player/${content.slug}`}>
-                                <img src={image} alt={name} />
+                                <img src={image || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg'} alt={name}
+                                    onerror={(event) => {
+                                        const img = event.currentTarget;
+
+                                        if (!img.dataset.fallback) {
+                                            img.dataset.fallback = 'true';
+                                            img.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';
+                                        }
+                                    }}
+                                />
                                 <h3>{name}</h3>
                             </a>
                         {:else}
-                            <!-- Keep your existing VIDEO URL here -->
                             <a href="#">
-                                <img src={image} alt={name} />
+                                <div class="image-wrapper">
+                                    <img src={image} alt={name} />
+
+                                    {#if content.playbackProgress !== undefined && content.playbackProgress !== null}
+                                        <div class="playback-progress">
+                                            <div
+                                                class="playback-progress-bar"
+                                                style={`width: ${content.playbackProgress * 100}%`}
+                                            ></div>
+                                        </div>
+                                    {/if}
+                                </div>
+
                                 <h3>{name}</h3>
                             </a>
                         {/if}
@@ -222,5 +241,23 @@
     .embla__slide{
         flex: 0 0 100%;
     }
+}
+
+.image-wrapper {
+    position: relative;
+}
+
+.playback-progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.playback-progress-bar {
+    height: 100%;
+    background: var(--tg4-pink);
 }
 </style>

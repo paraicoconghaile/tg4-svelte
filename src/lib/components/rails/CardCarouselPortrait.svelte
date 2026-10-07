@@ -109,7 +109,16 @@
                     <div class="embla__slide">
                         {#if isSeries}
                             <a href={`/${isIrish ? 'ga' : 'en'}/player/${content.slug}`}>
-                                <img src={image} alt={name} />
+                                <img src={image || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg'} alt={name}
+                                    onerror={(event) => {
+                                        const img = event.currentTarget;
+
+                                        if (!img.dataset.fallback) {
+                                            img.dataset.fallback = 'true';
+                                            img.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';
+                                        }
+                                    }}
+                                />
                                 <h3>{name}</h3>
                             </a>
                         {:else}
@@ -189,7 +198,7 @@
 }
 
 .embla__slide {
-    flex: 0 0 25%;
+    flex: 0 0 17%;
     min-width: 0;
     padding-right: 6px;
 }
