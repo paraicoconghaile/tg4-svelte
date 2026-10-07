@@ -389,6 +389,9 @@
 }
 
 @media (max-width: 600px) {
+    .single-hero {
+        aspect-ratio: 0;
+    }
     .overlay p {
         display: none;
     }

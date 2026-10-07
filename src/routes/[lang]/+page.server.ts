@@ -1,24 +1,19 @@
 import { getRails, getContinueWatching } from '$lib/api/tg4_1';
 
-export async function load({ params, cookies }) {
-    const rails = await getRails();
+export const load: PageServerLoad = async ({ params, cookies }) => {
+
+    //console.log('Homepage cookies:', cookies.getAll());
+
     const peachSid = cookies.get('identity.provider.sid');
 
-    let continueWatching = [];
-    if (peachSid) {
-        const continueWatching = await getContinueWatching(peachSid);
+    //console.log('Peach SID:', peachSid ? 'FOUND' : 'NOT FOUND');
 
-        const continueWatchingRail = rails.rails.find(
-            (rail) => rail.type === 'CONTINUE_WATCHING'
-        );
+    const rails = await getRails();
 
-        if (continueWatchingRail) {
-            continueWatchingRail.items = continueWatching;
-        }
-    }
+    // temporarily don't call Continue Watching yet
 
     return {
         lang: params.lang,
         rails
     };
-}
+};

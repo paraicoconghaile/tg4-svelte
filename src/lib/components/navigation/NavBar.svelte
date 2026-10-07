@@ -256,7 +256,7 @@
             {/each}
         </ul>
         <div class="mobile-menu-footer">
-            <a href={switchLanguage} onclick={closeMobileMenu}>{isIrish ? 'English' : 'Gaeilge'}</a>
+            <a href={switchLanguage} class="language-switch" onclick={closeMobileMenu}>{isIrish ? 'English' : 'Gaeilge'}</a>
             <a href={isIrish ? '/ga/account/login' : '/en/account/login'}><img src="/icons/profile.svg" alt="TG4 Account" class="sso_logo"></a>
         </div>
     </div>
@@ -543,7 +543,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 18px 20px;
+        padding: 8px 20px;
         border-bottom: 1px solid rgba(255,255,255,.15);
         font-weight: 700;
     }
@@ -569,7 +569,7 @@
     .mobile-menu a,
     .mobile-menu-heading {
         display: block;
-        padding: 16px 20px;
+        padding: 10px 20px;
         color: var(--tg4-white);
         text-decoration: none;
     }
@@ -587,7 +587,7 @@
     }
 
     .mobile-submenu a {
-        padding: 12px 20px;
+        padding: 8px 20px;
         font-weight: 400;
     }
 
@@ -600,9 +600,12 @@
     }
 
     .mobile-menu-footer a {
-        background: var(--tg4-pink);
         padding: 8px 18px;
         font-weight: 700;
+    }
+
+    .mobile-menu-footer a:hover {
+        background: none;
     }
 }
 </style>
