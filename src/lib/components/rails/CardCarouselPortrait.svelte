@@ -198,7 +198,7 @@
 }
 
 .embla__slide {
-    flex: 0 0 17%;
+    flex: 0 0 calc(16% + 9px);
     min-width: 0;
     padding-right: 6px;
 }

@@ -111,7 +111,7 @@
                 <p>{data.series.series.subtitles} {data.series.series.contentRating}</p>
 
                 <div class="hero-buttons">
-                    <a class="watch-now">▶&nbsp; {data.lang === 'ga' ? 'Féach' : 'Watch now'}</a>
+                    <a class="watch-now" href={`/${data.lang}/player/${data.slug}/`}>▶&nbsp; {data.lang === 'ga' ? 'Féach' : 'Watch now'}</a>
                 </div>
             </div>
         </div>

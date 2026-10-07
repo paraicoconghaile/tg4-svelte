@@ -1,6 +1,8 @@
 <script lang="ts">
     import CardCarouselPortrait from '$lib/components/rails/CardCarouselPortrait.svelte';
     import CardCarousel from '$lib/components/rails/CardCarousel.svelte'
+    import Marketing from '$lib/components/rails/Marketing.svelte';
+
   	let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
     
@@ -27,6 +29,8 @@
         <CardCarouselPortrait {rail} {isIrish}/>
     {:else if  rail.type === 'HORIZONTAL'}
         <CardCarousel {rail} {isIrish}/>
+    {:else if rail.type === 'MARKETING'}
+        <Marketing {rail} {isIrish} />
     {/if}
 {/each}
 

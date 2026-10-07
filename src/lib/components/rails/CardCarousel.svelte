@@ -121,7 +121,7 @@
                                 <h3>{name}</h3>
                             </a>
                         {:else}
-                            <a href="#">
+                            <a href={`/${isIrish ? 'ga' : 'en'}/player/${content.vid}`}>
                                 <div class="image-wrapper">
                                     <img src={image} alt={name} />
 

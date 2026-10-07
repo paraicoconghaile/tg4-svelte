@@ -5,13 +5,9 @@
     } = $props();
 
     const image = $derived(rail.image);
-    const buttonText = $derived(
-        isIrish ? rail.actionButtonTextGa : rail.actionButtonTextEn
-    );
+    const buttonText = $derived(isIrish ? rail.actionButtonTextGa : rail.actionButtonTextEn);
     const buttonUrl = $derived(rail.actionButtonUrl);
-    const altText = $derived(
-        isIrish ? rail.image?.altTextGa : rail.image?.altTextEn
-    );
+    const altText = $derived(isIrish ? rail.image?.altTextGa : rail.image?.altTextEn);
 </script>
 
 <section class="marketing-rail">
@@ -30,10 +26,7 @@
 
                 {#if buttonText}
                     <div class="marketing-action">
-                        <a
-                            href={buttonUrl}
-                            class="marketing-button"
-                        >
+                        <a href={buttonUrl} class="marketing-button">
                             {buttonText}
                         </a>
                     </div>

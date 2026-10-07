@@ -112,7 +112,7 @@
         return subtitleLanguages[lang]?.[code] ?? code;
     }
 
-    console.log("Episode Data", JSON.stringify(data, null, 2));
+    //console.log("Episode Data", JSON.stringify(data, null, 2));
 </script>
 
 <section class="episode-page">

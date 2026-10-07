@@ -8,7 +8,6 @@
     import Marketing from '$lib/components/rails/Marketing.svelte';
     import LiveCarousel from '$lib/components/rails/LiveCarousel.svelte';
     import LuckyDipCarousel from '$lib/components/rails/LuckyDipCarousel.svelte';
-    //import ContinueWatching from '$lib/components/rails/ContinueWatching.svelte';
 
     let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
