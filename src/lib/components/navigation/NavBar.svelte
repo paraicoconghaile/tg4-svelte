@@ -1,7 +1,7 @@
 <script lang="ts">
     import { navigation } from '$lib/config/siteNav';
     import { page } from '$app/state';
-    import { withBase } from '$lib/utils/paths';
+    import { withBase, stripBase } from '$lib/utils/paths';
 
     //const isIrish = $derived(page.url.pathname.startsWith('/ga'));
 
