@@ -1,8 +1,11 @@
 <script lang="ts">
     import { navigation } from '$lib/config/siteNav';
     import { page } from '$app/state';
+    import { stripBase, withBase } from '$lib/utils/paths';
 
-    const isIrish = $derived(page.url.pathname.startsWith('/ga'));
+    //const isIrish = $derived(page.url.pathname.startsWith('/ga'));
+
+    const isIrish = $derived(stripBase(page.url.pathname) === '/ga' || stripBase(page.url.pathname).startsWith('/ga/'));
 
     let openMenu = $state<number | null>(null);
     let searchOpen = $state(false);
@@ -10,13 +13,16 @@
     let mobileMenuOpen = $state(false);
 
     const switchLanguage = $derived.by(() => {
-        const currentPath = page.url.pathname;
+        const currentPath = stripBase(page.url.pathname);
 
         function findTranslation(items: typeof navigation): string | null {
             for (const item of items) {
                 if (item.children) {
                     const result = findTranslation(item.children);
-                    if (result) return result;
+
+                    if (result) {
+                        return result;
+                    }
                 }
 
                 if (isIrish && item.hrefGa === currentPath) {
@@ -35,7 +41,7 @@
             findTranslation(navigation) ??
             currentPath.replace(/^\/(en|ga)/, isIrish ? '/en' : '/ga');
 
-        return translatedPath + page.url.search + page.url.hash;
+        return withBase(translatedPath) + page.url.search + page.url.hash;
     });
 
     function closeMobileMenu() {
@@ -49,8 +55,7 @@
             return;
         }
 
-        window.location.href =
-            `/${isIrish ? 'ga' : 'en'}/search?q=${encodeURIComponent(query)}`;
+        window.location.href = withBase(`/${isIrish ? 'ga' : 'en'}/search?q=${encodeURIComponent(query)}`);
     }
 </script>
 
@@ -59,8 +64,8 @@
         <button class="mobile-menu-button" aria-label="Open menu" onclick={() => mobileMenuOpen = !mobileMenuOpen}>☰</button>
 
         <div class="mobile-logo">
-            <a href={isIrish ? '/ga' : '/en'}>
-                <img src="/icons/TG4_Player_Logo_Pink.svg" alt="TG4 Player"/>
+            <a href={withBase(isIrish ? '/ga' : '/en')}>
+                <img src={withBase('/icons/TG4_Player_Logo_Pink.svg')} alt="TG4 Player"/>
             </a>
         </div>
 
@@ -139,7 +144,7 @@
     </div>
     <div class="nav-left">
         <div class="logo">
-            <a href={isIrish ? '/ga' : '/en'}><img src="/icons/TG4_Player_Logo_Pink.svg" alt="TG4 Player"></a>
+            <a href={withBase(isIrish ? '/ga' : '/en')}><img src="/icons/TG4_Player_Logo_Pink.svg" alt="TG4 Player"></a>
         </div>
         <ul class="menu">
             {#each navigation as item, index}
@@ -155,7 +160,7 @@
                             <ul class="dropdown">
                                 {#each item.children as child}
                                     <li>
-                                        <a href={isIrish ? child.hrefGa : child.hrefEn}>
+                                        <a href={withBase(isIrish ? child.hrefGa : child.hrefEn)}>
                                             {isIrish ? child.titleGa : child.titleEn}
                                         </a>
                                     </li>
@@ -163,7 +168,7 @@
                             </ul>
                         {/if}
                     {:else}
-                        <a href={isIrish ? item.hrefGa : item.hrefEn}>{isIrish ? item.titleGa : item.titleEn}</a>
+                        <a href={withBase(isIrish ? item.hrefGa : item.hrefEn)}>{isIrish ? item.titleGa : item.titleEn}</a>
                     {/if}
                 </li>
             {/each}
@@ -218,7 +223,7 @@
 
         <a href={switchLanguage} class="language-switch">{isIrish ? 'English' : 'Gaeilge'}</a>
 
-        <a href={isIrish ? '/ga/account/login' : '/en/account/login'}><img src="/icons/profile.svg" alt="TG4 Account" class="sso_logo"></a>
+        <a href={withBase(isIrish ? '/ga/account/login' : '/en/account/login')}><img src={withBase('/icons/profile.svg')} alt="TG4 Account" class="sso_logo"></a>
     </div>
 </nav>
 
@@ -241,14 +246,14 @@
                         <ul class="mobile-submenu">
                             {#each item.children as child}
                                 <li>
-                                    <a href={isIrish ? child.hrefGa : child.hrefEn} onclick={closeMobileMenu}>
+                                    <a href={withBase(isIrish ? child.hrefGa : child.hrefEn)} onclick={closeMobileMenu}>
                                         {isIrish ? child.titleGa : child.titleEn}
                                     </a>
                                 </li>
                             {/each}
                         </ul>
                     {:else}
-                        <a href={isIrish ? item.hrefGa : item.hrefEn} onclick={closeMobileMenu}>
+                        <a href={withBase(isIrish ? item.hrefGa : item.hrefEn)} onclick={closeMobileMenu}>
                             {isIrish ? item.titleGa : item.titleEn}
                         </a>
                     {/if}
@@ -257,7 +262,7 @@
         </ul>
         <div class="mobile-menu-footer">
             <a href={switchLanguage} class="language-switch" onclick={closeMobileMenu}>{isIrish ? 'English' : 'Gaeilge'}</a>
-            <a href={isIrish ? '/ga/account/login' : '/en/account/login'}><img src="/icons/profile.svg" alt="TG4 Account" class="sso_logo"></a>
+            <a href={withBase(isIrish ? '/ga/account/login' : '/en/account/login')}><img src="/icons/profile.svg" alt="TG4 Account" class="sso_logo"></a>
         </div>
     </div>
 {/if}
