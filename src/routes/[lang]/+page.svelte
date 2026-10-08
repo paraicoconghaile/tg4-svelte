@@ -39,6 +39,8 @@
     {/if}
 {/each}
 
+{data.isLoggedIn ? 'Logged in' : 'Not logged in'}
+
 <!-- <pre>
 {JSON.stringify(data, null, 2)}
 </pre> -->
