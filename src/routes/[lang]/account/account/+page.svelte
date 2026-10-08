@@ -5,6 +5,7 @@
     import { requireAuthentication } from '$lib/sso/auth';
     import Eye from '$lib/components/icons/Eye.svelte';
     import EyeOff from '$lib/components/icons/EyeOff.svelte';
+    import { withBase } from '$lib/utils/paths';
 
     let loading = $state(true);
     let error = $state('');
@@ -246,15 +247,9 @@
                 <div class="account-layout">
                     <!-- LEFT COLUMN -->
                     <nav class="account-tabs">
-                        <a href={`/${page.params.lang}/account/account`} class="active">
-                            {messages.labels.accountLink}
-                        </a>
-                        <a href={`/${page.params.lang}/account/profile`}>
-                            {messages.labels.profile}
-                        </a>
-                        <a href={`/${page.params.lang}/account/preferences`}>
-                            {messages.labels.preferences}
-                        </a>
+                        <a href={withBase(`/${page.params.lang}/account/account`)} class="active">{messages.labels.accountLink}</a>
+                        <a href={withBase(`/${page.params.lang}/account/profile`)}>{messages.labels.profile}</a>
+                        <a href={withBase(`/${page.params.lang}/account/preferences`)}>{messages.labels.preferences}</a>
                     </nav>
 
                     <!-- MIDDLE COLUMN -->

@@ -2,6 +2,7 @@
     import CardCarouselPortrait from '$lib/components/rails/CardCarouselPortrait.svelte';
     import CardCarousel from '$lib/components/rails/CardCarousel.svelte'
     import Marketing from '$lib/components/rails/Marketing.svelte';
+    import { withBase } from '$lib/utils/paths';
 
   	let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
@@ -40,7 +41,7 @@
 
         <div class="series-grid">
             {#each data.series as item}
-                <a class="series-card" href={`/${data.lang}/player/${item.slug}`}>
+                <a class="series-card" href={withBase(`/${data.lang}/player/${item.slug}`)}>
                     <img src={getImageUrl(item)} alt={item.title} onerror={(e) => {e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';}}/>
                     <h3>{item.title}</h3>
                     <p>{item.description}</p>

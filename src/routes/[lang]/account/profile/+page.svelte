@@ -4,6 +4,7 @@
     import { goto } from '$app/navigation';
     import { countries } from '$lib/data/countries';
     import { requireAuthentication } from '$lib/sso/auth';
+    import { withBase } from '$lib/utils/paths';
 
     let pu: any;
     let profile: any = null;
@@ -249,9 +250,9 @@
                 <div class="account-layout">
                     <!-- LEFT COLUMN -->
                     <nav class="account-tabs">
-                        <a href={`/${page.params.lang}/account/account`}>{messages.labels.account}</a>
-                        <a href={`/${page.params.lang}/account/profile`} class="active">{messages.labels.profileLink}</a>
-                        <a href={`/${page.params.lang}/account/preferences`}>{messages.labels.preferences}</a>
+                        <a href={withBase(`/${page.params.lang}/account/account`)}>{messages.labels.account}</a>
+                        <a href={withBase(`/${page.params.lang}/account/profile`)} class="active">{messages.labels.profileLink}</a>
+                        <a href={withBase(`/${page.params.lang}/account/preferences`)}>{messages.labels.preferences}</a>
                     </nav>
 
                     <!-- MIDDLE COLUMN -->

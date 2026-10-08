@@ -3,8 +3,6 @@
     import { page } from '$app/state';
     import { withBase, stripBase } from '$lib/utils/paths';
 
-    //const isIrish = $derived(page.url.pathname.startsWith('/ga'));
-
     const isIrish = $derived(stripBase(page.url.pathname) === '/ga' || stripBase(page.url.pathname).startsWith('/ga/'));
 
     let openMenu = $state<number | null>(null);

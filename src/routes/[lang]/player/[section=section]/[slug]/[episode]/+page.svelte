@@ -4,6 +4,7 @@
     
     import { genres } from '$lib/config/playerNav';
     import { tick } from 'svelte';
+    import { withBase } from '$lib/utils/paths';
 
     let playerElement: HTMLVideoElement;
     let playing = $state(false);
@@ -116,12 +117,6 @@
 </script>
 
 <section class="episode-page">
-    <!-- <nav>
-        {#each genres as g}
-            <a class="language-switch" href={`/${data.lang}/player/${g.key[data.lang]}`}>{g.label[data.lang]}</a>&nbsp;&nbsp;
-        {/each}
-    </nav> -->
-
     {#if !playing}
         <div class="poster">
             <img src={getImageUrl(data)} alt={data.video.seriesTitle} onerror={(e) => {
@@ -221,12 +216,7 @@
                 <p>{formatDate(data.video.airDate)}</p>
 
                 <p><br />
-                    <a
-                        class="language-switch"
-                        href={`/${data.lang}/player/${data.slug}`}
-                    >
-                        {data.backLabel}
-                    </a>
+                    <a class="language-switch" href={withBase(`/${data.lang}/player/${data.slug}`)}>{data.backLabel}</a>
                 </p>
             </div>
 
@@ -237,18 +227,11 @@
     </section>
 
     <section class="episodes">
-        <h2>
-            {data.lang === 'ga'
-                ? 'Tuilleadh Eipeasóid'
-                : 'More episodes'}
-        </h2>
+        <h2>{data.lang === 'ga' ? 'Tuilleadh Eipeasóid' : 'More episodes'}</h2>
 
         <div class="episode-grid">
             {#each data.otherEpisodes as ep}
-                <a
-                    class="episode-card"
-                    href={`/${data.lang}/player/${data.slug}/${ep.episodeID}`}
-                >
+                <a class="episode-card" href={withBase(`/${data.lang}/player/${data.slug}/${ep.episodeID}`)}>
                     <img
                         src={ep.prodCode
                             ? `https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto:eco/${ep.prodCode}.jpg`
@@ -258,11 +241,7 @@
 
                     <h3>{ep.title}</h3>
 
-                    <p>
-                        {data.lang === 'ga'
-                            ? `Sraith ${ep.seriesNumber}, Eipeasóid ${ep.episodeNumber}`
-                            : `Series ${ep.seriesNumber}, Episode ${ep.episodeNumber}`}
-                    </p>
+                    <p>{data.lang === 'ga' ? `Sraith ${ep.seriesNumber}, Eipeasóid ${ep.episodeNumber}` : `Series ${ep.seriesNumber}, Episode ${ep.episodeNumber}`}</p>
                 </a>
             {/each}
         </div>

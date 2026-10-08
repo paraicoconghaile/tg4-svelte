@@ -116,12 +116,6 @@
 </script>
 
 <section class="episode-page">
-    <!-- <nav>
-        {#each genres as g}
-            <a class="language-switch" href={`/${data.lang}/player/${g.key[data.lang]}`}>{g.label[data.lang]}</a>&nbsp;&nbsp;
-        {/each}
-    </nav> -->
-
     {#if !playing}
         <div class="poster">
             <img src={getImageUrl(data)} alt={data.video.seriesTitle} onerror={(e) => {

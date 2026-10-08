@@ -158,7 +158,7 @@
                                 }}
                             />
 
-                            <a href={`/${data.lang}/player/${data.slug}/${ep.episodeID}`}>
+                            <a href={withBase(`/${data.lang}/player/${data.slug}/${ep.episodeID}`)}>
                                 <svg
                                     class="play-icon"
                                     width="40"
