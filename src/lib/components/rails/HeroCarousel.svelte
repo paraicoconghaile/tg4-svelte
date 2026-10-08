@@ -1,5 +1,6 @@
 <script lang="ts">
     import { fly } from 'svelte/transition';
+    import { withBase } from '$lib/utils/paths';
 
     let {
         rail,
@@ -131,7 +132,7 @@
 {#if slides.length === 1}
     <!-- Single image - no carousel -->
     <section class="carousel single-slide">
-        <a class="single-hero" href={`/${isIrish ? 'ga' : 'en'}/player/${slides[0].slug}`}>
+        <a class="single-hero" href={withBase(`/${isIrish ? 'ga' : 'en'}/player/${slides[0].slug}`)}>
             <img src={slides[0].image} alt={slides[0].title}/>
 
             <div class="overlay">
@@ -172,7 +173,7 @@
             <!-- Hero -->
             <div class="card hero" onpointerdown={handlePointerDown}>
                 {#key current}
-                    <a class="hero-card" href={`/${isIrish ? 'ga' : 'en'}/player/${getSlide(0).slug}`} onclick={handleClick}>
+                    <a class="hero-card" href={withBase(`/${isIrish ? 'ga' : 'en'}/player/${getSlide(0).slug}`)} onclick={handleClick}>
                         <div in:fly={{x: direction === 'next' ? 750 : -750, duration: 350}} out:fly={{x: direction === 'next' ? -750 : 750, duration: 350}}>
                             <img src={getSlide(0).image} alt={getSlide(0).title} />
                             <div class="overlay">

@@ -4,6 +4,7 @@
     import irelandFlag from '$lib/assets/icons/irl_icon.svg';
     import { onMount } from 'svelte';
     import { invalidateAll } from '$app/navigation';
+    import { withBase } from '$lib/utils/paths';
 
     let emblaApi: EmblaCarouselType | undefined;
 
@@ -142,7 +143,7 @@
                     {@const nextshow = stream.nextShow}
 
                     <div class="embla__slide">
-                        <a class="live-card" href={`/${isIrish ? 'ga' : 'en'}/player/live/${stream.stream}`}>
+                        <a class="live-card" href={withBase(`/${isIrish ? 'ga' : 'en'}/player/live/${stream.stream}`)}>
                             <div class="live-image">
                                 <img src={stream.logoUrl} alt={stream.stream} />
                                 {#key `${show.startTime}-${progressKey}`}

@@ -1,6 +1,7 @@
 <script lang="ts">
     import emblaCarouselSvelte from 'embla-carousel-svelte';
     import type { EmblaCarouselType } from 'embla-carousel';
+    import { withBase } from '$lib/utils/paths';
 
     let emblaApi: EmblaCarouselType | undefined;
 
@@ -107,7 +108,7 @@
 
                     <div class="embla__slide">
                         {#if isSeries}
-                            <a href={`/${isIrish ? 'ga' : 'en'}/player/${content.slug}`}>
+                            <a href={withBase(`/${isIrish ? 'ga' : 'en'}/player/${content.slug}`)}>
                                 <img src={image || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg'} alt={name}
                                     onerror={(event) => {
                                         const img = event.currentTarget;
@@ -121,7 +122,7 @@
                                 <h3>{name}</h3>
                             </a>
                         {:else}
-                            <a href={`/${isIrish ? 'ga' : 'en'}/player/${content.vid}`}>
+                            <a href={withBase(`/${isIrish ? 'ga' : 'en'}/player/${content.vid}`)}>
                                 <div class="image-wrapper">
                                     <img src={image} alt={name} />
 

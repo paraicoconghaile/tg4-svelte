@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { withBase } from '$lib/utils/paths';
+    
     let {
         rail,
         isIrish
@@ -39,7 +41,7 @@
 </script>
 
 <section class="single-content">
-    <a class="single-card" href={link}>
+    <a class="single-card" href={withBase(link)}>
         <img src={image} alt={displayName}/>
 
         <div class="play-box">

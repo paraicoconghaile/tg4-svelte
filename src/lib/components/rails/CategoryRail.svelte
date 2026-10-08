@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { withBase } from '$lib/utils/paths';
+
     let {
         rail,
         isIrish
@@ -18,7 +20,7 @@
         {@const category = item.category}
         {@const title = isIrish ? category.displayGa : category.displayEn}
         {@const url = isIrish ? category.urlPathGa : category.urlPathEn}
-        <a class="category" href={`/${isIrish ? 'ga' : 'en'}/player/${url}`} style={`background:${category.color ?? '#333'};`}>
+        <a class="category" href={withBase(`/${isIrish ? 'ga' : 'en'}/player/${url}`)} style={`background:${category.color ?? '#333'};`}>
             <div class="play-box">
                 <svg width="56" height="56" viewBox="18.5 0 35.5 56" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M55.9383 27.9696L46.9742 19.3235L35.2362 30.6515L18.6702 46.6389L27.6318 55.2875L55.9383 27.9696Z" fill="#2B2A2A"/>

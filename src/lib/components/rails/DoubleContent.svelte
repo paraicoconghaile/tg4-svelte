@@ -1,8 +1,10 @@
 <script lang="ts">
-let {
-    rail,
-    isIrish
-} = $props();
+    import { withBase } from '$lib/utils/paths';
+
+    let {
+        rail,
+        isIrish
+    } = $props();
 </script>
 
 <section class="double-content">
@@ -29,7 +31,7 @@ let {
             ? `/${isIrish ? 'ga' : 'en'}/player/${content.slug}`
             : `/${isIrish ? 'ga' : 'en'}/player/${content.vid}`}
 
-        <a class="content-card" href={href}>
+        <a class="content-card" href={withBase(href)}>
             <img src={image} alt={title} />
 
             <div class="play-box">
