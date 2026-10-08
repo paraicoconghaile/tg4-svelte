@@ -55,10 +55,7 @@
 
     function getDateLabel(date: Date) {
         if (isIrish) {
-            const month = date.toLocaleString('en-US', {
-                month: 'long'
-            });
-
+            const month = date.toLocaleString('en-US', {month: 'long'});
             return `${date.getDate()} ${irishMonths[month]}`;
         }
 

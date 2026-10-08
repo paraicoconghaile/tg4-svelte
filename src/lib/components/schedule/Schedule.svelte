@@ -5,7 +5,7 @@
     } = $props();
 
     import { page } from '$app/state';
-    import { stripBase } from '$lib/utils/paths';
+    import { withBase, stripBase } from '$lib/utils/paths';
 
     let isIrish = $derived(stripBase(page.url.pathname).startsWith('/ga'));
     let locale = $derived(isIrish ? 'ga-IE' : 'en-IE');
@@ -69,13 +69,9 @@
         console.log('Loading schedule for:', apiDate, 'channel:', channel);
 
         try {
-            const channelParam = channel
-                ? `&channel=${encodeURIComponent(channel)}`
-                : '';
+            const channelParam = channel ? `&channel=${encodeURIComponent(channel)}` : '';
 
-            const response = await fetch(
-                `/api/schedule?date=${apiDate}${channelParam}`
-            );
+            const response = await fetch(withBase(`/api/schedule?date=${apiDate}${channelParam}`));
 
             if (!response.ok) {
                 throw new Error(`Failed to load schedule: ${response.status}`);
