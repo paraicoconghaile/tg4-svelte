@@ -2,11 +2,9 @@
     import { page } from '$app/state';
 
     let { schedule } = $props();
+    import { stripBase } from '$lib/utils/paths';
 
-    let isIrish = $derived(
-        page.url.pathname.startsWith('/ga')
-    );
-
+    let isIrish = $derived(stripBase(page.url.pathname).startsWith('/ga'));
     let openProgramme = $state<string | null>(null);
 
     const irishDays: Record<string, string> = {

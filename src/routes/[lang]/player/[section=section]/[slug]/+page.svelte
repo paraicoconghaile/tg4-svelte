@@ -4,6 +4,7 @@
     let selectedSeason = $state(data.seasons[0]);
     let seasonDropdownOpen = $state(false);
     let visibleEpisodes = $state(8);
+    import { withBase } from '$lib/utils/paths';
 
     /* function selectSeason(season: any) {
         selectedSeason = season;
@@ -111,7 +112,7 @@
                 <p>{data.series.series.subtitles} {data.series.series.contentRating}</p>
 
                 <div class="hero-buttons">
-                    <a class="watch-now" href={`/${data.lang}/player/${data.slug}/`}>▶&nbsp; {data.lang === 'ga' ? 'Féach' : 'Watch now'}</a>
+                    <a class="watch-now" href={withBase(`/${data.lang}/player/${data.slug}/`)}>▶&nbsp; {data.lang === 'ga' ? 'Féach' : 'Watch now'}</a>
                 </div>
             </div>
         </div>

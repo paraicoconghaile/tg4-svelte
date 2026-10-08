@@ -4,6 +4,7 @@
     import { loadPeachUser } from '$lib/sso/peach';
     import Eye from '$lib/components/icons/Eye.svelte';
     import EyeOff from '$lib/components/icons/EyeOff.svelte';
+    import { withBase } from '$lib/utils/paths';
 
     let email = $state('');
     let password = $state('');
@@ -97,7 +98,7 @@
                 console.log('LOGIN: ALREADY LOGGED IN');
 
                 // If this succeeds, they're already logged in
-                window.location.href = `/${page.params.lang}/account/account/`;
+                window.location.href = withBase(`/${page.params.lang}/account/account/`);
                 return;
 
             } catch {
@@ -144,7 +145,7 @@
 
             loggingIn = false;
 
-            window.location.href = `/${page.params.lang}/account/account/`; /* */
+            window.location.href = withBase(`/${page.params.lang}/account/account/`);
 
         } catch (err) {
             console.error('Login error:', err);
