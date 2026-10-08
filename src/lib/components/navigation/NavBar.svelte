@@ -144,7 +144,7 @@
     </div>
     <div class="nav-left">
         <div class="logo">
-            <a href={withBase(isIrish ? '/ga' : '/en')}><img src="/icons/TG4_Player_Logo_Pink.svg" alt="TG4 Player"></a>
+            <a href={withBase(isIrish ? '/ga' : '/en')}><img src={withBase('/icons/TG4_Player_Logo_Pink.svg')} alt="TG4 Player"></a>
         </div>
         <ul class="menu">
             {#each navigation as item, index}
