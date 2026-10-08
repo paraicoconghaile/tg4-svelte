@@ -135,7 +135,31 @@
                 </p>
 
                 <div class="hero-buttons">
-                    <a class="watch-now" href={withBase(`/${data.lang}/player/${data.slug}/`)}>▶&nbsp; {data.lang === 'ga' ? 'Féach' : 'Watch now'}</a>
+                    <div class="hero-button">
+                        <a class="hero-button-icon" href={withBase(`/${data.lang}/player/${data.slug}/`)}>
+                            <svg width="20" height="29" viewBox="0 0 20 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19.6164 14.3439L14.903 9.79771L0.020813 24.1602L4.73281 28.7076L19.6164 14.3439Z" fill="#2B2A2A"/>
+                                <path d="M14.8835 18.9111L19.5942 14.3624L4.712 0L0 4.54743L14.8835 18.9111Z" fill="#2B2A2A"/>
+                            </svg>
+                        </a>
+
+                        <a class="hero-button-text" href={withBase(`/${data.lang}/player/${data.slug}/`)}>
+                            {data.lang === 'ga' ? 'Féach' : 'Watch now'}
+                        </a>
+                    </div>
+
+                    <div class="hero-button">
+                        <button class="hero-button-icon" type="button">
+                            <svg width="27" height="26" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8.9079 10.0013V25.6H15.6689V15.6169H23.5105L26.4 10.0013H8.9079Z" fill="#2B2A2A"/>
+                                <path d="M15.6586 15.5987L15.6586 0L8.89755 5.64766e-07L8.89755 9.98315H0L5.13447e-07 15.5987L15.6586 15.5987Z" fill="#2B2A2A"/>
+                            </svg>
+                        </button>
+
+                        <button class="hero-button-text" type="button">
+                            {data.lang === 'ga' ? 'Bookmark' : 'Bookmark'}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -149,7 +173,9 @@
                 <span>{data.lang === 'ga' ? `Sraith ${selectedSeason.seasonNumber}` : `Series ${selectedSeason.seasonNumber}`}</span>
 
                 <span class:open={seasonDropdownOpen} class="dropdown-arrow">
-                    ▼
+                    <svg width="19" height="12" viewBox="0 0 19 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.1705 9.36227L19 2.62642L16.3295 0L9.5 6.73585L2.67045 0L0 2.62642L9.5 12L12.1705 9.36227Z" fill="white"/>
+                    </svg>
                 </span>
             </button>
 

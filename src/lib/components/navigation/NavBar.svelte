@@ -152,7 +152,7 @@
                             <span>
                                 {isIrish ? item.titleGa : item.titleEn}
                             </span>
-                            <span class="arrow">▼</span>
+                            <span class="arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.14889 4.68113L9.59961 1.31321L8.25033 -5.8979e-08L4.79961 3.36792L1.34889 -3.6065e-07L-0.00039011 1.31321L4.79961 6L6.14889 4.68113Z" fill="white"/></svg></span>
                         </button>
                         {#if openMenu === index}
                             <ul class="dropdown">

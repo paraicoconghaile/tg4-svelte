@@ -1,5 +1,6 @@
 import { goto } from '$app/navigation';
 import { loadPeachUser } from './peach';
+import { withBase } from '$lib/utils/paths';
 
 export async function requireAuthentication(lang: string) {
     const pu = await loadPeachUser();
@@ -8,7 +9,7 @@ export async function requireAuthentication(lang: string) {
     try {
         await pu.isAuthorized();
     } catch {
-        await goto(`/${lang}/account/login`);
+        await goto(withBase(`/${lang}/account/login`));
         return null;
     }
 
