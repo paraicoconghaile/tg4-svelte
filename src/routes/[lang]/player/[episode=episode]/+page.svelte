@@ -214,14 +214,9 @@
 
                 <p>{formatDate(data.video.airDate)}</p>
 
-                <p><br />
-                    <a
-                        class="language-switch"
-                        href={`/${data.lang}/player/${data.slug}`}
-                    >
-                        {data.backLabel}
-                    </a>
-                </p>
+                <!-- <p><br />
+                    <a class="language-switch" href={`/${data.lang}/player/${data.slug}`}>{data.backLabel}</a>
+                </p> -->
             </div>
 
             <div class="bookmark">
@@ -231,11 +226,7 @@
     </section>
 
     <section class="episodes">
-        <h2>
-            {data.lang === 'ga'
-                ? 'Tuilleadh Eipeasóid'
-                : 'More episodes'}
-        </h2>
+        <h2>{data.lang === 'ga' ? 'Tuilleadh Eipeasóid' : 'More episodes'}</h2>
 
         <div class="episode-grid">
             {#each data.otherEpisodes as ep}
@@ -283,6 +274,17 @@
 @media (max-width: 800px) {
     .episode-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .video-info {
+        flex-direction: column;
+    }
+
+    .bookmark {
+        align-self: flex-start;
+        margin-top: 15px;
     }
 }
 

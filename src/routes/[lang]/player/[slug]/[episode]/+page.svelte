@@ -221,11 +221,11 @@
 
                 <p>{formatDate(data.video.airDate)}</p>
 
-                <p><br />
+                <!-- <p><br />
                     <a class="language-switch" href={withBase(`/${data.lang}/player/${data.slug}`)}>
                         {data.backLabel}
                     </a>
-                </p>
+                </p> -->
             </div>
 
             <div class="bookmark">
@@ -235,11 +235,7 @@
     </section>
 
     <section class="episodes">
-        <h2>
-            {data.lang === 'ga'
-                ? 'Tuilleadh Eipeasóid'
-                : 'More episodes'}
-        </h2>
+        <h2>{data.lang === 'ga' ? 'Tuilleadh Eipeasóid' : 'More episodes'}</h2>
 
         <div class="episode-grid">
             {#each data.otherEpisodes as ep}

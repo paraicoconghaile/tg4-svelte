@@ -385,6 +385,27 @@
     }
 }
 
+@media (max-width: 700px) {
+    .video-info {
+        flex-direction: column;
+        width: 100%;
+        align-items: flex-start;
+        gap: 0;
+    }
+
+    .video-details {
+        width: 100%;
+    }
+
+    .bookmark {
+        width: 100%;
+        margin-top: 0;
+        text-align: left;
+        align-self: flex-start;
+        justify-content: flex-start;
+    }
+}
+
 @media (max-width: 600px) {
     .episode-hero {
         height: 500px;
@@ -393,7 +414,7 @@
         padding: 25px;
     }
     .hero-content h1 {
-        font-size: 2.2rem;
+        font-size: 1.8rem;
     }
     .hero-content p {
         font-size: 1rem;
