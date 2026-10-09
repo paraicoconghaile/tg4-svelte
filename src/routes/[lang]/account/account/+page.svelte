@@ -419,6 +419,17 @@
     opacity: 1;
 }
 
+.account-tabs .disabled {
+    position: relative;
+    width: fit-content;
+    padding: 10px 0;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 .account-content {
     min-width: 0;
 }
