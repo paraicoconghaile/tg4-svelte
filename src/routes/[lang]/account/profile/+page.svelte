@@ -124,6 +124,16 @@
 
     const messages = $derived(profileMessages[page.params.lang === 'ga' ? 'ga' : 'en']);
 
+    const profileComplete = $derived(
+        !!firstName.trim() &&
+        !!lastName.trim() &&
+        age &&
+        !!gender &&
+        !!nationality &&
+        !!residence &&
+        !!irish
+    );
+
     onMount(async () => {
         try {
             pu = await requireAuthentication(page.params.lang);
@@ -252,7 +262,21 @@
                     <nav class="account-tabs">
                         <a href={withBase(`/${page.params.lang}/account/account`)}>{messages.labels.account}</a>
                         <a href={withBase(`/${page.params.lang}/account/profile`)} class="active">{messages.labels.profileLink}</a>
-                        <a href={withBase(`/${page.params.lang}/account/preferences`)}>{messages.labels.preferences}</a>
+                        {#if profileComplete}
+                            <a href={withBase(`/${page.params.lang}/account/preferences`)}>
+                                {messages.labels.preferences}
+                            </a>
+                        {:else}
+                            <span
+                                class="disabled"
+                                aria-disabled="true"
+                                title={page.params.lang === 'ga'
+                                    ? 'Comhlánaigh do phróifíl chun rochtain a fháil ar shainroghanna.'
+                                    : 'Complete your profile to access preferences.'}
+                            >
+                                {messages.labels.preferences}
+                            </span>
+                        {/if}
                     </nav>
 
                     <!-- MIDDLE COLUMN -->
@@ -430,6 +454,12 @@
 .account-tabs a:hover::after,
 .account-tabs a.active::after {
     opacity: 1;
+}
+
+.account-tabs .disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 .account-content {
