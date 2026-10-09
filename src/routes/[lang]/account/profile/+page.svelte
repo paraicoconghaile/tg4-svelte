@@ -267,13 +267,7 @@
                                 {messages.labels.preferences}
                             </a>
                         {:else}
-                            <span
-                                class="disabled"
-                                aria-disabled="true"
-                                title={page.params.lang === 'ga'
-                                    ? 'Comhlánaigh do phróifíl chun rochtain a fháil ar shainroghanna.'
-                                    : 'Complete your profile to access preferences.'}
-                            >
+                            <span class="disabled" aria-disabled="true" title={page.params.lang === 'ga' ? 'Comhlánaigh do phróifíl chun rochtain a fháil ar shainroghanna.' : 'Complete your profile to access preferences.'}>
                                 {messages.labels.preferences}
                             </span>
                         {/if}

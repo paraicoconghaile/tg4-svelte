@@ -6,6 +6,7 @@
     import Eye from '$lib/components/icons/Eye.svelte';
     import EyeOff from '$lib/components/icons/EyeOff.svelte';
     import { withBase } from '$lib/utils/paths';
+    import { isProfileComplete } from '$lib/sso/profile-complete';
 
     let loading = $state(true);
     let error = $state('');
@@ -28,6 +29,7 @@
     let showEmailPassword = $state(false);
     let showCurrentPassword = $state(false);
     let showNewPassword = $state(false);
+    let profileComplete = $state(false);
 
     const accountMessages = {
         en: {
@@ -124,6 +126,9 @@
                 await goto(`/${page.params.lang}/account/login`);
                 return;
             }
+        
+            // Check whether the profile is complete
+            profileComplete = isProfileComplete(profile);
 
             newEmail = profile.profile.contactEmail;
             loading = false;
@@ -249,7 +254,16 @@
                     <nav class="account-tabs">
                         <a href={withBase(`/${page.params.lang}/account/account`)} class="active">{messages.labels.accountLink}</a>
                         <a href={withBase(`/${page.params.lang}/account/profile`)}>{messages.labels.profile}</a>
-                        <a href={withBase(`/${page.params.lang}/account/preferences`)}>{messages.labels.preferences}</a>
+                        <!-- <a href={withBase(`/${page.params.lang}/account/preferences`)}>{messages.labels.preferences}</a> -->
+                        {#if profileComplete}
+                            <a href={withBase(`/${page.params.lang}/account/preferences`)}>
+                                {messages.labels.preferences}
+                            </a>
+                        {:else}
+                            <span class="disabled" aria-disabled="true" title={page.params.lang === 'ga' ? 'Comhlánaigh do phróifíl chun rochtain a fháil ar shainroghanna.' : 'Complete your profile to access preferences.'}>
+                                {messages.labels.preferences}
+                            </span>
+                        {/if}
                     </nav>
 
                     <!-- MIDDLE COLUMN -->
