@@ -34,7 +34,7 @@
 <style>
 .category-rail {
     max-width: var(--page-width);
-    min-height: 630px;
+    min-height: 400px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr repeat(4, 177px);

@@ -18,7 +18,6 @@
     </div>
 
     {#each rail.items as item}
-
         {@const content = item.type === 'SERIES' ? item.series : item.video}
 
         {@const image = item.type === 'SERIES'
@@ -53,7 +52,7 @@
 <style>
 .double-content {
     max-width: var(--page-width);
-    min-height: 610px;
+    min-height: 400px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
@@ -109,12 +108,37 @@
     }
 }
 
-@media(max-width:450px) {
+@media (max-width: 500px) {
+    .double-content {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        min-height: auto;
+        gap: 5px;
+    }
+
+    .intro {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        padding: 20px;
+    }
+
+    .double-content > a:nth-child(2) {
+        grid-column: 1;
+        grid-row: 2;
+        min-height: 250px;
+    }
+
+    .double-content > a:nth-child(3) {
+        grid-column: 2;
+        grid-row: 2;
+    }
+}
+
+/* @media(max-width:450px) {
     .double-content {
         grid-template-columns: 1fr 81px 81px;
     }
     .intro {
         padding: 20px;
     }
-}
+} */
 </style>
