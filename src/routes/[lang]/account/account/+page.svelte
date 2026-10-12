@@ -30,6 +30,7 @@
     let showCurrentPassword = $state(false);
     let showNewPassword = $state(false);
     let profileComplete = $state(false);
+    let isVerified = $derived(profile?.profile?.verified === true);
 
     let sendingVerification = $state(false);
     let verificationMessage = $state('');
@@ -50,7 +51,9 @@
                 newPassword: 'New password',
                 updating: 'Updating...',
                 loading: 'Loading...',
-                logout: 'Logout'
+                logout: 'Logout',
+                bookmarks: 'Bookmarks',
+                history: 'History'
             },
             password: {
                 required: 'Please enter your current and new password.',
@@ -84,7 +87,9 @@
                 newPassword: 'Pasfhocal nua',
                 updating: 'Ag uasdhátú...',
                 loading: 'Ag lódáil...',
-                logout: 'Logáil AMach'
+                logout: 'Logáil Amach',
+                bookmarks: 'Labharmharcanna',
+                history: 'Stair'
             },
             password: {
                 required: 'Cuir isteach do phasfhocal reatha agus do phasfhocal nua, le do thoil.',
@@ -309,9 +314,15 @@
                             {messages.labels.accountLink}
                         </a>
 
-                        <a href={withBase(`/${page.params.lang}/account/profile`)}>
-                            {messages.labels.profile}
-                        </a>
+                        {#if isVerified}
+                            <a href={withBase(`/${page.params.lang}/account/profile`)}>
+                                {messages.labels.profile}
+                            </a>
+                        {:else}
+                            <span class="disabled" aria-disabled="true">
+                                {messages.labels.profile}
+                            </span>
+                        {/if}
 
                         {#if profileComplete}
                             <a href={withBase(`/${page.params.lang}/account/preferences`)}>
@@ -325,13 +336,25 @@
                             </span>
                         {/if}
 
-                        <a href={withBase(`/${page.params.lang}/account/bookmarks`)}>
-                            {page.params.lang === 'ga' ? 'Leabharmharcanna' : 'Bookmarks'}
-                        </a>
+                        {#if isVerified}
+                            <a href={withBase(`/${page.params.lang}/account/bookmarks`)}>
+                                {messages.labels.bookmarks}
+                            </a>
+                        {:else}
+                            <span class="disabled" aria-disabled="true">
+                                {messages.labels.bookmarks}
+                            </span>
+                        {/if}
 
-                        <a href={withBase(`/${page.params.lang}/account/history`)}>
-                            {page.params.lang === 'ga' ? 'Stair' : 'History'}
-                        </a>
+                        {#if isVerified}
+                            <a href={withBase(`/${page.params.lang}/account/history`)}>
+                                {messages.labels.history}
+                            </a>
+                        {:else}
+                            <span class="disabled" aria-disabled="true">
+                                {messages.labels.history}
+                            </span>
+                        {/if}
                     </nav>
 
                     <!-- MIDDLE COLUMN - FORM -->
