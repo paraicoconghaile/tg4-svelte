@@ -49,7 +49,8 @@
                 currentPassword: 'Current password',
                 newPassword: 'New password',
                 updating: 'Updating...',
-                loading: 'Loading...'
+                loading: 'Loading...',
+                logout: 'Logout'
             },
             password: {
                 required: 'Please enter your current and new password.',
@@ -82,7 +83,8 @@
                 currentPassword: 'Pasfhocal reatha',
                 newPassword: 'Pasfhocal nua',
                 updating: 'Ag uasdhátú...',
-                loading: 'Ag lódáil...'
+                loading: 'Ag lódáil...',
+                logout: 'Logáil AMach'
             },
             password: {
                 required: 'Cuir isteach do phasfhocal reatha agus do phasfhocal nua, le do thoil.',
@@ -298,56 +300,41 @@
         {:else}
             <section class="account">
                 <div class="account-layout">
-                    <!-- LEFT COLUMN -->
-                    <div class="account-navigation">
-                        <nav class="account-tabs">
-                            <a href={withBase(`/${page.params.lang}/account/account`)} class="active">{messages.labels.accountLink}</a>
-                            <a href={withBase(`/${page.params.lang}/account/profile`)}>{messages.labels.profile}</a>
-                            <!-- <a href={withBase(`/${page.params.lang}/account/preferences`)}>{messages.labels.preferences}</a> -->
-                            {#if profileComplete}
-                                <a href={withBase(`/${page.params.lang}/account/preferences`)}>
-                                    {messages.labels.preferences}
-                                </a>
-                            {:else}
-                                <span class="disabled" aria-disabled="true" title={page.params.lang === 'ga' ? 'Comhlánaigh do phróifíl chun rochtain a fháil ar shainroghanna.' : 'Complete your profile to access preferences.'}>
-                                    {messages.labels.preferences}
-                                </span>
-                            {/if}
-                        </nav>
+                    <!-- LEFT COLUMN - MAIN NAVIGATION -->
+                    <nav class="account-main-nav" aria-label="Account navigation">
+                        <a
+                            href={withBase(`/${page.params.lang}/account/account`)}
+                            class:active={page.url.pathname.endsWith('/account/account')}
+                        >
+                            {messages.labels.accountLink}
+                        </a>
 
-                        {#if profile?.verified === false}
-                            <div class="verification-section">
-                                <p>{page.params.lang === 'ga' ? 'Níl do sheoladh ríomhphoist fíoraithe fós.' : 'Your email address is not verified yet.'}</p>
+                        <a href={withBase(`/${page.params.lang}/account/profile`)}>
+                            {messages.labels.profile}
+                        </a>
 
-                                <button
-                                    type="button"
-                                    class="sidebar-link"
-                                    onclick={sendVerificationEmail}
-                                    disabled={sendingVerification}
-                                >
-                                    {#if sendingVerification}
-                                        {page.params.lang === 'ga' ? 'Á sheoladh…' : 'Sending…'}
-                                    {:else}
-                                        {page.params.lang === 'ga' ? 'Seol ríomhphost fíoraithe' : 'Send verification email'}
-                                    {/if}
-                                </button>
-
-                                {#if verificationMessage}
-                                    <p class="verification-success" role="status">{verificationMessage}</p>
-                                {/if}
-
-                                {#if verificationError}
-                                    <p class="error" role="alert">{verificationError}</p>
-                                {/if}
-                            </div>
+                        {#if profileComplete}
+                            <a href={withBase(`/${page.params.lang}/account/preferences`)}>
+                                {messages.labels.preferences}
+                            </a>
+                        {:else}
+                            <span class="disabled" aria-disabled="true" title={page.params.lang === 'ga'
+                                    ? 'Comhlánaigh do phróifíl chun rochtain a fháil ar shainroghanna.'
+                                    : 'Complete your profile to access preferences.'}>
+                                {messages.labels.preferences}
+                            </span>
                         {/if}
 
-                        <div class="sidebar-danger">
-                            <a href={withBase(`/${page.params.lang}/account/delete-account`)} class="delete-account-link">{page.params.lang === 'ga' ? 'Scrios cuntas' : 'Delete account'}</a>
-                        </div>
-                    </div>
+                        <a href={withBase(`/${page.params.lang}/account/bookmarks`)}>
+                            {page.params.lang === 'ga' ? 'Leabharmharcanna' : 'Bookmarks'}
+                        </a>
 
-                    <!-- MIDDLE COLUMN -->
+                        <a href={withBase(`/${page.params.lang}/account/history`)}>
+                            {page.params.lang === 'ga' ? 'Stair' : 'History'}
+                        </a>
+                    </nav>
+
+                    <!-- MIDDLE COLUMN - FORM -->
                     <div class="account-content">
                         <h1>{messages.labels.account}</h1>
 
@@ -441,6 +428,45 @@
                         </div>
                     </div>
 
+                    <!-- SECONDARY NAVIGATION -->
+                    <nav class="account-secondary-nav" aria-label="Account actions">
+                        {#if profile?.verified === false}
+                            <div class="verification-section">
+                                <p>{page.params.lang === 'ga' ? 'Níl do sheoladh ríomhphoist fíoraithe fós.' : 'Your email address is not verified yet.'}</p>
+
+                                <button
+                                    type="button"
+                                    class="sidebar-link"
+                                    onclick={sendVerificationEmail}
+                                    disabled={sendingVerification}
+                                >
+                                    {sendingVerification
+                                        ? (page.params.lang === 'ga' ? 'Á sheoladh…' : 'Sending…')
+                                        : (page.params.lang === 'ga'
+                                            ? 'Fíoraigh do sheoladh ríomhphoist'
+                                            : 'Verify your email')}
+                                </button>
+
+                                {#if verificationMessage}
+                                    <p role="status">{verificationMessage}</p>
+                                {/if}
+
+                                {#if verificationError}
+                                    <p class="error" role="alert">{verificationError}</p>
+                                {/if}
+                            </div>
+                        {/if}
+
+                        <a
+                            href={withBase(`/${page.params.lang}/account/delete-account`)}
+                            class="delete-account-link"
+                        >
+                            {page.params.lang === 'ga' ? 'Scrios cuntas' : 'Delete account'}
+                        </a>
+
+                        <button type="button" class="logout-link" onclick={logout}>{messages.labels.logout}</button>
+                    </nav>
+
                     <!-- RIGHT COLUMN -->
                     <div class="account-sidebar"></div>
                 </div>
@@ -459,9 +485,85 @@
 
 .account-layout {
     display: grid;
-    grid-template-columns: 250px minmax(0, 600px) 180px;
-    gap: 40px;
+    grid-template-columns: 220px minmax(0, 1fr) 180px;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "main content sidebar"
+        "secondary content sidebar";
+    column-gap: 2rem;
+    row-gap: 1.5rem;
     align-items: start;
+}
+
+.account-main-nav {
+    grid-area: main;
+}
+
+.account-content {
+    grid-area: content;
+    min-width: 0;
+}
+
+.account-secondary-nav {
+    grid-area: secondary;
+    align-self: end;
+}
+
+.account-sidebar {
+    grid-area: sidebar;
+}
+
+.account-main-nav,
+.account-secondary-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-top: 42px;
+}
+
+.account-main-nav a,
+.account-secondary-nav a,
+.logout-link {
+    text-decoration: none;
+}
+
+.account-main-nav a.active {
+    font-weight: 700;
+}
+
+.verification-section {
+    margin-bottom: 0.75rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.verification-section p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.sidebar-link,
+.logout-link {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.sidebar-link {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.delete-account-link {
+    color: #c62828;
+}
+
+.logout-link {
+    cursor: pointer;
 }
 
 .account-navigation {
@@ -623,6 +725,33 @@
         color 0.2s ease;
 }
 
+.account-main-nav a,
+.account-secondary-nav a,
+.account-secondary-nav .logout-link {
+    display: inline-block;
+    width: fit-content;
+    padding-bottom: 5px;
+    border-bottom: 2px solid transparent;
+    text-decoration: none;
+    transition: border-color 0.2s ease;
+}
+
+.account-main-nav a:hover,
+.account-main-nav a.active,
+.account-secondary-nav a:hover,
+.account-secondary-nav a.active,
+.account-secondary-nav .logout-link:hover,
+.account-secondary-nav .logout-link.active {
+    border-bottom-color: #FF126C;
+}
+
+.account-main-nav .disabled {
+    color: inherit;
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 @media (max-width: 1160px) {
     .account-layout {
         grid-template-columns: 200px minmax(0, 700px);
@@ -653,15 +782,37 @@
 
 @media (max-width: 768px) {
     .account-layout {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto auto auto;
+        grid-template-areas:
+            "main"
+            "content"
+            "secondary";
+        row-gap: 1.5rem;
     }
 
-    .account-navigation {
-        order: 1;
+    .account-main-nav {
+        grid-area: main;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.75rem 1.25rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #ddd;
     }
 
     .account-content {
-        order: 2;
+        grid-area: content;
+    }
+
+    .account-secondary-nav {
+        grid-area: secondary;
+        padding-top: 1rem;
+        border-top: 1px solid #ddd;
+    }
+
+    .account-sidebar {
+        display: none;
     }
 }
 </style>
