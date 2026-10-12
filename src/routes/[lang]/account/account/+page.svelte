@@ -723,10 +723,7 @@
 
     .account-secondary-nav {
         grid-area: secondary;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 0.75rem 1.25rem;
+        padding-top: 0;
     }
 
     .account-sidebar {
