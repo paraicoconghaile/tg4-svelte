@@ -8,7 +8,7 @@
     import { withBase } from '$lib/utils/paths';
     import { isProfileComplete } from '$lib/sso/profile-complete';
 
-    let loading = $state(true);
+    let loading = $state(false);
     let error = $state('');
 
     let pu = $state<any>(null);
@@ -30,6 +30,10 @@
     let showCurrentPassword = $state(false);
     let showNewPassword = $state(false);
     let profileComplete = $state(false);
+
+    let sendingVerification = $state(false);
+    let verificationMessage = $state('');
+    let verificationError = $state('');
 
     const accountMessages = {
         en: {
@@ -102,7 +106,7 @@
 
     const messages = $derived(accountMessages[page.params.lang === 'ga' ? 'ga' : 'en']);
 
-    onMount(async () => {
+    /* onMount(async () => {
         try {
             pu = await requireAuthentication(page.params.lang);
             if (!pu) return;
@@ -138,7 +142,7 @@
             error = err instanceof Error ? err.message : String(err);
             loading = false;
         }
-    });
+    }); */
 
     async function changeEmail() {
         emailMessage = '';
@@ -239,6 +243,50 @@
             updatingPassword = false;
         }
     }
+
+    async function sendVerificationEmail() {
+        verificationMessage = '';
+        verificationError = '';
+        sendingVerification = true;
+
+        try {
+            const response = await fetch(
+                'https://api.tg4.ie/sso-verify-dev',
+                {
+                    method: 'POST',
+                    credentials: 'include'
+                }
+            );
+
+            if (response.status === 200 || response.status === 204) {
+                verificationMessage =
+                    page.params.lang === 'ga'
+                        ? 'Seoladh an nasc fíoraithe chuig do sheoladh ríomhphoist.'
+                        : 'Verification link sent to your email address.';
+            } else {
+                const responseText = await response.text();
+                console.error(
+                    'Verification error:',
+                    response.status,
+                    responseText
+                );
+
+                verificationError =
+                    page.params.lang === 'ga'
+                        ? 'Níorbh fhéidir an ríomhphost fíoraithe a sheoladh. Bain triail eile as.'
+                        : 'Could not send the verification email. Please try again.';
+            }
+        } catch (err) {
+            console.error('Verification request failed:', err);
+
+            verificationError =
+                page.params.lang === 'ga'
+                    ? 'Tharla earráid líonra. Bain triail eile as.'
+                    : 'A network error occurred. Please try again.';
+        } finally {
+            sendingVerification = false;
+        }
+    }
 </script>
 
 <section class="account-page">
@@ -251,47 +299,52 @@
             <section class="account">
                 <div class="account-layout">
                     <!-- LEFT COLUMN -->
-                    <nav class="account-tabs">
-                        <a href={withBase(`/${page.params.lang}/account/account`)} class="active">{messages.labels.accountLink}</a>
-                        <a href={withBase(`/${page.params.lang}/account/profile`)}>{messages.labels.profile}</a>
-                        <!-- <a href={withBase(`/${page.params.lang}/account/preferences`)}>{messages.labels.preferences}</a> -->
-                        {#if profileComplete}
-                            <a href={withBase(`/${page.params.lang}/account/preferences`)}>
-                                {messages.labels.preferences}
-                            </a>
-                        {:else}
-                            <span class="disabled" aria-disabled="true" title={page.params.lang === 'ga' ? 'Comhlánaigh do phróifíl chun rochtain a fháil ar shainroghanna.' : 'Complete your profile to access preferences.'}>
-                                {messages.labels.preferences}
-                            </span>
+                    <div class="account-navigation">
+                        <nav class="account-tabs">
+                            <a href={withBase(`/${page.params.lang}/account/account`)} class="active">{messages.labels.accountLink}</a>
+                            <a href={withBase(`/${page.params.lang}/account/profile`)}>{messages.labels.profile}</a>
+                            <!-- <a href={withBase(`/${page.params.lang}/account/preferences`)}>{messages.labels.preferences}</a> -->
+                            {#if profileComplete}
+                                <a href={withBase(`/${page.params.lang}/account/preferences`)}>
+                                    {messages.labels.preferences}
+                                </a>
+                            {:else}
+                                <span class="disabled" aria-disabled="true" title={page.params.lang === 'ga' ? 'Comhlánaigh do phróifíl chun rochtain a fháil ar shainroghanna.' : 'Complete your profile to access preferences.'}>
+                                    {messages.labels.preferences}
+                                </span>
+                            {/if}
+                        </nav>
+
+                        {#if profile?.verified === false}
+                            <div class="verification-section">
+                                <p>{page.params.lang === 'ga' ? 'Níl do sheoladh ríomhphoist fíoraithe fós.' : 'Your email address is not verified yet.'}</p>
+
+                                <button
+                                    type="button"
+                                    class="sidebar-link"
+                                    onclick={sendVerificationEmail}
+                                    disabled={sendingVerification}
+                                >
+                                    {#if sendingVerification}
+                                        {page.params.lang === 'ga' ? 'Á sheoladh…' : 'Sending…'}
+                                    {:else}
+                                        {page.params.lang === 'ga' ? 'Seol ríomhphost fíoraithe' : 'Send verification email'}
+                                    {/if}
+                                </button>
+
+                                {#if verificationMessage}
+                                    <p class="verification-success" role="status">{verificationMessage}</p>
+                                {/if}
+
+                                {#if verificationError}
+                                    <p class="error" role="alert">{verificationError}</p>
+                                {/if}
+                            </div>
                         {/if}
-                    </nav>
 
-                    {#if profile?.verified === false}
-                        <div class="verification-section">
-                            <p>{page.params.lang === 'ga' ? 'Níl do sheoladh ríomhphoist fíoraithe fós.' : 'Your email address is not verified yet.'}</p>
-
-                            <button type="button" class="sidebar-link" onclick={sendVerificationEmail} disabled={sendingVerification}>
-                                {sendingVerification
-                                    ? (page.params.lang === 'ga'
-                                        ? 'Á sheoladh…'
-                                        : 'Sending…')
-                                    : (page.params.lang === 'ga'
-                                        ? 'Seol ríomhphost fíoraithe'
-                                        : 'Send verification email')}
-                            </button>
-
-                            {#if verificationMessage}
-                                <p class="verification-success" role="status">{verificationMessage}</p>
-                            {/if}
-
-                            {#if verificationError}
-                                <p class="error" role="alert">{verificationError}</p>
-                            {/if}
+                        <div class="sidebar-danger">
+                            <a href={withBase(`/${page.params.lang}/account/delete-account`)} class="delete-account-link">{page.params.lang === 'ga' ? 'Scrios cuntas' : 'Delete account'}</a>
                         </div>
-                    {/if}
-
-                    <div class="sidebar-danger">
-                        <a href={withBase(`/${page.params.lang}/account/delete-account`)} class="delete-account-link">{page.params.lang === 'ga' ? 'Scrios cuntas' : 'Delete account'}</a>
                     </div>
 
                     <!-- MIDDLE COLUMN -->
@@ -411,16 +464,10 @@
     align-items: start;
 }
 
-.account-sidebar {
+.account-navigation {
     display: flex;
     flex-direction: column;
-    height: 100%;
     min-width: 0;
-}
-
-.account-tabs {
-    display: flex;
-    flex-direction: column;
 }
 
 .verification-section {
@@ -432,6 +479,7 @@
 .verification-section p {
     font-size: 0.9rem;
     line-height: 1.5;
+    overflow-wrap: anywhere;
 }
 
 .sidebar-link {
@@ -451,13 +499,10 @@
     cursor: wait;
 }
 
-.verification-success {
-    overflow-wrap: anywhere;
-}
-
 .sidebar-danger {
-    margin-top: auto;
-    padding-top: 2rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 0px solid #ddd;
 }
 
 .delete-account-link {
@@ -468,6 +513,13 @@
 
 .delete-account-link:hover {
     color: #8e0000;
+}
+
+.account-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-top: 32px;
 }
 
 .account-tabs a {
@@ -596,6 +648,20 @@
 
     .account-sidebar {
         display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .account-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .account-navigation {
+        order: 1;
+    }
+
+    .account-content {
+        order: 2;
     }
 }
 </style>
