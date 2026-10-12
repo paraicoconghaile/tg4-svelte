@@ -464,7 +464,8 @@
                             {page.params.lang === 'ga' ? 'Scrios cuntas' : 'Delete account'}
                         </a>
 
-                        <button type="button" class="logout-link" onclick={logout}>{messages.labels.logout}</button>
+                        <!-- <button type="button" class="logout-link" onclick={logout}>{messages.labels.logout}</button> -->
+                        <button type="button" class="logout-link">{messages.labels.logout}</button>
                     </nav>
 
                     <!-- RIGHT COLUMN -->
