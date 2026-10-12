@@ -430,7 +430,7 @@
 
                     <!-- SECONDARY NAVIGATION -->
                     <nav class="account-secondary-nav" aria-label="Account actions">
-                        {#if profile?.verified === false}
+                        {#if profile?.profile?.verified === false}
                             <div class="verification-section">
                                 <p>{page.params.lang === 'ga' ? 'Níl do sheoladh ríomhphoist fíoraithe fós.' : 'Your email address is not verified yet.'}</p>
 
