@@ -20,66 +20,32 @@
     const loginMessages = {
         en: {
             labels: {
-                account: 'Account',
                 email: 'Email address',
                 password: 'Password',
-                currentPassword: 'Current password',
-                newPassword: 'New password',
-                updateEmail: 'Update email',
-                updatePassword: 'Update password',
-                updating: 'Updating...',
                 loading: 'Loading...',
                 login: 'Login',
-                loggingIn: 'Logging in...'
-            },
-            password: {
-                required: 'Please enter your current and new password.',
-                changed: 'Password Changed!',
-                incorrect: 'Current Password is incorrect.',
-                weak: 'New Password is not strong enough.',
-                error: 'Unable to update password.'
-            },
-            email: {
-                required: 'Please enter an email address.',
-                passwordRequired: 'Please enter your current password.',
-                changed: 'Email Changed!',
-                verification: 'Email with verification link sent to new email address.',
-                taken: 'New Email already taken.',
-                incorrect: 'Current Password is incorrect.',
-                tooMany: 'Too many requests. Please try later.',
-                error: 'Unable to update email address.'
+                loggingIn: 'Logging in...',
+                forgotPassword: 'Forgot your password?',
+                needAccount: 'Need an account?',
+                register: 'Signup',
+                enterEmail: 'Please enter your email address and password.',
+                invalidDetails: 'Invalid email address or password.',
+                errorLogin: 'Unable to initialise login.'
             }
         },
         ga: {
             labels: {
-                account: 'Cuntas',
                 email: 'Seoladh ríomhphoist',
                 password: 'Pasfhocal',
-                currentPassword: 'Pasfhocal reatha',
-                newPassword: 'Pasfhocal nua',
-                updateEmail: 'Nuashonraigh an seoladh ríomhphoist',
-                updatePassword: 'Nuashonraigh an pasfhocal',
-                updating: 'Á nuashonrú...',
                 loading: 'Ag lódáil...',
                 login: 'Logáil isteach',
-                loggingIn: 'Ag logáil isteach...'
-            },
-            password: {
-                required: 'Cuir isteach do phasfhocal reatha agus do phasfhocal nua, le do thoil.',
-                changed: 'Athraíodh an pasfhocal!',
-                incorrect: 'Tá an pasfhocal reatha mícheart.',
-                weak: 'Níl an pasfhocal nua sách láidir.',
-                error: 'Níorbh fhéidir an pasfhocal a athrú.'
-            },
-            email: {
-                required: 'Cuir isteach seoladh ríomhphoist, le do thoil.',
-                passwordRequired: 'Cuir isteach do phasfhocal reatha, le do thoil.',
-                changed: 'Athraíodh an seoladh ríomhphoist!',
-                verification: 'Seoladh ríomhphost le nasc fíoraithe chuig an seoladh ríomhphoist nua.',
-                taken: 'Tá an seoladh ríomhphoist nua in úsáid cheana féin.',
-                incorrect: 'Tá an pasfhocal reatha mícheart.',
-                tooMany: 'An iomarca iarratas. Bain triail eile as ar ball.',
-                error: 'Níorbh fhéidir an seoladh ríomhphoist a athrú.'
+                loggingIn: 'Ag logáil isteach...',
+                forgotPassword: 'Pasfhocal dearmadta?',
+                needAccount: 'Cuntas uait?',
+                register: 'Cláraigh',
+                enterEmail: 'Cur isteach do seoladh rphost agus pasfhocal.',
+                invalidDetails: 'Invalid email address or password.',
+                errorLogin: 'Unable to initialise login.'
             }
         }
     };
@@ -106,7 +72,7 @@
             }
         } catch (err) {
             console.error('Peach User error:', err);
-            error = 'Unable to initialise login.';
+            error = messages.labels.errorLogin;
         }    finally {
             checkingAuth = false;
         }
@@ -116,7 +82,7 @@
         error = '';
 
         if (!email || !password) {
-            error = 'Please enter your email address and password.';
+            error = messages.labels.enterEmail;
             return;
         }
 
@@ -128,7 +94,7 @@
             console.log('LOGIN RESPONSE:', response);
 
             if (response.status !== 204) {
-                error = 'Invalid email address or password.';
+                error = messages.labels.invalidDetails;
                 loggingIn = false;
                 return;
             }
@@ -150,7 +116,7 @@
         } catch (err) {
             console.error('Login error:', err);
 
-            error = 'Invalid email address or password.';
+            error = messages.labels.invalidDetails;
             loggingIn = false;
         }
     }
@@ -189,6 +155,11 @@
                 {/if}
             </div>
         </form>
+
+        <div class="account-links">
+            <a href={`/${page.params.lang}/account/forgot-password`}>{messages.labels.forgotPassword}</a> | 
+                {messages.labels.needAccount}, <a href={`/${page.params.lang}/account/sign-up`}>{messages.labels.register}</a>
+        </div>
     {/if}
 </div>
 
@@ -271,5 +242,28 @@ input {
     transition:
         background-color 0.2s ease,
         color 0.2s ease;
+}
+
+.account-links {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.account-links > a {
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.account-links p {
+    margin: 0;
+}
+
+.account-links a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.account-links a:hover {
+    opacity: 1;
 }
 </style>
