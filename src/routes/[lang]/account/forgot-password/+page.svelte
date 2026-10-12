@@ -83,6 +83,8 @@
 <div class="account-page">
     <h1>{messages.labels.forgotPassword}</h1>
 
+    <p>{messages.labels.passwordResetIntro}</p>
+
     <form onsubmit={(event) => {
         event.preventDefault();
         forgotPassword();
@@ -104,20 +106,14 @@
         {/if}
 
         <div class="form-field">
-            <button
-                type="submit"
-                class="form-button"
-                disabled={submitting}
-            >
+            <button type="submit" class="form-button" disabled={submitting}>
                 {submitting ? messages.labels.sending : messages.labels.resetPassword}
             </button>
         </div>
     </form>
 
     <div class="account-links">
-        <a href={`/${page.params.lang}/account/login`}>
-            {messages.labels.login}
-        </a>
+        <a href={withBase(`/${page.params.lang}/account/login`)}>{messages.labels.login}</a>
     </div>
 </div>
 

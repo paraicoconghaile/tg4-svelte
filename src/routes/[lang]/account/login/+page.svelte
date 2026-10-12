@@ -157,8 +157,8 @@
         </form>
 
         <div class="account-links">
-            <a href={`/${page.params.lang}/account/forgot-password`}>{messages.labels.forgotPassword}</a> | 
-                {messages.labels.needAccount}, <a href={`/${page.params.lang}/account/sign-up`}>{messages.labels.register}</a>
+            <a href={withBase(`/${page.params.lang}/account/forgot-password`)}>{messages.labels.forgotPassword}</a> | 
+                {messages.labels.needAccount}, <a href={withBase(`/${page.params.lang}/account/sign-up`)}>{messages.labels.register}</a>
         </div>
     {/if}
 </div>

@@ -156,9 +156,7 @@
         {#if success}
             <p class="success" role="status">
                 {success}
-                <a href={`/${page.params.lang}/account/login`}>
-                    {messages.labels.login}
-                </a>
+                <a href={withBase(`/${page.params.lang}/account/login`)}>{messages.labels.login}</a>
             </p>
         {/if}
 
@@ -172,9 +170,7 @@
     <div class="account-links">
         <p>
             {messages.labels.alreadyHaveAccount}
-            <a href={`/${page.params.lang}/account/login`}>
-                {messages.labels.login}
-            </a>
+            <a href={withBase(`/${page.params.lang}/account/login`)}>{messages.labels.login}</a>
         </p>
     </div>
     <div class="registration-info">
