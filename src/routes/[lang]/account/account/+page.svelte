@@ -266,6 +266,34 @@
                         {/if}
                     </nav>
 
+                    {#if profile?.verified === false}
+                        <div class="verification-section">
+                            <p>{page.params.lang === 'ga' ? 'Níl do sheoladh ríomhphoist fíoraithe fós.' : 'Your email address is not verified yet.'}</p>
+
+                            <button type="button" class="sidebar-link" onclick={sendVerificationEmail} disabled={sendingVerification}>
+                                {sendingVerification
+                                    ? (page.params.lang === 'ga'
+                                        ? 'Á sheoladh…'
+                                        : 'Sending…')
+                                    : (page.params.lang === 'ga'
+                                        ? 'Seol ríomhphost fíoraithe'
+                                        : 'Send verification email')}
+                            </button>
+
+                            {#if verificationMessage}
+                                <p class="verification-success" role="status">{verificationMessage}</p>
+                            {/if}
+
+                            {#if verificationError}
+                                <p class="error" role="alert">{verificationError}</p>
+                            {/if}
+                        </div>
+                    {/if}
+
+                    <div class="sidebar-danger">
+                        <a href={withBase(`/${page.params.lang}/account/delete-account`)} class="delete-account-link">{page.params.lang === 'ga' ? 'Scrios cuntas' : 'Delete account'}</a>
+                    </div>
+
                     <!-- MIDDLE COLUMN -->
                     <div class="account-content">
                         <h1>{messages.labels.account}</h1>
@@ -383,11 +411,63 @@
     align-items: start;
 }
 
+.account-sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+}
+
 .account-tabs {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    padding-top: 32px;
+}
+
+.verification-section {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
+}
+
+.verification-section p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.sidebar-link {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+
+.sidebar-link:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.verification-success {
+    overflow-wrap: anywhere;
+}
+
+.sidebar-danger {
+    margin-top: auto;
+    padding-top: 2rem;
+}
+
+.delete-account-link {
+    color: #c62828;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.delete-account-link:hover {
+    color: #8e0000;
 }
 
 .account-tabs a {
