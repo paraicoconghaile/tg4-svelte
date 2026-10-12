@@ -590,102 +590,13 @@
     cursor: pointer;
 }
 
-.account-navigation {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-}
-
-.verification-section {
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid #ddd;
-}
-
-.verification-section p {
-    font-size: 0.9rem;
-    line-height: 1.5;
-    overflow-wrap: anywhere;
-}
-
-.sidebar-link {
-    padding: 0;
-    border: 0;
-    background: none;
-    color: inherit;
-    font: inherit;
-    text-align: left;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    cursor: pointer;
-}
-
 .sidebar-link:disabled {
     opacity: 0.6;
     cursor: wait;
 }
 
-.sidebar-danger {
-    margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 0px solid #ddd;
-}
-
-.delete-account-link {
-    color: #c62828;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-}
-
 .delete-account-link:hover {
     color: #8e0000;
-}
-
-.account-tabs {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    padding-top: 32px;
-}
-
-.account-tabs a {
-    position: relative;
-    width: fit-content;
-    padding: 10px 0px;
-    text-decoration: none;
-    color: inherit;
-}
-
-.account-tabs a.active {
-    font-weight: bold;
-}
-
-.account-tabs a::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 3px;
-    background-color: var(--link-colour);
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
-.account-tabs a:hover::after,
-.account-tabs a.active::after {
-    opacity: 1;
-}
-
-.account-tabs .disabled {
-    position: relative;
-    width: fit-content;
-    padding: 10px 0;
-    text-decoration: none;
-    color: inherit;
-    opacity: 0.45;
-    cursor: not-allowed;
-    pointer-events: none;
 }
 
 .account-content {
@@ -789,23 +700,6 @@
 
 @media (max-width: 800px) {
     .account-layout {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    .account-tabs {
-        flex-direction: row;
-        gap: 25px;
-        padding-top: 0;
-    }
-
-    .account-sidebar {
-        display: none;
-    }
-}
-
-@media (max-width: 768px) {
-    .account-layout {
         grid-template-columns: minmax(0, 1fr);
         grid-template-rows: auto auto auto;
         grid-template-areas:
@@ -821,8 +715,6 @@
         flex-direction: row;
         flex-wrap: wrap;
         gap: 0.75rem 1.25rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid #ddd;
     }
 
     .account-content {
@@ -831,8 +723,10 @@
 
     .account-secondary-nav {
         grid-area: secondary;
-        padding-top: 1rem;
-        border-top: 1px solid #ddd;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.75rem 1.25rem;
     }
 
     .account-sidebar {
