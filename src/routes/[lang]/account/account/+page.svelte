@@ -8,7 +8,7 @@
     import { withBase } from '$lib/utils/paths';
     import { isProfileComplete } from '$lib/sso/profile-complete';
 
-    let loading = $state(false);
+    let loading = $state(true);
     let error = $state('');
 
     let pu = $state<any>(null);
@@ -106,7 +106,7 @@
 
     const messages = $derived(accountMessages[page.params.lang === 'ga' ? 'ga' : 'en']);
 
-    /* onMount(async () => {
+    onMount(async () => {
         try {
             pu = await requireAuthentication(page.params.lang);
             if (!pu) return;
@@ -142,7 +142,7 @@
             error = err instanceof Error ? err.message : String(err);
             loading = false;
         }
-    }); */
+    });
 
     async function changeEmail() {
         emailMessage = '';
