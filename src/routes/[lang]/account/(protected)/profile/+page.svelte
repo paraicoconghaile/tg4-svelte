@@ -218,7 +218,7 @@
 
             console.log('Saving profile:', updatedProfile);
 
-            await pu.setCombinedSessionAndPreferenceProfile('profile_preference_key', updatedProfile);
+            await account.pu.setCombinedSessionAndPreferenceProfile('profile_preference_key', updatedProfile);
             profile = updatedProfile;
             saved = true;
 
