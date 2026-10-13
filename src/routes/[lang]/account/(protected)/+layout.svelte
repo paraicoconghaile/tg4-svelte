@@ -41,7 +41,7 @@
                 loading: 'Loading...',
                 completeProfileFirst: 'Please complete your profile first.',
                 deleteAccount: 'Delete account',
-                verifyEmail: 'Verify email',
+                verifyEmail: 'Account is not verified. You need to be verified to view Bookmarks and History.',
                 sendingVerification: 'Sending...',
                 sendVerification: 'Send verification email'
             }
@@ -57,7 +57,7 @@
                 loading: 'Ag lódáil...',
                 completeProfileFirst: 'Comhlánaigh do phróifíl ar dtús, le do thoil.',
                 deleteAccount: 'Scrios cuntas',
-                verifyEmail: 'Fíoraigh ríomhphost',
+                verifyEmail: 'Níl an cuntas deimhnithe. Ní mhór a bheith deimhnithe chun go mbeadh fáil ar Leabharmharcanna agus Stair.',
                 sendingVerification: 'Á sheoladh...',
                 sendVerification: 'Seol ríomhphost fíoraithe'
             }
