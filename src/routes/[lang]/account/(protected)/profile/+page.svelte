@@ -2,7 +2,6 @@
     import { getContext, onMount } from 'svelte';
     import { page } from '$app/state';
     import { countries } from '$lib/data/countries';
-    import { withBase } from '$lib/utils/paths';
 
     let loading = $state(true);
     let error = $state('');
@@ -126,16 +125,6 @@
     };
 
     const messages = $derived(profileMessages[page.params.lang === 'ga' ? 'ga' : 'en']);
-
-    const profileComplete = $derived(
-        !!firstName.trim() &&
-        !!lastName.trim() &&
-        age &&
-        !!gender &&
-        !!nationality &&
-        !!residence &&
-        !!irish
-    );
     
     onMount(() => {
         profile = account.profile;
@@ -154,7 +143,7 @@
         irish = profile.preferences.irish ?? '';
         nationality = profile.preferences.nationality ?? '';
         residence = profile.preferences.residence ?? '';
-        newsletter = profile.preferences.newsletter ?? '';
+        newsletter = profile.preferences.newsletter ?? false;
 
         loading = false;
     });
@@ -354,85 +343,25 @@
 {/if}
 
 <style>
-.profile-page {
-    max-width: var(--page-width);
-    margin: 0 auto;
-    padding: 20px;
-    background-color: var(--genre-background);
-}
 
-.account-layout {
-    display: grid;
-    grid-template-columns: 250px minmax(0, 600px) 180px;
-    gap: 40px;
-    align-items: start;
-}
-
-.account-tabs {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    padding-top: 32px;
-}
-
-.account-tabs a {
-    position: relative;
-    width: fit-content;
-    padding: 10px 0;
-    text-decoration: none;
-    color: inherit;
-}
-
-.account-tabs a.active {
-    font-weight: bold;
-}
-
-.account-tabs a::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 3px;
-    background-color: var(--link-colour);
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
-.account-tabs a:hover::after,
-.account-tabs a.active::after {
-    opacity: 1;
-}
-
-.account-tabs .disabled {
-    position: relative;
-    width: fit-content;
-    padding: 10px 0;
-    text-decoration: none;
-    color: inherit;
-    opacity: 0.45;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
-.account-content {
+.account-page-content {
     min-width: 0;
 }
 
-.account-section {
-    margin-bottom: 40px;
-}
-
-.account-section form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.account-page-content h1 {
+    margin-top: 0;
 }
 
 fieldset {
     border: 0;
     padding: 0;
     margin: 0;
+}
+
+.account-page-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .form-field {
@@ -452,6 +381,7 @@ fieldset {
 
 .form-row .form-field {
     flex: 1;
+    min-width: 0;
 }
 
 input[type="text"],
@@ -570,7 +500,7 @@ select {
     padding: 10px 20px;
     background: var(--tg4-grey-2);
     color: white;
-    border-radius: 0px;
+    border-radius: 0;
     transition:
         background-color 0.2s ease,
         color 0.2s ease;
@@ -581,42 +511,13 @@ select {
     color: white;
 }
 
+/* Save confirmation */
+
 .notification {
     display: block;
     padding: 10px 20px;
     background: var(--tg4-grey-2);
     color: white;
-    border-radius: 0px;
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease;
-}
-
-@media (max-width: 1160px) {
-    .account-layout {
-        grid-template-columns: 200px minmax(0, 700px);
-        gap: 20px;
-    }
-
-    .account-sidebar {
-        display: none;
-    }
-}
-
-@media (max-width: 800px) {
-    .account-layout {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    .account-tabs {
-        flex-direction: row;
-        gap: 25px;
-        padding-top: 0;
-    }
-
-    .account-sidebar {
-        display: none;
-    }
+    border-radius: 0;
 }
 </style>
