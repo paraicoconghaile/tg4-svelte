@@ -88,7 +88,7 @@
                 updating: 'Ag uasdhátú...',
                 loading: 'Ag lódáil...',
                 logout: 'Logáil Amach',
-                bookmarks: 'Labharmharcanna',
+                bookmarks: 'Leabharmharcanna',
                 history: 'Stair'
             },
             password: {
@@ -294,6 +294,14 @@
             sendingVerification = false;
         }
     }
+
+    async function logout() {
+        try {
+            await _pu.logout();
+        } finally {
+            window.location.href = withBase(`/${page.params.lang}/account/login`);
+        }
+    }
 </script>
 
 <section class="account-page">
@@ -487,8 +495,7 @@
                             {page.params.lang === 'ga' ? 'Scrios cuntas' : 'Delete account'}
                         </a>
 
-                        <!-- <button type="button" class="logout-link" onclick={logout}>{messages.labels.logout}</button> -->
-                        <button type="button" class="logout-link">{messages.labels.logout}</button>
+                        <button type="button" class="logout-link" onclick={logout}>{messages.labels.logout}</button>
                     </nav>
 
                     <!-- RIGHT COLUMN -->
