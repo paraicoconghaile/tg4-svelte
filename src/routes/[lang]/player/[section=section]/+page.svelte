@@ -22,9 +22,7 @@
     //console.log('GENRE RAILS API:', data.rails);
 </script>
 
-
 <!-- CATEGORY RAILS -->
-
 {#each data.rails?.rails ?? [] as rail}
     {#if rail.type === 'HORIZONTAL' && rail.showItemsAsBoxset}
         <CardCarouselPortrait {rail} {isIrish}/>
@@ -44,7 +42,7 @@
                 <a class="series-card" href={withBase(`/${data.lang}/player/${item.slug}`)}>
                     <img src={getImageUrl(item)} alt={item.title} onerror={(e) => {e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';}}/>
                     <h3>{item.title}</h3>
-                    <p>{item.description}</p>
+                    <!-- <p>{item.description}</p> -->
                 </a>
             {/each}
         </div>

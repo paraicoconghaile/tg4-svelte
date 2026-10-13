@@ -6,6 +6,7 @@
     import { withBase } from '$lib/utils/paths';
     import { isProfileComplete } from '$lib/sso/profile-complete';
 
+    let { children } = $props();
     let loading = $state(true);
     let error = $state('');
 
