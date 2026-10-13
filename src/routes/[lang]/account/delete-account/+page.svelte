@@ -1,6 +1,8 @@
 <script lang="ts">
     import { page } from '$app/state';
     import { withBase } from '$lib/utils/paths';
+    import { redirect } from '@sveltejs/kit';
+    import type { PageServerLoad } from './$types';
 
     let password = $state('');
     let showPassword = $state(false);
@@ -8,6 +10,14 @@
     let deleting = $state(false);
     let errorMessage = $state('');
     let successMessage = $state('');
+
+    export const load: PageServerLoad = async ({ cookies, params, url }) => {
+        const peachSid = cookies.get('identity.provider.sid');
+
+        if (!peachSid) {
+            redirect(303,`withBase(/${params.lang}/account/login?redirect=${encodeURIComponent(url.pathname)})`);
+        }
+    };
 
     const isIrish = $derived(page.params.lang === 'ga');
 
@@ -211,110 +221,108 @@
 {/if}
 
 <style>
-    .delete-account {
-        max-width: 640px;
-    }
+.delete-account {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--genre-background);
+}
 
-    .warning-message {
-        padding: 1rem;
-        color: #8a1c2d;
-        background: #fff0f2;
-        border: 1px solid #f2b8c1;
-        border-radius: 4px;
-    }
+.warning-message {
+    padding: 1rem;
+    color: #8a1c2d;
+    background: #fff0f2;
+    border: 1px solid #f2b8c1;
+    margin-bottom: 10px;
+}
 
-    .delete-button {
-        padding: 0.75rem 1rem;
-        color: white;
-        background: #d7193f;
-        border: 1px solid #d7193f;
-        border-radius: 4px;
-        cursor: pointer;
-    }
+.delete-button {
+    padding: 0.75rem 1rem;
+    color: white;
+    background: #d7193f;
+    border: 1px solid #d7193f;
+    cursor: pointer;
+}
 
-    .delete-button:hover:not(:disabled) {
-        background: #b51233;
-    }
+.delete-button:hover:not(:disabled) {
+    background: #b51233;
+}
 
-    button:disabled {
-        cursor: not-allowed;
-        opacity: 0.55;
-    }
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
 
-    .modal-backdrop {
-        position: fixed;
-        inset: 0;
-        z-index: 1000;
-        display: grid;
-        place-items: center;
-        overflow-y: auto;
-        padding: 1rem;
-        background: rgb(0 0 0 / 65%);
-    }
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    overflow-y: auto;
+    padding: 1rem;
+    background: rgb(0 0 0 / 65%);
+}
 
-    .delete-modal {
-        width: 100%;
-        max-width: 480px;
-        padding: 1.5rem;
-        background: white;
-        color: #222;
-        border-radius: 6px;
-    }
+.delete-modal {
+    width: 100%;
+    max-width: 480px;
+    padding: 1.5rem;
+    background: white;
+    color: #222;
+}
 
-    .delete-modal h2 {
-        margin-top: 0;
-    }
+.delete-modal h2 {
+    margin-top: 0;
+}
 
-    .delete-modal form > input {
-        display: block;
-        box-sizing: border-box;
-        width: 100%;
-        margin-top: 0.5rem;
-        padding: 0.75rem;
-        border: 1px solid #aaa;
-        border-radius: 4px;
-    }
+.delete-modal form > input {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid #aaa;
+}
 
-    .show-password {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-top: 0.75rem;
-    }
+.show-password {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
 
-    .modal-actions {
-        display: flex;
-        justify-content: flex-end;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-        margin-top: 1.5rem;
-    }
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
 
-    .secondary-button {
-        padding: 0.75rem 1rem;
-        background: white;
-        border: 1px solid #aaa;
-        border-radius: 4px;
-        cursor: pointer;
-    }
+.secondary-button {
+    padding: 0.75rem 1rem;
+    background: white;
+    border: 1px solid #aaa;
+    cursor: pointer;
+}
 
-    .error-message {
-        color: #b51233;
-    }
+.error-message {
+    color: #b51233;
+}
 
-    .success-message {
-        padding: 1rem;
-        background: #eef8ef;
-        border-radius: 4px;
-    }
+.success-message {
+    padding: 1rem;
+    background: #eef8ef;
+}
 
-    .success-message a {
-        color: #b51270;
-    }
+.success-message a {
+    color: #b51270;
+}
 
-    @media (max-width: 480px) {
-        .modal-actions > button {
-            flex: 1;
-        }
+@media (max-width: 480px) {
+    .modal-actions > button {
+        flex: 1;
     }
+}
 </style>
