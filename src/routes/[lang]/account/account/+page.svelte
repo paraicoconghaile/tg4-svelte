@@ -488,10 +488,7 @@
                             </div>
                         {/if}
 
-                        <a
-                            href={withBase(`/${page.params.lang}/account/delete-account`)}
-                            class="delete-account-link"
-                        >
+                        <a href={withBase(`/${page.params.lang}/account/delete-account`)} class="delete-account-link">
                             {page.params.lang === 'ga' ? 'Scrios cuntas' : 'Delete account'}
                         </a>
 
