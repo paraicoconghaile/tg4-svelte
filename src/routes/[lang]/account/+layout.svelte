@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+    import { onMount, setContext } from 'svelte';
     import { page } from '$app/state';
     import { goto } from '$app/navigation';
     import { requireAuthentication } from '$lib/sso/auth';
@@ -13,6 +13,15 @@
     let pu = $state<any>(null);
     let profile = $state<any>(null);
     let profileComplete = $state(false);
+
+    setContext('tg4-account', {
+        get pu() {
+            return pu;
+        },
+        get profile() {
+            return profile;
+        }
+    });
 
     let isVerified = $derived(profile?.profile?.verified === true);
 

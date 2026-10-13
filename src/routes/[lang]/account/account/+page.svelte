@@ -1,18 +1,7 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
     import { page } from '$app/state';
-    import { goto } from '$app/navigation';
-    import { requireAuthentication } from '$lib/sso/auth';
     import Eye from '$lib/components/icons/Eye.svelte';
     import EyeOff from '$lib/components/icons/EyeOff.svelte';
-    import { withBase } from '$lib/utils/paths';
-    import { isProfileComplete } from '$lib/sso/profile-complete';
-
-    let loading = $state(true);
-    let error = $state('');
-
-    let pu = $state<any>(null);
-    let profile = $state<any>(null);
 
     // Email
     let newEmail = $state('');
@@ -29,31 +18,17 @@
     let showEmailPassword = $state(false);
     let showCurrentPassword = $state(false);
     let showNewPassword = $state(false);
-    let profileComplete = $state(false);
-    let isVerified = $derived(profile?.profile?.verified === true);
-
-    let sendingVerification = $state(false);
-    let verificationMessage = $state('');
-    let verificationError = $state('');
 
     const accountMessages = {
         en: {
             labels: {
                 account: 'Edit account details',
-                accountLink: 'Account',
-                profile: 'Profile',
-                preferences: 'Preferences',
                 email: 'Email address',
                 updateEmail: 'Update Email',
                 updatePassword: 'Update Password',
-                password: 'Password',
                 currentPassword: 'Current password',
                 newPassword: 'New password',
-                updating: 'Updating...',
-                loading: 'Loading...',
-                logout: 'Logout',
-                bookmarks: 'Bookmarks',
-                history: 'History'
+                updating: 'Updating...'
             },
             password: {
                 required: 'Please enter your current and new password.',
@@ -76,20 +51,12 @@
         ga: {
             labels: {
                 account: 'Athraigh do chuntas',
-                accountLink: 'Cuntas',
-                profile: 'Próifíl',
-                preferences: 'Sainrogha phearsanta',
+                email: 'Seoladh ríomhphoist',
                 updateEmail: 'Athraigh Ríomhphost',
                 updatePassword: 'Athraigh Pasfhocal',
-                email: 'Seoladh ríomhphoist',
-                password: 'Pasfhocal',
                 currentPassword: 'Pasfhocal reatha',
                 newPassword: 'Pasfhocal nua',
-                updating: 'Ag uasdhátú...',
-                loading: 'Ag lódáil...',
-                logout: 'Logáil Amach',
-                bookmarks: 'Leabharmharcanna',
-                history: 'Stair'
+                updating: 'Ag uasdhátú...'
             },
             password: {
                 required: 'Cuir isteach do phasfhocal reatha agus do phasfhocal nua, le do thoil.',
@@ -111,45 +78,14 @@
         }
     };
 
-    const messages = $derived(accountMessages[page.params.lang === 'ga' ? 'ga' : 'en']);
+    const messages = $derived(
+        accountMessages[page.params.lang === 'ga' ? 'ga' : 'en']
+    );
 
-    onMount(async () => {
-        try {
-            pu = await requireAuthentication(page.params.lang);
-            if (!pu) return;
-
-            // User is authenticated, so load their profile
-            profile = await pu.getCombinedSessionAndPreferenceProfile();
-
-            console.log('PROFILE:', profile);
-
-            const unauthorized = profile?.profile?.error === 'Unauthorized' || profile?.preferences?.error === 'Unauthorized';
-
-            if (unauthorized) {
-                console.warn('Session is stale - logging out');
-
-                try {
-                    await pu.logout();
-                } catch (err) {
-                    console.error('Logout error:', err);
-                }
-
-                await goto(`/${page.params.lang}/account/login`);
-                return;
-            }
-        
-            // Check whether the profile is complete
-            profileComplete = isProfileComplete(profile);
-
-            newEmail = profile.profile.contactEmail;
-            loading = false;
-
-        } catch (err) {
-            console.error('Profile error:', err);
-            error = err instanceof Error ? err.message : String(err);
-            loading = false;
-        }
-    });
+    // The shared account layout supplies the authenticated Peach instance
+    // and profile through the next step's layout data integration.
+    let pu: any = null;
+    let profile: any = null;
 
     async function changeEmail() {
         emailMessage = '';
@@ -169,36 +105,27 @@
         try {
             const response = await pu.changeEmail(newEmail.trim(), emailPassword);
 
-            console.log('CHANGE EMAIL RESPONSE:', response);
-
             switch (response) {
                 case 200:
                     emailMessage = messages.email.changed;
                     emailPassword = '';
                     break;
-
                 case 204:
                     emailMessage = messages.email.verification;
                     emailPassword = '';
                     break;
-
                 case 400:
                     emailMessage = messages.email.taken;
                     break;
-
                 case 401:
                     emailMessage = messages.email.incorrect;
                     break;
-
                 case 429:
                     emailMessage = messages.email.tooMany;
                     break;
-
                 default:
                     emailMessage = messages.email.error;
-                    break;
             }
-
         } catch (err) {
             console.error('Change email error:', err);
             emailMessage = messages.email.error;
@@ -218,9 +145,11 @@
         updatingPassword = true;
 
         try {
-            const response = await pu.updatePassword(profile.profile.contactEmail, newPassword, currentPassword);
-
-            console.log('CHANGE PASSWORD RESPONSE:', response);
+            const response = await pu.updatePassword(
+                profile.profile.contactEmail,
+                newPassword,
+                currentPassword
+            );
 
             switch (response) {
                 case 200:
@@ -229,77 +158,20 @@
                     currentPassword = '';
                     newPassword = '';
                     break;
-
                 case 401:
                     passwordMessage = messages.password.incorrect;
                     break;
-
                 case 500:
                     passwordMessage = messages.password.weak;
                     break;
-
                 default:
                     passwordMessage = messages.password.error;
-                    break;
             }
-
         } catch (err) {
             console.error('Change password error:', err);
             passwordMessage = messages.password.error;
         } finally {
             updatingPassword = false;
-        }
-    }
-
-    async function sendVerificationEmail() {
-        verificationMessage = '';
-        verificationError = '';
-        sendingVerification = true;
-
-        try {
-            const response = await fetch(
-                'https://api.tg4.ie/sso-verify-dev',
-                {
-                    method: 'POST',
-                    credentials: 'include'
-                }
-            );
-
-            if (response.status === 200 || response.status === 204) {
-                verificationMessage =
-                    page.params.lang === 'ga'
-                        ? 'Seoladh an nasc fíoraithe chuig do sheoladh ríomhphoist.'
-                        : 'Verification link sent to your email address.';
-            } else {
-                const responseText = await response.text();
-                console.error(
-                    'Verification error:',
-                    response.status,
-                    responseText
-                );
-
-                verificationError =
-                    page.params.lang === 'ga'
-                        ? 'Níorbh fhéidir an ríomhphost fíoraithe a sheoladh. Bain triail eile as.'
-                        : 'Could not send the verification email. Please try again.';
-            }
-        } catch (err) {
-            console.error('Verification request failed:', err);
-
-            verificationError =
-                page.params.lang === 'ga'
-                    ? 'Tharla earráid líonra. Bain triail eile as.'
-                    : 'A network error occurred. Please try again.';
-        } finally {
-            sendingVerification = false;
-        }
-    }
-
-    async function logout() {
-        try {
-            await _pu.logout();
-        } finally {
-            window.location.href = withBase(`/${page.params.lang}/account/login`);
         }
     }
 </script>
@@ -312,191 +184,124 @@
             <p>{error}</p>
         {:else}
             <section class="account">
-                <div class="account-layout">
-                    <!-- LEFT COLUMN - MAIN NAVIGATION -->
-                    <nav class="account-main-nav" aria-label="Account navigation">
-                        <a
-                            href={withBase(`/${page.params.lang}/account/account`)}
-                            class:active={page.url.pathname.endsWith('/account/account')}
-                        >
-                            {messages.labels.accountLink}
-                        </a>
+                <div class="account-content">
+                    <h1>{messages.labels.account}</h1>
 
-                        {#if isVerified}
-                            <a href={withBase(`/${page.params.lang}/account/profile`)}>
-                                {messages.labels.profile}
-                            </a>
-                        {:else}
-                            <span class="disabled" aria-disabled="true">
-                                {messages.labels.profile}
-                            </span>
-                        {/if}
+                    <!-- EMAIL -->
+                    <div class="account-section">
+                        <form onsubmit={(event) => { event.preventDefault(); changeEmail(); }}>
+                            <div class="form-field">
+                                <label for="email">{messages.labels.email}</label>
+                                <input id="email" type="email" bind:value={newEmail} />
+                            </div>
 
-                        {#if profileComplete}
-                            <a href={withBase(`/${page.params.lang}/account/preferences`)}>
-                                {messages.labels.preferences}
-                            </a>
-                        {:else}
-                            <span class="disabled" aria-disabled="true" title={page.params.lang === 'ga'
-                                    ? 'Comhlánaigh do phróifíl chun rochtain a fháil ar shainroghanna.'
-                                    : 'Complete your profile to access preferences.'}>
-                                {messages.labels.preferences}
-                            </span>
-                        {/if}
+                            <div class="form-field">
+                                <label for="email-password">
+                                    {messages.labels.currentPassword}
+                                </label>
 
-                        {#if isVerified}
-                            <a href={withBase(`/${page.params.lang}/account/bookmarks`)}>
-                                {messages.labels.bookmarks}
-                            </a>
-                        {:else}
-                            <span class="disabled" aria-disabled="true">
-                                {messages.labels.bookmarks}
-                            </span>
-                        {/if}
+                                <div class="password-input">
+                                    <input
+                                        id="email-password"
+                                        type={showEmailPassword ? 'text' : 'password'}
+                                        bind:value={emailPassword}
+                                    />
 
-                        {#if isVerified}
-                            <a href={withBase(`/${page.params.lang}/account/history`)}>
-                                {messages.labels.history}
-                            </a>
-                        {:else}
-                            <span class="disabled" aria-disabled="true">
-                                {messages.labels.history}
-                            </span>
-                        {/if}
-                    </nav>
-
-                    <!-- MIDDLE COLUMN - FORM -->
-                    <div class="account-content">
-                        <h1>{messages.labels.account}</h1>
-
-                        <!-- EMAIL -->
-                        <div class="account-section">
-                            <form onsubmit={(event) => { event.preventDefault(); changeEmail(); }}>
-                                <div class="form-field">
-                                    <label for="email">{messages.labels.email}</label>
-                                    <input id="email" type="email" bind:value={newEmail} />
-                                </div>
-
-                                <div class="form-field">
-                                    <label for="email-password">
-                                        {messages.labels.currentPassword}
-                                    </label>
-
-                                    <div class="password-input">
-                                        <input id="email-password" type={showEmailPassword ? 'text' : 'password'} bind:value={emailPassword} />
-
-                                        <button type="button" class="password-toggle" onclick={() => showEmailPassword = !showEmailPassword} aria-label={showEmailPassword ? 'Hide password' : 'Show password'}>
-                                            {#if showEmailPassword}
-                                                <EyeOff />
-                                            {:else}
-                                                <Eye />
-                                            {/if}
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div class="form-field">
-                                    <button type="submit" disabled={updatingEmail} class="form-button">
-                                        {updatingEmail ? messages.labels.updating : messages.labels.updateEmail}
+                                    <button
+                                        type="button"
+                                        class="password-toggle"
+                                        onclick={() => showEmailPassword = !showEmailPassword}
+                                        aria-label={showEmailPassword ? 'Hide password' : 'Show password'}
+                                    >
+                                        {#if showEmailPassword}
+                                            <EyeOff />
+                                        {:else}
+                                            <Eye />
+                                        {/if}
                                     </button>
                                 </div>
-                            </form>
+                            </div>
 
-                            {#if emailMessage}
-                                <p class="notification">{emailMessage}</p>
-                            {/if}
-                        </div>
+                            <div class="form-field">
+                                <button type="submit" disabled={updatingEmail} class="form-button">
+                                    {updatingEmail ? messages.labels.updating : messages.labels.updateEmail}
+                                </button>
+                            </div>
+                        </form>
 
-                        <!-- PASSWORD -->
-                        <div class="account-section">
-                            <form onsubmit={(event) => { event.preventDefault(); changePassword(); }}>
-                                <div class="form-field">
-                                    <label for="current-password">
-                                        {messages.labels.currentPassword}
-                                    </label>
-
-                                    <div class="password-input">
-                                        <input id="current-password" type={showCurrentPassword ? 'text' : 'password'} bind:value={currentPassword} />
-
-                                        <button type="button" class="password-toggle" onclick={() => showCurrentPassword = !showCurrentPassword} aria-label={showCurrentPassword ? 'Hide password' : 'Show password'}>
-                                            {#if showCurrentPassword}
-                                                <EyeOff />
-                                            {:else}
-                                                <Eye />
-                                            {/if}
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div class="form-field">
-                                    <label for="new-password">
-                                        {messages.labels.newPassword}
-                                    </label>
-
-                                    <div class="password-input">
-                                        <input id="new-password" type={showNewPassword ? 'text' : 'password'} bind:value={newPassword} />
-
-                                        <button type="button" class="password-toggle" onclick={() => showNewPassword = !showNewPassword} aria-label={showNewPassword ? 'Hide password' : 'Show password'}>
-                                            {#if showNewPassword}
-                                                <EyeOff />
-                                            {:else}
-                                                <Eye />
-                                            {/if}
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div class="form-field">
-                                    <button type="submit" disabled={updatingPassword} class="form-button">
-                                        {updatingPassword ? messages.labels.updating : messages.labels.updatePassword}
-                                    </button>
-                                </div>
-                            </form>
-
-                            {#if passwordMessage}
-                                <p class="notification">{passwordMessage}</p>
-                            {/if}
-                        </div>
+                        {#if emailMessage}
+                            <p class="notification">{emailMessage}</p>
+                        {/if}
                     </div>
 
-                    <!-- SECONDARY NAVIGATION -->
-                    <nav class="account-secondary-nav" aria-label="Account actions">
-                        {#if profile?.profile?.verified === false}
-                            <div class="verification-section">
-                                <p>{page.params.lang === 'ga' ? 'Níl do sheoladh ríomhphoist fíoraithe fós.' : 'Your email address is not verified yet.'}</p>
+                    <!-- PASSWORD -->
+                    <div class="account-section">
+                        <form onsubmit={(event) => { event.preventDefault(); changePassword(); }}>
+                            <div class="form-field">
+                                <label for="current-password">
+                                    {messages.labels.currentPassword}
+                                </label>
 
-                                <button
-                                    type="button"
-                                    class="sidebar-link"
-                                    onclick={sendVerificationEmail}
-                                    disabled={sendingVerification}
-                                >
-                                    {sendingVerification
-                                        ? (page.params.lang === 'ga' ? 'Á sheoladh…' : 'Sending…')
-                                        : (page.params.lang === 'ga'
-                                            ? 'Fíoraigh do sheoladh ríomhphoist'
-                                            : 'Verify your email')}
-                                </button>
+                                <div class="password-input">
+                                    <input
+                                        id="current-password"
+                                        type={showCurrentPassword ? 'text' : 'password'}
+                                        bind:value={currentPassword}
+                                    />
 
-                                {#if verificationMessage}
-                                    <p role="status">{verificationMessage}</p>
-                                {/if}
-
-                                {#if verificationError}
-                                    <p class="error" role="alert">{verificationError}</p>
-                                {/if}
+                                    <button
+                                        type="button"
+                                        class="password-toggle"
+                                        onclick={() => showCurrentPassword = !showCurrentPassword}
+                                        aria-label={showCurrentPassword ? 'Hide password' : 'Show password'}
+                                    >
+                                        {#if showCurrentPassword}
+                                            <EyeOff />
+                                        {:else}
+                                            <Eye />
+                                        {/if}
+                                    </button>
+                                </div>
                             </div>
+
+                            <div class="form-field">
+                                <label for="new-password">
+                                    {messages.labels.newPassword}
+                                </label>
+
+                                <div class="password-input">
+                                    <input
+                                        id="new-password"
+                                        type={showNewPassword ? 'text' : 'password'}
+                                        bind:value={newPassword}
+                                    />
+
+                                    <button
+                                        type="button"
+                                        class="password-toggle"
+                                        onclick={() => showNewPassword = !showNewPassword}
+                                        aria-label={showNewPassword ? 'Hide password' : 'Show password'}
+                                    >
+                                        {#if showNewPassword}
+                                            <EyeOff />
+                                        {:else}
+                                            <Eye />
+                                        {/if}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-field">
+                                <button type="submit" disabled={updatingPassword} class="form-button">
+                                    {updatingPassword ? messages.labels.updating : messages.labels.updatePassword}
+                                </button>
+                            </div>
+                        </form>
+
+                        {#if passwordMessage}
+                            <p class="notification">{passwordMessage}</p>
                         {/if}
-
-                        <a href={withBase(`/${page.params.lang}/account/delete-account`)} class="delete-account-link">
-                            {page.params.lang === 'ga' ? 'Scrios cuntas' : 'Delete account'}
-                        </a>
-
-                        <button type="button" class="logout-link" onclick={logout}>{messages.labels.logout}</button>
-                    </nav>
-
-                    <!-- RIGHT COLUMN -->
-                    <div class="account-sidebar"></div>
+                    </div>
                 </div>
             </section>
         {/if}
