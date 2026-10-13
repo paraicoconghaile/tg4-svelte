@@ -388,7 +388,7 @@
             "main"
             "content"
             "secondary";
-        row-gap: 1.5rem;
+        row-gap: 0rem;
     }
 
     .account-main-nav {
