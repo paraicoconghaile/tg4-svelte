@@ -1,7 +1,8 @@
 <script lang="ts">
-    import { onMount, getContext } from 'svelte';
+    import { getContext, onMount } from 'svelte';
     import { page } from '$app/state';
     import { countries } from '$lib/data/countries';
+    import { withBase } from '$lib/utils/paths';
 
     const account = getContext<{
         pu: any;
@@ -9,9 +10,6 @@
     }>('tg4-account');
 
     let profile: any = null;
-
-    let loading = $state(true);
-    let error = $state('');
     let saving = $state(false);
     let saved = $state(false);
 

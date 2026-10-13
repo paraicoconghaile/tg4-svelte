@@ -7,9 +7,9 @@
     import { isProfileComplete } from '$lib/sso/profile-complete';
 
     let { children } = $props();
+
     let loading = $state(true);
     let error = $state('');
-
     let pu = $state<any>(null);
     let profile = $state<any>(null);
     let profileComplete = $state(false);
@@ -24,7 +24,6 @@
     });
 
     let isVerified = $derived(profile?.profile?.verified === true);
-
     let sendingVerification = $state(false);
     let verificationMessage = $state('');
     let verificationError = $state('');
