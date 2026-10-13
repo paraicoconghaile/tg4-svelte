@@ -5,6 +5,7 @@
     import { withBase } from '$lib/utils/paths';
 
     let loading = $state(true);
+    let error = $state('');
 
     const account = getContext<{
         pu: any;
