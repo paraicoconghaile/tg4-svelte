@@ -56,12 +56,12 @@
         console.log('LOGIN MOUNT', page.url.pathname);
         try {
             pu = await loadPeachUser();
-            console.log('LOGIN PEACH LOADED');
+            //console.log('LOGIN PEACH LOADED');
 
             // Already logged in?
             try {
                 await pu.isAuthorized();
-                console.log('LOGIN: ALREADY LOGGED IN');
+                //console.log('LOGIN: ALREADY LOGGED IN');
 
                 // If this succeeds, they're already logged in
                 window.location.href = withBase(`/${page.params.lang}/account/account/`);
@@ -73,7 +73,7 @@
         } catch (err) {
             console.error('Peach User error:', err);
             error = messages.labels.errorLogin;
-        }    finally {
+        } finally {
             checkingAuth = false;
         }
     });
@@ -115,7 +115,6 @@
 
         } catch (err) {
             console.error('Login error:', err);
-
             error = messages.labels.invalidDetails;
             loggingIn = false;
         }
