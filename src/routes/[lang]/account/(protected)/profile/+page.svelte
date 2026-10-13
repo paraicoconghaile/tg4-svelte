@@ -4,6 +4,8 @@
     import { countries } from '$lib/data/countries';
     import { withBase } from '$lib/utils/paths';
 
+    let loading = $state(true);
+
     const account = getContext<{
         pu: any;
         profile: any;
