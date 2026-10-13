@@ -254,11 +254,8 @@
                             {messages.labels.deleteAccount}
                         </a>
 
-                        <button
-                            type="button"
-                            class="logout-link"
-                            onclick={logout}
-                        >
+                        
+                        <button type="button" class="logout-link" onclick={logout}>
                             {messages.labels.logout}
                         </button>
                     </nav>
@@ -350,6 +347,26 @@
     opacity: 0.45;
     cursor: not-allowed;
     pointer-events: none;
+}
+
+.sidebar-link,
+.logout-link {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    line-height: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.delete-account-link {
+    color: #c62828 !important;
+}
+
+.delete-account-link:hover {
+    color: #8e0000;
 }
 
 @media (max-width: 1160px) {
