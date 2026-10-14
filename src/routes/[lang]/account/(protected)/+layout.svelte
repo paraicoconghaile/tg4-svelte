@@ -85,7 +85,7 @@
                     console.error('Logout error:', err);
                 }
 
-                await goto(`/${page.params.lang}/account/login`);
+                await goto(withBase(`/${page.params.lang}/account/login`));
                 return;
             }
 
@@ -146,9 +146,7 @@
         try {
             await pu?.logout();
         } finally {
-            window.location.href = withBase(
-                `/${page.params.lang}/account/login`
-            );
+            window.location.href = withBase(`/${page.params.lang}/account/login`);
         }
     }
 </script>

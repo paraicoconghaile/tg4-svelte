@@ -131,8 +131,8 @@
     <title>{text.title} | TG4</title>
 </svelte:head>
 
-<section class="delete-account">
-    <h1>{text.title}</h1>
+<section class="account-page-content">
+    <p class="frmTitle">{text.title}</p>
 
     {#if successMessage}
         <div class="success-message" role="status">
@@ -156,13 +156,11 @@
 
 {#if modalOpen}
     <div class="modal-backdrop">
-        <section
-            class="delete-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="delete-modal-title"
-        >
-            <h2 id="delete-modal-title">{text.title}</h2>
+        <section class="delete-modal" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title">
+            <div class="modal-header">  
+                <h2 id="delete-modal-title">{text.title}</h2>
+                <button type="button" class="modal-close" onclick={closeModal} disabled={deleting} aria-label={text.close}>&times;</button>
+            </div>
 
             <p class="warning-message">{text.warning}</p>
             <p>{text.explanation}</p>
@@ -183,11 +181,7 @@
                 />
 
                 <label class="show-password">
-                    <input
-                        type="checkbox"
-                        bind:checked={showPassword}
-                        disabled={deleting}
-                    />
+                    <input type="checkbox" bind:checked={showPassword} disabled={deleting} />
                     {text.showPassword}
                 </label>
 
@@ -198,20 +192,11 @@
                 {/if}
 
                 <div class="modal-actions">
-                    <button
-                        type="button"
-                        class="secondary-button"
-                        onclick={closeModal}
-                        disabled={deleting}
-                    >
+                    <button type="button" class="secondary-button" onclick={closeModal} disabled={deleting}>
                         {text.close}
                     </button>
 
-                    <button
-                        type="submit"
-                        class="delete-button"
-                        disabled={!password.trim() || deleting}
-                    >
+                    <button type="submit" disabled={!password.trim() || deleting}>
                         {deleting ? text.deleting : text.confirm}
                     </button>
                 </div>
@@ -237,8 +222,6 @@
 }
 
 .delete-button {
-    padding: 0.75rem 1rem;
-    color: white;
     background: #d7193f;
     border: 1px solid #d7193f;
     cursor: pointer;
@@ -318,6 +301,31 @@ button:disabled {
 
 .success-message a {
     color: #b51270;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.modal-header h2 {
+    margin: 0;
+}
+
+.modal-close {
+    padding: 0;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.modal-close:hover:not(:disabled) {
+    opacity: 0.7;
 }
 
 @media (max-width: 480px) {
