@@ -1,14 +1,17 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+    import { getContext, onMount } from 'svelte';
     import { page } from '$app/state';
-    import { goto } from '$app/navigation';
-    import { requireAuthentication } from '$lib/sso/auth';
-    import { withBase } from '$lib/utils/paths';
 
-    let pu: any;
-    let profile: any = null;
     let loading = $state(true);
     let error = $state('');
+
+    const account = getContext<{
+        pu: any;
+        profile: any;
+    }>('tg4-account');
+
+    let profile: any = null;
+
     let saving = $state(false);
     let saved = $state(false);
 
@@ -71,47 +74,27 @@
     };
 
     const messages = $derived(prefMessages [page.params.lang === 'ga' ? 'ga' : 'en']);
+    
+    onMount(() => {
+        profile = account.profile;
 
-    onMount(async () => {
-        try {
-            pu = await requireAuthentication(page.params.lang);
-            if (!pu) return;
-
-            // User is authenticated, so load their profile
-            profile = await pu.getCombinedSessionAndPreferenceProfile();
-
-            console.log('PROFILE:', profile);
-
-            const unauthorized = profile?.profile?.error === 'Unauthorized' || profile?.preferences?.error === 'Unauthorized';
-
-            if (unauthorized) {
-                console.warn('Session is stale - logging out');
-
-                try {
-                    await pu.logout();
-                } catch (err) {
-                    console.error('Logout error:', err);
-                }
-
-                await goto(`/${page.params.lang}/account/login`);
-                return;
-            }
-
-            ads = profile.preferences.extraPref?.ads ?? false;
-            subtitles = profile.preferences.extraPref?.subtitles ?? false;
-            promos = profile.preferences.extraPref?.promos ?? false;
-            credits = profile.preferences.extraPref?.credits ?? false;
-            nextEpisode = profile.preferences.extraPref?.nextEpisode ?? false;
-            accessibilityView = profile.preferences.extraPref?.accessibilityView ?? false;
-            genres = [...(profile.preferences.extraPref?.genres ?? [])];
-
+        if (!profile) {
+            error = 'Unable to load your preferences.';
             loading = false;
-
-        } catch (err) {
-            console.error('Profile error:', err);
-            error = err instanceof Error ? err.message : String(err);
-            loading = false;
+            return;
         }
+
+        const extraPref = profile.preferences?.extraPref ?? {};
+
+        ads = extraPref.ads ?? false;
+        subtitles = extraPref.subtitles ?? false;
+        promos = extraPref.promos ?? false;
+        credits = extraPref.credits ?? true;
+        nextEpisode = extraPref.nextEpisode ?? true;
+        accessibilityView = extraPref.accessibilityView ?? false;
+        genres = [...(extraPref.genres ?? [])];
+
+        loading = false;
     });
 
     async function handleSubmit() {
@@ -140,7 +123,7 @@
 
             console.log('Saving preferences:', updatedProfile);
 
-            await pu.setCombinedSessionAndPreferenceProfile('profile_preference_key', updatedProfile);
+            await account.pu.setCombinedSessionAndPreferenceProfile('profile_preference_key', updatedProfile);
             profile = updatedProfile;
             saved = true;
 
@@ -152,199 +135,116 @@
     }
 </script>
 
-<section class="preference-page">
-    <section class="episodes">
-        {#if loading}
-            <p>Loading...</p>
-        {:else if error}
-            <p>{error}</p>
-        {:else}
-            <section class="account">
-                <div class="account-layout">
-                    <!-- LEFT COLUMN -->
-                    <nav class="account-tabs">
-                        <a href={withBase(`/${page.params.lang}/account/account`)}>{messages.labels.account}</a>
-                        <a href={withBase(`/${page.params.lang}/account/profile`)}>{messages.labels.profile}</a>
-                        <a href={withBase(`/${page.params.lang}/account/preferences`)} class="active">{messages.labels.preferencesLink}</a>
-                    </nav>
+{#if loading}
+    <p>{messages.labels.loading}</p>
+{:else if error}
+    <p>{error}</p>
+{:else}
+    <div class="account-page-content">
+        <h1>{messages.labels.preferences}</h1>
+        <form onsubmit={(event) => {event.preventDefault(); handleSubmit();}}>
+            <fieldset>
+                <div class="form-field">
+                    <label class="toggle">
+                        <input
+                            class="toggle-checkbox"
+                            type="checkbox"
+                            bind:checked={ads}
+                        />
+                        <span class="toggle-switch"></span>
+                        <span class="toggle-label">{messages.labels.ads}</span>
+                    </label>
+                </div>
+                <div class="form-field">
+                    <label class="toggle">
+                        <input
+                            class="toggle-checkbox"
+                            type="checkbox"
+                            bind:checked={subtitles}
+                        />
+                        <span class="toggle-switch"></span>
+                        <span class="toggle-label">{messages.labels.subtitles}</span>
+                    </label>
+                </div>
+                <div class="form-field">
+                    <label class="toggle">
+                        <input
+                            class="toggle-checkbox"
+                            type="checkbox"
+                            bind:checked={promos}
+                        />
+                        <span class="toggle-switch"></span>
+                        <span class="toggle-label">{messages.labels.promos}</span>
+                    </label>
+                </div>
+                <div class="form-field">
+                    <h3>{messages.labels.genres}</h3>
 
-                    <!-- MIDDLE COLUMN -->
-                    <div class="account-content">
-                        <h1>{messages.labels.preferences}</h1>
-                            <form onsubmit={(event) => {event.preventDefault(); handleSubmit();}}>
-                                <fieldset>
-                                    <div class="form-field">
-                                        <label class="toggle">
-                                            <input
-                                                class="toggle-checkbox"
-                                                type="checkbox"
-                                                bind:checked={ads}
-                                            />
-                                            <span class="toggle-switch"></span>
-                                            <span class="toggle-label">{messages.labels.ads}</span>
-                                        </label>
-                                    </div>
-                                    <div class="form-field">
-                                        <label class="toggle">
-                                            <input
-                                                class="toggle-checkbox"
-                                                type="checkbox"
-                                                bind:checked={subtitles}
-                                            />
-                                            <span class="toggle-switch"></span>
-                                            <span class="toggle-label">{messages.labels.subtitles}</span>
-                                        </label>
-                                    </div>
-                                    <div class="form-field">
-                                        <label class="toggle">
-                                            <input
-                                                class="toggle-checkbox"
-                                                type="checkbox"
-                                                bind:checked={promos}
-                                            />
-                                            <span class="toggle-switch"></span>
-                                            <span class="toggle-label">{messages.labels.promos}</span>
-                                        </label>
-                                    </div>
-                                    <div class="form-field">
-                                        <h3>{messages.labels.genres}</h3>
-
-                                        <div class="genre-options">
-                                            {#each availableGenres as genre}
-                                                <label class:selected={genres.includes(genre.value)}>
-                                                    <input
-                                                        type="checkbox"
-                                                        value={genre.value}
-                                                        checked={genres.includes(genre.value)}
-                                                        onchange={(event) => {
-                                                            if (event.currentTarget.checked) {
-                                                                genres = [...genres, genre.value];
-                                                            } else {
-                                                                genres = genres.filter(value => value !== genre.value);
-                                                            }
-                                                        }}
-                                                    />
-                                                    <span>{genre.label}</span>
-                                                </label>
-                                            {/each}
-                                        </div>
-                                    </div>
-                                    <div class="form-field">
-                                        <label class="toggle">
-                                            <input
-                                                class="toggle-checkbox"
-                                                type="checkbox"
-                                                bind:checked={credits}
-                                            />
-                                            <span class="toggle-switch"></span>
-                                            <span class="toggle-label">{messages.labels.credits}</span>
-                                        </label>
-                                    </div>
-                                    <div class="form-field">
-                                        <label class="toggle">
-                                            <input
-                                                class="toggle-checkbox"
-                                                type="checkbox"
-                                                bind:checked={nextEpisode}
-                                            />
-                                            <span class="toggle-switch"></span>
-                                            <span class="toggle-label">{messages.labels.nextEpisode}</span>
-                                        </label>
-                                    </div>
-                                    <div class="form-field">
-                                        <label class="toggle">
-                                            <input
-                                                class="toggle-checkbox"
-                                                type="checkbox"
-                                                bind:checked={accessibilityView}
-                                            />
-                                            <span class="toggle-switch"></span>
-                                            <span class="toggle-label">{messages.labels.accessibilityView}</span>
-                                        </label>
-                                    </div>
-
-                                    <button type="submit" class="form-button" disabled={saving}>{saving ? messages.labels.updating : messages.labels.savebutton}</button>
-
-                                    {#if saved}
-                                        <p class="notification">{messages.labels.preferenceSaved}</p>
-                                    {/if}
-                                </fieldset>
-                            </form>
-                        </div>
+                    <div class="genre-options">
+                        {#each availableGenres as genre}
+                            <label class:selected={genres.includes(genre.value)}>
+                                <input
+                                    type="checkbox"
+                                    value={genre.value}
+                                    checked={genres.includes(genre.value)}
+                                    onchange={(event) => {
+                                        if (event.currentTarget.checked) {
+                                            genres = [...genres, genre.value];
+                                        } else {
+                                            genres = genres.filter(value => value !== genre.value);
+                                        }
+                                    }}
+                                />
+                                <span>{genre.label}</span>
+                            </label>
+                        {/each}
                     </div>
+                </div>
+                <div class="form-field">
+                    <label class="toggle">
+                        <input
+                            class="toggle-checkbox"
+                            type="checkbox"
+                            bind:checked={credits}
+                        />
+                        <span class="toggle-switch"></span>
+                        <span class="toggle-label">{messages.labels.credits}</span>
+                    </label>
+                </div>
+                <div class="form-field">
+                    <label class="toggle">
+                        <input
+                            class="toggle-checkbox"
+                            type="checkbox"
+                            bind:checked={nextEpisode}
+                        />
+                        <span class="toggle-switch"></span>
+                        <span class="toggle-label">{messages.labels.nextEpisode}</span>
+                    </label>
+                </div>
+                <div class="form-field">
+                    <label class="toggle">
+                        <input
+                            class="toggle-checkbox"
+                            type="checkbox"
+                            bind:checked={accessibilityView}
+                        />
+                        <span class="toggle-switch"></span>
+                        <span class="toggle-label">{messages.labels.accessibilityView}</span>
+                    </label>
+                </div>
 
-                    <!-- RIGHT COLUMN -->
-                    <div class="account-sidebar"></div>
-            </section>
-        {/if}
-    </section>
-</section>
+                <button type="submit" class="form-button" disabled={saving}>{saving ? messages.labels.updating : messages.labels.savebutton}</button>
+
+                {#if saved}
+                    <p class="notification">{messages.labels.preferenceSaved}</p>
+                {/if}
+            </fieldset>
+        </form>
+    </div>
+{/if}
 
 <style>
-.preference-page {
-    max-width: var(--page-width);
-    margin: 0 auto;
-    padding: 20px;
-    background-color: var(--genre-background);
-}
-
-.account-layout {
-    display: grid;
-    grid-template-columns: 250px minmax(0, 600px) 180px;
-    gap: 40px;
-    align-items: start;
-}
-
-.account-tabs {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    padding-top: 32px;
-}
-
-.account-tabs a {
-    position: relative;
-    width: fit-content;
-    padding: 10px 0;
-    text-decoration: none;
-    color: inherit;
-}
-
-.account-tabs a.active {
-    font-weight: bold;
-}
-
-.account-tabs a::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 3px;
-    background-color: var(--link-colour);
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
-.account-tabs a:hover::after,
-.account-tabs a.active::after {
-    opacity: 1;
-}
-
-.account-content {
-    min-width: 0;
-}
-
-.account-section {
-    margin-bottom: 40px;
-}
-
-.account-section form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
 fieldset {
     border: 0;
     padding: 0;
@@ -382,10 +282,10 @@ fieldset {
 }
 
 .genre-options span {
-    background: var(--tg4-grey-2);
     display: block;
     padding: 10px 16px;
-    border-radius: 0px;
+    background: var(--tg4-grey-2);
+    border-radius: 0;
     cursor: pointer;
 }
 
@@ -456,37 +356,9 @@ fieldset {
     padding: 10px 20px;
     background: var(--tg4-grey-2);
     color: white;
-    border-radius: 0px;
+    border-radius: 0;
     transition:
         background-color 0.2s ease,
         color 0.2s ease;
-}
-
-@media (max-width: 1160px) {
-    .account-layout {
-        grid-template-columns: 200px minmax(0, 700px);
-        gap: 20px;
-    }
-
-    .account-sidebar {
-        display: none;
-    }
-}
-
-@media (max-width: 800px) {
-    .account-layout {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    .account-tabs {
-        flex-direction: row;
-        gap: 25px;
-        padding-top: 0;
-    }
-
-    .account-sidebar {
-        display: none;
-    }
 }
 </style>
