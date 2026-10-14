@@ -182,7 +182,7 @@
 </script>
 
 <div class="account-page-content">
-    <h1>{messages.labels.account}</h1>
+    <p class="frmTitle">{messages.labels.account}</p>
 
     <!-- EMAIL -->
     <div class="account-section">
@@ -220,7 +220,7 @@
             </div>
 
             <div class="form-field">
-                <button type="submit" disabled={updatingEmail} class="form-button">
+                <button type="submit" disabled={updatingEmail}>
                     {updatingEmail ? messages.labels.updating : messages.labels.updateEmail}
                 </button>
             </div>
@@ -289,7 +289,7 @@
             </div>
 
             <div class="form-field">
-                <button type="submit" disabled={updatingPassword} class="form-button">
+                <button type="submit" disabled={updatingPassword}>
                     {updatingPassword ? messages.labels.updating : messages.labels.updatePassword}
                 </button>
             </div>
@@ -302,109 +302,6 @@
 </div>
 
 <style>
-.account-page {
-    max-width: var(--page-width);
-    margin: 0 auto;
-    padding: 20px;
-    background-color: var(--genre-background);
-}
-
-.account-layout {
-    display: grid;
-    grid-template-columns: 220px minmax(0, 1fr) 180px;
-    grid-template-rows: auto 1fr;
-    grid-template-areas:
-        "main content sidebar"
-        "secondary content sidebar";
-    column-gap: 2rem;
-    row-gap: 1.5rem;
-    align-items: start;
-}
-
-.account-main-nav {
-    grid-area: main;
-}
-
-.account-content {
-    grid-area: content;
-    min-width: 0;
-}
-
-.account-secondary-nav {
-    grid-area: secondary;
-    align-self: end;
-}
-
-.account-sidebar {
-    grid-area: sidebar;
-}
-
-.account-main-nav,
-.account-secondary-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    padding-top: 42px;
-}
-
-.account-main-nav a,
-.account-secondary-nav a,
-.logout-link {
-    text-decoration: none;
-}
-
-.account-main-nav a.active {
-    font-weight: 700;
-}
-
-.verification-section {
-    margin-bottom: 0.75rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #ddd;
-}
-
-.verification-section p {
-    font-size: 0.9rem;
-    line-height: 1.5;
-}
-
-.sidebar-link,
-.logout-link {
-    padding: 0;
-    border: 0;
-    background: none;
-    color: inherit;
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-}
-
-.sidebar-link {
-    text-decoration: underline;
-    text-underline-offset: 3px;
-}
-
-.delete-account-link {
-    color: #c62828;
-}
-
-.logout-link {
-    cursor: pointer;
-}
-
-.sidebar-link:disabled {
-    opacity: 0.6;
-    cursor: wait;
-}
-
-.delete-account-link:hover {
-    color: #8e0000;
-}
-
-.account-content {
-    min-width: 0;
-}
-
 .account-section {
     margin-bottom: 40px;
 }
@@ -417,12 +314,6 @@
 
 .form-field {
     margin-bottom: 10px;
-}
-
-.form-field label {
-    display: block;
-    margin-bottom: 4px;
-    font-weight: bold;
 }
 
 .form-field input {
@@ -460,76 +351,5 @@
     transition:
         background-color 0.2s ease,
         color 0.2s ease;
-}
-
-.account-main-nav a,
-.account-secondary-nav a,
-.account-secondary-nav .logout-link {
-    display: inline-block;
-    width: fit-content;
-    padding-bottom: 5px;
-    border-bottom: 2px solid transparent;
-    text-decoration: none;
-    transition: border-color 0.2s ease;
-}
-
-.account-main-nav a:hover,
-.account-main-nav a.active,
-.account-secondary-nav a:hover,
-.account-secondary-nav a.active,
-.account-secondary-nav .logout-link:hover,
-.account-secondary-nav .logout-link.active {
-    border-bottom-color: #FF126C;
-}
-
-.account-main-nav .disabled {
-    color: inherit;
-    opacity: 0.45;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
-@media (max-width: 1160px) {
-    .account-layout {
-        grid-template-columns: 200px minmax(0, 700px);
-        gap: 20px;
-    }
-
-    .account-sidebar {
-        display: none;
-    }
-}
-
-@media (max-width: 800px) {
-    .account-layout {
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-rows: auto auto auto;
-        grid-template-areas:
-            "main"
-            "content"
-            "secondary";
-        row-gap: 1.5rem;
-    }
-
-    .account-main-nav {
-        grid-area: main;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 0.75rem 1.25rem;
-    }
-
-    .account-content {
-        grid-area: content;
-    }
-
-    .account-secondary-nav {
-        grid-area: secondary;
-        padding-top: 0;
-    }
-
-    .account-sidebar {
-        display: none;
-    }
 }
 </style>

@@ -8,7 +8,7 @@
 
     let { children } = $props();
 
-    let loading = $state(true);
+    let loading = $state(false);
     let error = $state('');
     let pu = $state<any>(null);
     let profile = $state<any>(null);
@@ -67,7 +67,7 @@
         accountMessages[page.params.lang === 'ga' ? 'ga' : 'en']
     );
 
-    onMount(async () => {
+    /* onMount(async () => {
         try {
             pu = await requireAuthentication(page.params.lang);
             if (!pu) return;
@@ -96,7 +96,7 @@
         } finally {
             loading = false;
         }
-    });
+    }); */
 
     async function sendVerificationEmail() {
         verificationMessage = '';
@@ -170,10 +170,7 @@
         <section class="episodes">
             <section class="account">
                 <div class="account-layout">
-                    <nav
-                        class="account-main-nav"
-                        aria-label="Account navigation"
-                    >
+                    <nav class="account-main-nav" aria-label="Account navigation">
                         <a
                             href={withBase(`/${page.params.lang}/account/account`)}
                             class:active={page.url.pathname.endsWith('/account/account')}
@@ -309,7 +306,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    padding-top: 42px;
+    padding-top: 28px;
 }
 
 .account-main-nav a,
@@ -327,10 +324,6 @@
     text-decoration: none;
     cursor: pointer;
     transition: border-color 0.2s ease;
-}
-
-.account-main-nav a.active {
-    font-weight: 700;
 }
 
 .account-main-nav a:hover,

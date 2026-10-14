@@ -110,7 +110,7 @@
 </script>
 
 <div class="account-page">
-    <h1>{messages.labels.register}</h1>
+    <p class="frmTitle">{messages.labels.register}</p>
 
     <form onsubmit={(event) => {
         event.preventDefault();
@@ -161,7 +161,7 @@
         {/if}
 
         <div class="form-field">
-            <button type="submit" class="form-button" disabled={registering}>
+            <button type="submit" disabled={registering}>
                 {registering ? messages.labels.registering : messages.labels.register}
             </button>
         </div>
@@ -226,12 +226,6 @@ input {
 
 .form-field {
     margin-bottom: 20px;
-}
-
-.form-field label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: bold;
 }
 
 .form-field input {

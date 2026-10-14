@@ -125,7 +125,7 @@
     {#if checkingAuth}
         <p>{messages.labels.loading}</p>
     {:else}
-        <h1>{messages.labels.login}</h1>
+        <p class="frmTitle">{messages.labels.login}</p>
 
         <form onsubmit={(event) => { event.preventDefault(); login(); }}>
             <div class="form-field">
@@ -146,7 +146,7 @@
                 </div>
             </div>
             <div class="form-field">
-                <button type="submit" disabled={loggingIn} class="form-button">{loggingIn ? messages.labels.loggingIn : messages.labels.login}</button>
+                <button type="submit" disabled={loggingIn}>{loggingIn ? messages.labels.loggingIn : messages.labels.login}</button>
             </div>
             <div class="form-field">
                 {#if error}
@@ -198,12 +198,6 @@ input {
 
 .form-field {
     margin-bottom: 20px;
-}
-
-.form-field label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: bold;
 }
 
 .form-field input {

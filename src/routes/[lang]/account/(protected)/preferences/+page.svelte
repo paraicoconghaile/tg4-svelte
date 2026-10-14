@@ -41,6 +41,7 @@
                 profile: 'Profile',
                 preferences: 'Edit your preferences',
                 preferencesLink: 'Preferences',
+                genres: 'Genres',
                 ads: 'Ads',
                 subtitles: 'Subtitles',
                 promos: 'Promos',
@@ -50,7 +51,8 @@
                 updating: 'Updating...',
                 loading: 'Loading...',
                 savebutton: 'Save',
-                preferenceSaved: 'Preferences Saved'
+                preferenceSaved: 'Preferences Saved',
+                toggleOptions: 'Yes/No'
             }
         },
         ga: {
@@ -59,6 +61,7 @@
                 profile: 'Próifíl',
                 preferences: 'Athraigh do sainrogha phearsanta',
                 preferencesLink: 'Sainrogha phearsanta',
+                genres: 'Séanraí',
                 ads: 'Fógraí',
                 subtitles: 'Fotheidil',
                 promos: 'Promos',
@@ -68,7 +71,8 @@
                 updating: 'Ag uasdhátú...',
                 loading: 'Ag lódáil...',
                 savebutton: 'Sabháil',
-                preferenceSaved: 'Sainrogha Phearsanta Athruithe'
+                preferenceSaved: 'Sainrogha Phearsanta Athruithe',
+                toggleOptions: 'Tá/Níl'
             }
         }
     };
@@ -141,45 +145,59 @@
     <p>{error}</p>
 {:else}
     <div class="account-page-content">
-        <h1>{messages.labels.preferences}</h1>
+        <p class="frmTitle">{messages.labels.preferences}</p>
+        <p>Allowing these options will give you have a personalised experience for all TG4 content. Giving you access to personalised newsletters and recommendations from us based on your interests.</p>
+
         <form onsubmit={(event) => {event.preventDefault(); handleSubmit();}}>
             <fieldset>
                 <div class="form-field">
-                    <label class="toggle">
-                        <input
-                            class="toggle-checkbox"
-                            type="checkbox"
-                            bind:checked={ads}
-                        />
-                        <span class="toggle-switch"></span>
-                        <span class="toggle-label">{messages.labels.ads}</span>
-                    </label>
+                    <label class="frmTitle">{messages.labels.ads}</label>
+                    <div class="form-setting-row">
+                        <p>Allow advertisements in-between watching content</p>
+                        <label class="toggle">
+                            <input
+                                class="toggle-checkbox"
+                                type="checkbox"
+                                bind:checked={ads}
+                            />
+                            <span class="toggle-switch"></span>
+                            <span class="toggle-label">{messages.labels.toggleOptions}</span>
+                        </label>
+                    </div>
                 </div>
                 <div class="form-field">
-                    <label class="toggle">
-                        <input
-                            class="toggle-checkbox"
-                            type="checkbox"
-                            bind:checked={subtitles}
-                        />
-                        <span class="toggle-switch"></span>
-                        <span class="toggle-label">{messages.labels.subtitles}</span>
-                    </label>
+                    <label class="frmTitle">{messages.labels.subtitles}</label>
+                    <div class="form-setting-row">
+                        <p>Allow subtitles to be on automatically</p>
+                        <label class="toggle">
+                            <input
+                                class="toggle-checkbox"
+                                type="checkbox"
+                                bind:checked={subtitles}
+                            />
+                            <span class="toggle-switch"></span>
+                            <span class="toggle-label">{messages.labels.toggleOptions}</span>
+                        </label>
+                    </div>
                 </div>
                 <div class="form-field">
-                    <label class="toggle">
-                        <input
-                            class="toggle-checkbox"
-                            type="checkbox"
-                            bind:checked={promos}
-                        />
-                        <span class="toggle-switch"></span>
-                        <span class="toggle-label">{messages.labels.promos}</span>
-                    </label>
+                    <label class="frmTitle">{messages.labels.promos}</label>
+                    <div class="form-setting-row">
+                        <p>Allow promos in-between watching content</p>
+                        <label class="toggle">
+                            <input
+                                class="toggle-checkbox"
+                                type="checkbox"
+                                bind:checked={promos}
+                            />
+                            <span class="toggle-switch"></span>
+                            <span class="toggle-label">{messages.labels.toggleOptions}</span>
+                        </label>
+                    </div>
                 </div>
                 <div class="form-field">
-                    <h3>{messages.labels.genres}</h3>
-
+                    <label class="frmTitle">{messages.labels.genres}</label>
+                    <p>Select your favourite genre(s)</p>
                     <div class="genre-options">
                         {#each availableGenres as genre}
                             <label class:selected={genres.includes(genre.value)}>
@@ -201,40 +219,55 @@
                     </div>
                 </div>
                 <div class="form-field">
-                    <label class="toggle">
-                        <input
-                            class="toggle-checkbox"
-                            type="checkbox"
-                            bind:checked={credits}
-                        />
-                        <span class="toggle-switch"></span>
-                        <span class="toggle-label">{messages.labels.credits}</span>
-                    </label>
+                    <label class="frmTitle">{messages.labels.credits}</label>
+
+                    <div class="form-setting-row">
+                        <p>Allow credits to be on automatically</p>
+                        <label class="toggle">
+                            <input
+                                class="toggle-checkbox"
+                                type="checkbox"
+                                bind:checked={credits}
+                            />
+                            <span class="toggle-switch"></span>
+                            <span class="toggle-label">{messages.labels.toggleOptions}</span>
+                        </label>
+                    </div>
                 </div>
                 <div class="form-field">
-                    <label class="toggle">
-                        <input
-                            class="toggle-checkbox"
-                            type="checkbox"
-                            bind:checked={nextEpisode}
-                        />
-                        <span class="toggle-switch"></span>
-                        <span class="toggle-label">{messages.labels.nextEpisode}</span>
-                    </label>
+                    <label class="frmTitle">{messages.labels.nextEpisode}</label>
+
+                    <div class="form-setting-row">
+                        <p>Automatically plays the next episode</p>
+                        <label class="toggle">
+                            <input
+                                class="toggle-checkbox"
+                                type="checkbox"
+                                bind:checked={nextEpisode}
+                            />
+                            <span class="toggle-switch"></span>
+                            <span class="toggle-label">{messages.labels.toggleOptions}</span>
+                        </label>
+                    </div>
                 </div>
                 <div class="form-field">
-                    <label class="toggle">
-                        <input
-                            class="toggle-checkbox"
-                            type="checkbox"
-                            bind:checked={accessibilityView}
-                        />
-                        <span class="toggle-switch"></span>
-                        <span class="toggle-label">{messages.labels.accessibilityView}</span>
-                    </label>
+                    <label class="frmTitle">{messages.labels.accessibilityView}</label>
+
+                    <div class="form-setting-row">
+                        <p>Switch to high accessibility view</p>
+                        <label class="toggle">
+                            <input
+                                class="toggle-checkbox"
+                                type="checkbox"
+                                bind:checked={accessibilityView}
+                            />
+                            <span class="toggle-switch"></span>
+                            <span class="toggle-label">{messages.labels.toggleOptions}</span>
+                        </label>
+                    </div>
                 </div>
 
-                <button type="submit" class="form-button" disabled={saving}>{saving ? messages.labels.updating : messages.labels.savebutton}</button>
+                <button type="submit" disabled={saving}>{saving ? messages.labels.updating : messages.labels.savebutton}</button>
 
                 {#if saved}
                     <p class="notification">{messages.labels.preferenceSaved}</p>
@@ -245,12 +278,6 @@
 {/if}
 
 <style>
-fieldset {
-    border: 0;
-    padding: 0;
-    margin: 0;
-}
-
 .form-field {
     margin-bottom: 20px;
 }
@@ -262,6 +289,22 @@ fieldset {
 
 .form-row .form-field {
     flex: 1;
+}
+
+.form-setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.form-setting-row p {
+    margin: 0;
+}
+
+.form-setting-row .toggle {
+    margin-top: 0;
+    flex-shrink: 0;
 }
 
 .genre-options {

@@ -12,7 +12,7 @@
     }>('tg4-account');
 
     let profile: any = null;
-    
+
     let saving = $state(false);
     let saved = $state(false);
 
@@ -226,7 +226,8 @@
     <p>{error}</p>
 {:else}
     <div class="account-page-content">
-        <h1>{messages.labels.profile}</h1>
+        <p class="frmTitle">{messages.labels.profile}</p>
+
         <form onsubmit={(event) => {event.preventDefault(); handleSubmit();}}>
             <fieldset>
                 <div class="form-row">
@@ -244,7 +245,8 @@
                     <input id="displayName" type="text" bind:value={displayName} required />
                 </div>
                 <div class="form-field">
-                    <label>{messages.labels.age}</label>
+                    <label class="frmTitle">{messages.labels.age}</label>
+                    <p>Some TG4 programming contains mature content, including adult language, graphic violence, and/or explicit sexual content. It is intended for adult audiences only. Viewer discretion is advised.</p>
 
                     <label class="toggle">
                         <input class="toggle-checkbox" type="checkbox" bind:checked={age} />
@@ -253,7 +255,7 @@
                     </label>
                 </div>
                 <div class="form-field">
-                    <label>{messages.labels.gender}</label>
+                    <label class="frmTitle">{messages.labels.gender}</label>
 
                     <div class="radio-options">
                         <label>
@@ -278,7 +280,7 @@
                     </div>
                 </div>
                 <div class="form-field">
-                    <label>{messages.labels.irishLevel}</label>
+                    <label class="frmTitle">{messages.labels.irishLevel}</label>
 
                     <div class="irish-options">
                         <label class:selected={irish === '1'}>
@@ -333,7 +335,7 @@
                     </label>
                 </div>
 
-                <button type="submit" class="form-button" disabled={saving}>{saving ? messages.labels.updating : messages.labels.savebutton}</button>
+                <button type="submit" disabled={saving}>{saving ? messages.labels.updating : messages.labels.savebutton}</button>
 
                 {#if saved}
                     <p class="notification">{messages.labels.profileSaved}</p>
@@ -344,35 +346,8 @@
 {/if}
 
 <style>
-
-.account-page-content {
-    min-width: 0;
-}
-
-.account-page-content h1 {
-    margin-top: 0;
-}
-
-fieldset {
-    border: 0;
-    padding: 0;
-    margin: 0;
-}
-
-.account-page-content form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
 .form-field {
     margin-bottom: 20px;
-}
-
-.form-field > label:first-child {
-    display: block;
-    margin-bottom: 4px;
-    font-weight: bold;
 }
 
 .form-row {
@@ -397,7 +372,7 @@ select {
 .radio-options {
     display: flex;
     width: 100%;
-    margin-top: 8px;
+    margin-top: 12px;
 }
 
 .radio-options label {
@@ -481,7 +456,7 @@ select {
     flex-wrap: wrap;
     width: 100%;
     gap: 10px;
-    margin-top: 8px;
+    margin-top: 12px;
 }
 
 .irish-options label {

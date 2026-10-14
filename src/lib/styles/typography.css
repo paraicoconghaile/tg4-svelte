@@ -23,28 +23,44 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: 'FS Lucas';
+    src: url('/fonts/FSLucas/FSLucasPro-Med.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'FS Lucas';
+    src: url('/fonts/FSLucas/FSLucasPro-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* Typography rules */
 :root {
     --font-body: 'FS Lucas', sans-serif;
     --font-brand: 'TG4', sans-serif;
 }
 
+/* Default typography */
 body {
     font-family: var(--font-body);
+    font-weight: 400;
 }
 
+/* Brand headings */
 h1,
 h2,
 h3 {
     font-family: var(--font-brand);
+    font-weight: 700;
 }
 
 h1 {
     font-size: 2.5rem;
-}
-
-p {
-    font-family: var(--font-body);
 }
 
 .brand {

@@ -81,7 +81,7 @@
 </script>
 
 <div class="account-page">
-    <h1>{messages.labels.forgotPassword}</h1>
+    <p class="frmTitle">{messages.labels.forgotPassword}</p>
 
     <p>{messages.labels.passwordResetIntro}</p>
 
@@ -106,7 +106,7 @@
         {/if}
 
         <div class="form-field">
-            <button type="submit" class="form-button" disabled={submitting}>
+            <button type="submit" disabled={submitting}>
                 {submitting ? messages.labels.sending : messages.labels.resetPassword}
             </button>
         </div>
@@ -153,12 +153,6 @@ input {
 
 .form-field {
     margin-bottom: 20px;
-}
-
-.form-field label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: bold;
 }
 
 .form-field input {
