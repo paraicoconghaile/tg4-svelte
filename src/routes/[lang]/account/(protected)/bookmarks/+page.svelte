@@ -25,8 +25,8 @@
             }
 
             const result = await account.pu.getPlaylists('watch_later');
-
             console.log('Bookmark playlist result:', result);
+            console.log('Individual bookmarks:', result?.bookmarks);
 
             bookmarks = result?.bookmarks ?? [];
         } catch (err) {

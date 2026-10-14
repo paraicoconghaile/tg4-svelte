@@ -148,7 +148,7 @@
         <p class="frmTitle">{messages.labels.preferences}</p>
         <p>Allowing these options will give you have a personalised experience for all TG4 content. Giving you access to personalised newsletters and recommendations from us based on your interests.</p>
 
-        <form onsubmit={(event) => {event.preventDefault(); handleSubmit();}}>
+        <form onsubmit={(event) => {event.preventDefault(); handleSubmit();}} class="account-section">
             <fieldset>
                 <div class="form-field">
                     <label class="frmTitle">{messages.labels.ads}</label>
@@ -278,6 +278,10 @@
 {/if}
 
 <style>
+.account-section {
+    margin-bottom: 40px;
+}
+
 .form-field {
     margin-bottom: 20px;
 }

@@ -228,7 +228,7 @@
     <div class="account-page-content">
         <p class="frmTitle">{messages.labels.profile}</p>
 
-        <form onsubmit={(event) => {event.preventDefault(); handleSubmit();}}>
+        <form onsubmit={(event) => {event.preventDefault(); handleSubmit();}} class="account-section">
             <fieldset>
                 <div class="form-row">
                     <div class="form-field">
@@ -346,6 +346,10 @@
 {/if}
 
 <style>
+.account-section {
+    margin-bottom: 40px;
+}
+
 .form-field {
     margin-bottom: 20px;
 }
