@@ -169,42 +169,24 @@
             <section class="account">
                 <div class="account-layout">
                     <nav class="account-main-nav" aria-label="Account navigation">
-                        <a
-                            href={withBase(`/${page.params.lang}/account/account`)}
-                            class:active={page.url.pathname.endsWith('/account/account')}
-                        >
-                            {messages.labels.account}
-                        </a>
+                        <a href={withBase(`/${page.params.lang}/account/account`)} class:active={page.url.pathname.endsWith('/account/account')}>{messages.labels.account}</a>
 
                         {#if isVerified}
-                            <a
-                                href={withBase(`/${page.params.lang}/account/profile`)}
-                                class:active={page.url.pathname.endsWith('/account/profile')}
-                            >
-                                {messages.labels.profile}
-                            </a>
+                            <a href={withBase(`/${page.params.lang}/account/profile`)} class:active={page.url.pathname.endsWith('/account/profile')}>{messages.labels.profile}</a>
                         {:else}
                             <span class="disabled">{messages.labels.profile}</span>
                         {/if}
 
                         {#if profileComplete}
-                            <a
-                                href={withBase(`/${page.params.lang}/account/preferences`)}
-                                class:active={page.url.pathname.endsWith('/account/preferences')}
-                            >
-                                {messages.labels.preferences}
-                            </a>
+                            <a href={withBase(`/${page.params.lang}/account/preferences`)} class:active={page.url.pathname.endsWith('/account/preferences')}>{messages.labels.preferences}</a>
                         {:else}
-                            <span
-                                class="disabled"
-                                title={messages.labels.completeProfileFirst}
-                            >
-                                {messages.labels.preferences}
-                            </span>
+                            <span class="disabled" title={messages.labels.completeProfileFirst}>{messages.labels.preferences}</span>
                         {/if}
 
-                        <span class="disabled">{messages.labels.bookmarks}</span>
-                        <span class="disabled">{messages.labels.history}</span>
+                        {#if profileComplete}
+                            <a href={withBase(`/${page.params.lang}/account/bookmarks`)} class:active={page.url.pathname.endsWith('/account/bookmarks')}>{messages.labels.bookmarks}</a>
+                            <a href={withBase(`/${page.params.lang}/account/history`)} class:active={page.url.pathname.endsWith('/account/history')}>{messages.labels.history}</a>
+                        {/if}
                     </nav>
 
                     <div class="account-content">
