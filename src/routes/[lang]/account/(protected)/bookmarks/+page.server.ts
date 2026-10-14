@@ -13,6 +13,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
 
     try {
         const bookmarks = await getBookmarks(peachSid);
+        console.log('Bookmarks API response:', JSON.stringify(bookmarks, null, 2));
 
         return {
             bookmarks: Array.isArray(bookmarks)
