@@ -192,10 +192,6 @@ export async function getBookmarks(peachSid: string) {
         }
     });
 
-    /* if (response.status === 401) {
-        return [];
-    } */
-
     if (response.status === 401) {
         console.error('Bookmarks API returned 401 Unauthorized');
         return [];
