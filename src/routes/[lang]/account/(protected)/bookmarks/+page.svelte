@@ -19,8 +19,7 @@
         {:else if data.bookmarks?.length}
             <div class="bookmarks-grid">
                 {#each data.bookmarks as bookmark (bookmark.bookmarkId)}
-                    <!-- <a class="bookmark-card" href={withBase(`/${data.lang}/player/${bookmark.slug}`)}> -->
-                    <a class="bookmark-card" href={withBase(`/${data.lang}/player/`)}>
+                    <a class="bookmark-card" href={withBase(`/${data.lang}/player/${bookmark.video.vid}`)}>
                         <img src={bookmark.video?.image?.large
                                     ?? bookmark.video?.image?.original
                                     ?? bookmark.video?.poster}
