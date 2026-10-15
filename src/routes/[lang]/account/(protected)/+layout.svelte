@@ -167,7 +167,7 @@
     <section class="account-page">
         <section class="episodes">
             <section class="account">
-                <div class="account-layout">
+                <div class="account-layout" class:bookmarks-layout={page.url.pathname.endsWith('/bookmarks') || page.url.pathname.endsWith('/history')}>
                     <nav class="account-main-nav" aria-label="Account navigation">
                         <a href={withBase(`/${page.params.lang}/account/account`)} class:active={page.url.pathname.endsWith('/account/account')}>{messages.labels.account}</a>
 
@@ -261,6 +261,10 @@
     column-gap: 2rem;
     row-gap: 1.5rem;
     align-items: start;
+}
+
+.account-layout.bookmarks-layout {
+    grid-template-columns: 220px minmax(0, 1fr) 60px;
 }
 
 .account-main-nav {
