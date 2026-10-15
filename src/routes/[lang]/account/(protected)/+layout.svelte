@@ -258,14 +258,14 @@
     grid-template-areas:
         "main content sidebar"
         "secondary content sidebar";
-    column-gap: 2rem;
+    column-gap: 0.2rem;
     row-gap: 1.5rem;
     align-items: start;
 }
 
 .account-layout.bookmarks-layout {
     grid-template-columns: 220px minmax(0, 1fr) 0px;
-    column-gap: 0rem;
+    column-gap: 0.2rem;
     row-gap: 1.5rem;
 }
 
