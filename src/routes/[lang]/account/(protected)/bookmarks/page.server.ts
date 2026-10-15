@@ -39,9 +39,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
         }
 
         const result = await response.json();
-        const bookmarks = Array.isArray(result)
-            ? result
-            : result?.data ?? [];
+        const bookmarks = result?.data ?? [];
 
         diagnostics.bookmarkCount = bookmarks.length;
 
