@@ -69,6 +69,7 @@ export async function loadSeason(
         episodeID: ep.vid,
         episodeNumber: ep.episodeNumber,
         seriesNumber: ep.seasonNumber,
+        duration: ep.duration,
         prodCode: ep.pCode,
         seriesCode: ep.customFields.s_prodcode,
         seriesDescription: lang === 'ga' ? ep.customFields.seriesdescg : ep.customFields.seriesdesce,

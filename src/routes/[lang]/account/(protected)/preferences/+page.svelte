@@ -125,7 +125,7 @@
                 }
             };
 
-            console.log('Saving preferences:', updatedProfile);
+            //console.log('Saving preferences:', updatedProfile);
 
             await account.pu.setCombinedSessionAndPreferenceProfile('profile_preference_key', updatedProfile);
             profile = updatedProfile;

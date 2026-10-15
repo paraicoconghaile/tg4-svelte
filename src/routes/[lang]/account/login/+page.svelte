@@ -53,7 +53,7 @@
     const messages = $derived(loginMessages[page.params.lang === 'ga' ? 'ga' : 'en']);
 
     onMount(async () => {
-        console.log('LOGIN MOUNT', page.url.pathname);
+        //console.log('LOGIN MOUNT', page.url.pathname);
         try {
             pu = await loadPeachUser();
             //console.log('LOGIN PEACH LOADED');
@@ -91,7 +91,7 @@
         try {
             const response = await pu.login(email, password);
 
-            console.log('LOGIN RESPONSE:', response);
+            //console.log('LOGIN RESPONSE:', response);
 
             if (response.status !== 204) {
                 error = messages.labels.invalidDetails;
@@ -99,12 +99,12 @@
                 return;
             }
 
-            console.log('LOGIN SUCCESS');
+            //console.log('LOGIN SUCCESS');
 
             try {
                 const profile = await pu.getCombinedSessionAndPreferenceProfile();
 
-                console.log('PROFILE:', profile);
+                //console.log('PROFILE:', profile);
             } catch (err) {
                 console.error('PROFILE ERROR:', err);
             }

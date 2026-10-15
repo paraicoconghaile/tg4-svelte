@@ -1,16 +1,13 @@
 <script lang="ts">
+    import { genres } from '$lib/config/playerNav';
+    import { onMount } from 'svelte';
+    import { withBase } from '$lib/utils/paths';
+
     let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
     let selectedSeason = $state(data.seasons[0]);
     let seasonDropdownOpen = $state(false);
     let visibleEpisodes = $state(8);
-    import { withBase } from '$lib/utils/paths';
-
-    /* function selectSeason(season: any) {
-        selectedSeason = season;
-        visibleEpisodes = 8;
-        seasonDropdownOpen = false;
-    } */
 
     async function selectSeason(season: any) {
         seasonDropdownOpen = false;
@@ -24,14 +21,14 @@
         }
 
         selectedSeason = await response.json();
+
+        /* console.log('Selected season data:', selectedSeason);
+        console.log('First episode:', selectedSeason.episodes?.[0]); */
     }
 
     function loadMoreEpisodes() {
         visibleEpisodes += 8;
     }
-
-    import { genres } from '$lib/config/playerNav';
-    import { onMount } from 'svelte';
 
     let loadMoreTrigger: HTMLDivElement;
 
@@ -191,7 +188,6 @@
         <!-- Selected season -->
         <section class="series">
             <div class="episode-grid">
-                <!-- {#each selectedSeason.episodes as ep} -->
                 {#each selectedSeason.episodes.slice(0, visibleEpisodes) as ep}
                     <article class="episode">
                         <div class="episode-media">
@@ -268,6 +264,6 @@
     </section>
 </section>
 
-<!-- <pre>
-    {JSON.stringify(data.episodes, null, 2)}
-</pre> -->
+<pre>
+    {JSON.stringify(data, null, 2)}
+</pre>
