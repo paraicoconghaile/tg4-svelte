@@ -4,6 +4,8 @@
     let { data } = $props();
 
     onMount(() => {
-        console.log('Bookmarks page data:', data);
+        console.log('Bookmarks diagnostics:', data.diagnostics);
+        console.log('Bookmarks error:', data.error);
+        console.log('Bookmarks count:', data.bookmarks.length);
     });
 </script>
