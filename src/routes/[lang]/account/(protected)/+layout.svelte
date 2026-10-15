@@ -8,7 +8,7 @@
 
     let { children } = $props();
 
-    let loading = $state(false);
+    let loading = $state(true);
     let error = $state('');
     let pu = $state<any>(null);
     let profile = $state<any>(null);
@@ -67,7 +67,7 @@
         accountMessages[page.params.lang === 'ga' ? 'ga' : 'en']
     );
 
-    /* onMount(async () => {
+    onMount(async () => {
         try {
             pu = await requireAuthentication(page.params.lang);
             if (!pu) return;
@@ -96,7 +96,7 @@
         } finally {
             loading = false;
         }
-    }); */
+    });
 
     async function sendVerificationEmail() {
         verificationMessage = '';
