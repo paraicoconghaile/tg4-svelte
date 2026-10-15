@@ -18,8 +18,23 @@ export const load: PageServerLoad = async ({ cookies }) => {
             bookmarks: Array.isArray(result)
                 ? result
                 : result?.data ?? [],
-            error: ''
+            error: '',
+            diagnostics: {
+                isArray: Array.isArray(result),
+                keys: result && typeof result === 'object'
+                    ? Object.keys(result)
+                    : [],
+                dataCount: result?.data?.length,
+                firstTitle: result?.data?.[0]?.video?.displayName
+            }
         };
+
+        /* return {
+            bookmarks: Array.isArray(result)
+                ? result
+                : result?.data ?? [],
+            error: ''
+        }; */
     } catch (error) {
         console.error('Failed to load bookmarks:', error);
 

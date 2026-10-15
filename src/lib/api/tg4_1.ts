@@ -208,5 +208,17 @@ export async function getBookmarks(peachSid: string) {
         throw new Error(`API Error: ${response.status}`);
     }
 
-    return response.json();
+    const result = await response.json();
+
+    console.log('getBookmarks response:', {
+        isArray: Array.isArray(result),
+        keys: result && typeof result === 'object'
+            ? Object.keys(result)
+            : [],
+        dataCount: result?.data?.length
+    });
+
+    return result;
+
+    //return response.json();
 }
