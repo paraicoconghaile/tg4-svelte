@@ -21,12 +21,12 @@
                 {#each data.history as history}
                     <!-- <a class="bookmark-card" href={withBase(`/${data.lang}/player/${history.slug}`)}> -->
                     <a class="bookmark-card" href={withBase(`/${data.lang}/player/`)}>
-                        <img src={history.video?.image?.large
-                                    ?? history.video?.image?.original
-                                    ?? history.video?.poster}
-                                alt={history.video?.displayName ?? ''}
+                        <img src={history?.image?.large
+                                    ?? history?.image?.original
+                                    ?? history?.poster}
+                                alt={history?.displayName ?? ''}
                                 loading="lazy" onerror={(e) => {e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';}}/>
-                        <h3>{history.video?.displayName ?? ''}</h3>
+                        <h3>{history?.displayName ?? ''}</h3>
                     </a>
                 {/each}
             </div>
