@@ -1,6 +1,6 @@
 <script lang="ts">
     import { withBase } from '$lib/utils/paths';
-    
+
     let { data } = $props();
 
     const isIrish = $derived(data.lang === 'ga');
@@ -19,14 +19,15 @@
         {:else if data.bookmarks?.length}
             <div class="bookmarks-grid">
                 {#each data.bookmarks as bookmark (bookmark.bookmarkId)}
-                    <a class="series-card" href={withBase(`/${data.lang}/player/${item.slug}`)}>
+                    <!-- <a class="series-card" href={withBase(`/${data.lang}/player/${bookmark.slug}`)}> -->
+                    <a class="series-card" href={withBase(`/${data.lang}/player/`)}>
                         <img src={bookmark.video?.image?.large
                                     ?? bookmark.video?.image?.original
                                     ?? bookmark.video?.poster}
                                 alt={bookmark.video?.displayName ?? ''}
                                 loading="lazy" onerror={(e) => {e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';}}/>
                         <h3>{bookmark.video?.displayName ?? ''}</h3>
-                    </a>
+                    <</a>
                 {/each}
             </div>
         {:else}
