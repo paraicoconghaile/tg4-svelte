@@ -237,7 +237,7 @@
     position: relative;
     aspect-ratio: 16 / 9;
     overflow: hidden;
-    margin: 0 55px;
+    margin: 0 58px 0 55px;
 }
 
 .single-hero img {

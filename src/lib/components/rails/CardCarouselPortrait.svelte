@@ -102,10 +102,7 @@
                         : (content.mainImage?.large ?? content.image?.large)
                     }
 
-                    {@const name = isSeries
-                        ? content.name
-                        : content.displayName
-                    }
+                    {@const name = isSeries ? content.name : content.displayName}
 
                     <div class="embla__slide">
                         {#if isSeries}
@@ -120,13 +117,31 @@
                                         }
                                     }}
                                 />
-                                <h3>{name}</h3>
+                                <h3>{content.name}</h3>
                             </a>
                         {:else}
                             <!-- Keep your existing VIDEO URL here -->
                             <a href="#">
                                 <img src={image} alt={name} />
-                                <h3>{name}</h3>
+                                {#if content.seriesTitle === content.displayName}
+                                    <h3>{content.seriesTitle}</h3>
+                                    <p>
+                                    {#if content.seasonNumber}
+                                        S{content.seasonNumber}
+                                    {/if}
+                                    {#if content.episodeNumber}
+                                        E{content.episodeNumber}
+                                    {/if}</p>
+                                {:else}
+                                    <h3>{content.seriesTitle}</h3>
+                                    <p>
+                                    {#if content.seasonNumber}
+                                        S{content.seasonNumber}
+                                    {/if}
+                                    {#if content.episodeNumber}
+                                        E{content.episodeNumber}
+                                    {/if}: {content.displayName}</p>
+                                {/if}
                             </a>
                         {/if}
                     </div>

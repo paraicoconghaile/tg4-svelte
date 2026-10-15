@@ -102,9 +102,7 @@
                         : (content.mainImage?.large ?? content.image?.large)
                     }
 
-                    {@const name = isSeries
-                        ? content.name
-                        : content.displayName}
+                    {@const name = isSeries ? content.seriesTitle : content.displayName}
 
                     <div class="embla__slide">
                         {#if isSeries}
@@ -119,7 +117,7 @@
                                         }
                                     }}
                                 />
-                                <h3>{name}</h3>
+                                <h3>{content.name}</h3>
                             </a>
                         {:else}
                             <a href={withBase(`/${isIrish ? 'ga' : 'en'}/player/${content.vid}`)}>
@@ -135,8 +133,25 @@
                                         </div>
                                     {/if}
                                 </div>
-
-                                <h3>{name}</h3>
+                                {#if content.seriesTitle === content.displayName}
+                                    <h3>{content.seriesTitle}</h3>
+                                    <p>
+                                    {#if content.seasonNumber}
+                                        S{content.seasonNumber}
+                                    {/if}
+                                    {#if content.episodeNumber}
+                                        E{content.episodeNumber}
+                                    {/if}</p>
+                                {:else}
+                                    <h3>{content.seriesTitle}</h3>
+                                    <p>
+                                    {#if content.seasonNumber}
+                                        S{content.seasonNumber}
+                                    {/if}
+                                    {#if content.episodeNumber}
+                                        E{content.episodeNumber}
+                                    {/if}: {content.displayName}</p>
+                                {/if}
                             </a>
                         {/if}
                     </div>
@@ -230,6 +245,14 @@
     margin: 15px 0 0;
     font-size: clamp(1rem, 1.5vw, 1.25rem);
     font-weight: 700;
+    line-height: 24px;
+}
+
+.embla__slide p {
+    margin: 0;
+    font-size: clamp(1rem, 1.5vw, 1rem);
+    font-weight: 400;
+    line-height: 20px;
 }
 
 @media (max-width:900px) {
