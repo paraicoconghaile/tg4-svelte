@@ -16,9 +16,7 @@
         seasonDropdownOpen = false;
         visibleEpisodes = 8;
 
-        const response = await fetch(
-            `/api/season?series=${data.slug}&season=${season.number}&lang=${data.lang}`
-        );
+        const response = await fetch(withBase(`/api/season?series=${data.slug}&season=${season.number}&lang=${data.lang}`));
 
         if (!response.ok) {
             console.error('Failed to load season');

@@ -225,33 +225,35 @@
         </section>
     </section>
 
-    <section class="episodes">
-        <h2>{data.lang === 'ga' ? 'Tuilleadh Eipeasóid' : 'More episodes'}</h2>
+    {#if data.otherEpisodes?.length}
+        <section class="episodes">
+            <h2>{data.lang === 'ga' ? 'Tuilleadh Eipeasóid..' : 'More episodes'}</h2>
 
-        <div class="episode-grid">
-            {#each data.otherEpisodes as ep}
-                <a
-                    class="episode-card"
-                    href={`/${data.lang}/player/${data.slug}/${ep.episodeID}`}
-                >
-                    <img
-                        src={ep.prodCode
-                            ? `https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto:eco/${ep.prodCode}.jpg`
-                            : 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg'}
-                        alt={ep.title}
-                    />
+            <div class="episode-grid">
+                {#each data.otherEpisodes as ep}
+                    <a
+                        class="episode-card"
+                        href={`/${data.lang}/player/${data.slug}/${ep.episodeID}`}
+                    >
+                        <img
+                            src={ep.prodCode
+                                ? `https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto:eco/${ep.prodCode}.jpg`
+                                : 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg'}
+                            alt={ep.title}
+                        />
 
-                    <h3>{ep.title}</h3>
+                        <h3>{ep.title}</h3>
 
-                    <p>
-                        {data.lang === 'ga'
-                            ? `Sraith ${ep.seriesNumber}, Eipeasóid ${ep.episodeNumber}`
-                            : `Series ${ep.seriesNumber}, Episode ${ep.episodeNumber}`}
-                    </p>
-                </a>
-            {/each}
-        </div>
-    </section>
+                        <p>
+                            {data.lang === 'ga'
+                                ? `Sraith ${ep.seriesNumber}, Eipeasóid ${ep.episodeNumber}`
+                                : `Series ${ep.seriesNumber}, Episode ${ep.episodeNumber}`}
+                        </p>
+                    </a>
+                {/each}
+            </div>
+        </section>
+    {/if}
 </section>
 
 <style>
