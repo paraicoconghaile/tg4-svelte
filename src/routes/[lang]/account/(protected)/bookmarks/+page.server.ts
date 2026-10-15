@@ -1,59 +1,31 @@
+import { getBookmarks } from '$lib/api/tg4_1';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies }) => {
-    console.log('BOOKMARKS SERVER LOADER RUNNING');
-
     const peachSid = cookies.get('identity.provider.sid');
-
-    const diagnostics = {
-        cookiePresent: !!peachSid,
-        apiStatus: 0,
-        bookmarkCount: 0
-    };
 
     if (!peachSid) {
         return {
             bookmarks: [],
-            error: 'Your session has expired. Please log in again.',
-            diagnostics
+            error: 'Your session has expired. Please log in again.'
         };
     }
 
     try {
-        const response = await fetch(
-            'https://api.tg4dev.com/api/user/bookmarks',
-            {
-                headers: {
-                    'X-Peach-Authorization': peachSid
-                }
-            }
-        );
-
-        diagnostics.apiStatus = response.status;
-
-        if (!response.ok) {
-            return {
-                bookmarks: [],
-                error: `Bookmarks API returned status ${response.status}.`,
-                diagnostics
-            };
-        }
-
-        const result = await response.json();
-        const bookmarks = result?.data ?? [];
-
-        diagnostics.bookmarkCount = bookmarks.length;
+        const result = await getBookmarks(peachSid);
 
         return {
-            bookmarks,
-            error: '',
-            diagnostics
+            bookmarks: Array.isArray(result)
+                ? result
+                : result?.data ?? [],
+            error: ''
         };
-    } catch {
+    } catch (error) {
+        console.error('Failed to load bookmarks:', error);
+
         return {
             bookmarks: [],
-            error: 'Unable to reach the bookmarks API.',
-            diagnostics
+            error: 'Unable to load your bookmarks. Please try again.'
         };
     }
 };
