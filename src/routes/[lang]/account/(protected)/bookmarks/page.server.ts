@@ -1,4 +1,4 @@
-import { getBookmarks } from '$lib/api/tg4_1';
+
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies }) => {
@@ -12,29 +12,28 @@ export const load: PageServerLoad = async ({ cookies }) => {
     }
 
     try {
-        const result = await getBookmarks(peachSid);
+        const response = await fetch(
+            'https://api.tg4dev.com/api/user/bookmarks',
+            {
+                headers: {
+                    'X-Peach-Authorization': peachSid
+                }
+            }
+        );
+
+        if (!response.ok) {
+            return {
+                bookmarks: [],
+                error: `Unable to load bookmarks (HTTP ${response.status}).`
+            };
+        }
+
+        const result = await response.json();
 
         return {
-            bookmarks: Array.isArray(result)
-                ? result
-                : result?.data ?? [],
-            error: '',
-            diagnostics: {
-                isArray: Array.isArray(result),
-                keys: result && typeof result === 'object'
-                    ? Object.keys(result)
-                    : [],
-                dataCount: result?.data?.length,
-                firstTitle: result?.data?.[0]?.video?.displayName
-            }
-        };
-
-        /* return {
-            bookmarks: Array.isArray(result)
-                ? result
-                : result?.data ?? [],
+            bookmarks: result?.data ?? [],
             error: ''
-        }; */
+        };
     } catch (error) {
         console.error('Failed to load bookmarks:', error);
 
