@@ -39,6 +39,17 @@ export const load: PageServerLoad = async ({ cookies }) => {
         }
 
         const result = await response.json();
+
+        console.log('Bookmarks response type:', Array.isArray(result) ? 'array' : typeof result);
+        console.log('Bookmarks response keys:', result && typeof result === 'object' ? Object.keys(result) : []);
+        console.log('Bookmarks response:', JSON.stringify(result, null, 2));
+
+        const responseSummary = {
+            isArray: Array.isArray(result),
+            keys: result && typeof result === 'object' ? Object.keys(result) : [],
+            preview: JSON.stringify(result, null, 2)?.slice(0, 4000)
+        };
+
         const bookmarks = Array.isArray(result)
             ? result
             : result?.bookmarks ?? [];
@@ -48,7 +59,8 @@ export const load: PageServerLoad = async ({ cookies }) => {
         return {
             bookmarks,
             error: '',
-            diagnostics
+            diagnostics,
+            responseSummary
         };
     } catch {
         return {
