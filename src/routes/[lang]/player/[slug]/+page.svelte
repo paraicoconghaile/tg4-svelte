@@ -264,6 +264,6 @@
     </section>
 </section>
 
-<pre>
+<!-- <pre>
     {JSON.stringify(data, null, 2)}
-</pre>
+</pre> -->
