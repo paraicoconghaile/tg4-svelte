@@ -1,4 +1,3 @@
-```svelte
 <script lang="ts">
     let { data } = $props();
 
@@ -9,44 +8,29 @@
     <title>{isIrish ? 'Mo Leabharmharcanna' : 'My Bookmarks'} | TG4</title>
 </svelte:head>
 
-<section class="bookmarks">
-    <h1>{isIrish ? 'Mo Leabharmharcanna' : 'My Bookmarks'}</h1>
+<section class="account-page-content">
+    <div class="bookmarks">
+        <p class="frmTitle">{isIrish ? 'Mo Leabharmharcanna' : 'My Bookmarks'}</p>
 
-    {#if data.error}
-        <p class="message">{data.error}</p>
-    {:else if data.bookmarks?.length}
-        <div class="bookmarks-grid">
-            {#each data.bookmarks as bookmark (bookmark.bookmarkId)}
-                <article class="bookmark">
-                    <div class="bookmark-image">
-                        <img
-                            src={bookmark.video?.image?.large
-                                ?? bookmark.video?.image?.original
-                                ?? bookmark.video?.poster}
-                            alt={bookmark.video?.displayName ?? ''}
-                            loading="lazy"
-                        />
-                    </div>
-
-                    <div class="bookmark-info">
-                        <h2>{bookmark.video?.displayName ?? ''}</h2>
-
-                        <p>
-                            {isIrish
-                                ? bookmark.video?.descriptionGa
-                                : bookmark.video?.descriptionEn}
-                        </p>
-                    </div>
-                </article>
-            {/each}
-        </div>
-    {:else}
-        <p class="message">
-            {isIrish
-                ? 'Níl aon leabharmharcanna agat fós.'
-                : 'You have no bookmarks yet.'}
-        </p>
-    {/if}
+        {#if data.error}
+            <p class="message">{data.error}</p>
+        {:else if data.bookmarks?.length}
+            <div class="bookmarks-grid">
+                {#each data.bookmarks as bookmark (bookmark.bookmarkId)}
+                    <a class="series-card" href={withBase(`/${data.lang}/player/${item.slug}`)}>
+                        <img src={bookmark.video?.image?.large
+                                    ?? bookmark.video?.image?.original
+                                    ?? bookmark.video?.poster}
+                                alt={bookmark.video?.displayName ?? ''}
+                                loading="lazy" onerror={(e) => {e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';}}/>
+                        <h3>{bookmark.video?.displayName ?? ''}</h3>
+                    </a>
+                {/each}
+            </div>
+        {:else}
+            <p class="message">{isIrish ? 'Níl aon leabharmharcanna agat fós.' : 'You have no bookmarks yet.'}</p>
+        {/if}
+    </div>
 </section>
 
 <style>
@@ -54,35 +38,26 @@
     width: 100%;
 }
 
-h1 {
-    margin: 0 0 2rem;
-}
-
 .bookmarks-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
 }
 
-.bookmark {
-    min-width: 0;
+.bookmark-card {
+    text-decoration: none;
+    color: var(--text-primary);
 }
 
-.bookmark-image {
+.bookmark-card img  {
+    width: 100%;
     aspect-ratio: 16 / 9;
     overflow: hidden;
     border-radius: 8px;
 }
 
-.bookmark-image img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.bookmark-info h2 {
-    margin: 0.75rem 0 0.5rem;
+.bookmark-card h3 {
+    margin-top: 12px;
     font-size: 1.1rem;
 }
 
@@ -91,19 +66,15 @@ h1 {
     line-height: 1.5;
 }
 
-.message {
-    margin: 1rem 0;
+@media(max-width:1000px){
+    .series-grid {grid-template-columns: repeat(3,1fr);}
 }
 
-@media (max-width: 900px) {
-    .bookmarks-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+@media(max-width:700px){
+    .series-grid {grid-template-columns: repeat(2,1fr);}
 }
 
-@media (max-width: 600px) {
-    .bookmarks-grid {
-        grid-template-columns: 1fr;
-    }
+@media(max-width:450px){
+    .series-grid {grid-template-columns: 1fr;}
 }
 </style>
