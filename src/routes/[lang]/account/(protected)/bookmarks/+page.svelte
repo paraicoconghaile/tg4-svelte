@@ -1,9 +1,7 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-
     let { data } = $props();
-
-    onMount(() => {
-        console.log('Bookmarks:', data);
-    });
 </script>
+
+{#each data.bookmarks as bookmark}
+    <p>{bookmark.video.displayName}</p>
+{/each}

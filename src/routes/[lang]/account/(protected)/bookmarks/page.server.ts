@@ -11,16 +11,13 @@ export const load: PageServerLoad = async ({ cookies }) => {
         };
     }
 
-    console.log('Bookmarks: Peach session cookie present:', !!peachSid);
-
     try {
-        const bookmarks = await getBookmarks(peachSid);
-        console.log('Bookmarks API response:', JSON.stringify(bookmarks, null, 2));
+        const result = await getBookmarks(peachSid);
 
         return {
-            bookmarks: Array.isArray(bookmarks)
-                ? bookmarks
-                : bookmarks?.data ?? [],
+            bookmarks: Array.isArray(result)
+                ? result
+                : result?.data ?? [],
             error: ''
         };
     } catch (error) {
