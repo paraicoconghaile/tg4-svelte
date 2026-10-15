@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { withBase } from '$lib/utils/paths';
+    
     let { data } = $props();
 
     const isIrish = $derived(data.lang === 'ga');
