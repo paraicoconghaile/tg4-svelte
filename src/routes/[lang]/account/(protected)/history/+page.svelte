@@ -18,7 +18,7 @@
             <p class="message">{data.error}</p>
         {:else if data.history?.length}
             <div class="bookmarks-grid">
-                {#each data.history as history (history.historyId)}
+                {#each data.history as history}
                     <!-- <a class="bookmark-card" href={withBase(`/${data.lang}/player/${history.slug}`)}> -->
                     <a class="bookmark-card" href={withBase(`/${data.lang}/player/`)}>
                         <img src={history.video?.image?.large
