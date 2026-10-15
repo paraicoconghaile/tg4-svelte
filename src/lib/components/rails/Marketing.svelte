@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { withBase } from '$lib/utils/paths';
+    
     let {
         rail,
         isIrish
@@ -6,8 +8,17 @@
 
     const image = $derived(rail.image);
     const buttonText = $derived(isIrish ? rail.actionButtonTextGa : rail.actionButtonTextEn);
-    const buttonUrl = $derived(rail.actionButtonUrl);
+    const buttonUrl = $derived(
+        rail.actionButtonUrl ??
+        (rail.items?.[0]?.series?.slug
+            ? withBase(`/${isIrish ? 'ga' : 'en'}/player/${rail.items[0].series.slug}`)
+            : null)
+    );
     const altText = $derived(isIrish ? rail.image?.altTextGa : rail.image?.altTextEn);
+
+    /* console.log('========== MARKETING RAIL JSON ==========');
+    console.log("Marketing Rail Data:", JSON.stringify(rail, null, 2));
+    console.log('================================'); */
 </script>
 
 <section class="marketing-rail">
