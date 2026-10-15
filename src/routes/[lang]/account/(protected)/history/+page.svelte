@@ -56,7 +56,7 @@
     width: 100%;
     aspect-ratio: 16 / 9;
     overflow: hidden;
-    border-radius: 8px;
+    border-radius: 0px;
 }
 
 .bookmark-card h3 {
@@ -88,6 +88,6 @@
 }
 </style>
 
-<!-- <pre>
+<pre>
     {JSON.stringify(data.episodes, null, 2)}
-</pre> -->
+</pre>
