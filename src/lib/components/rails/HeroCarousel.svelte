@@ -235,8 +235,9 @@
 .single-hero {
     display: block;
     position: relative;
-    aspect-ratio: 12 / 5;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
+    margin: 0 55px;
 }
 
 .single-hero img {
@@ -251,6 +252,7 @@
     margin: 0 auto;
     overflow: hidden;
     position: relative;
+    background: var(--tg4-grey-2);
 }
 
 .stage {
