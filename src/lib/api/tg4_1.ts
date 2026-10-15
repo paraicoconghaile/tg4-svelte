@@ -209,3 +209,31 @@ export async function getBookmarks(peachSid: string) {
 
     return response.json();
 }
+
+export async function getHistory(peachSid: string) {
+    const url = `https://api.tg4dev.com/api/user/history`;
+
+    const response = await fetch(url, {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Peach-Authorization': peachSid
+        }
+    });
+
+    if (response.status === 401) {
+        return [];
+    }
+
+    if (!response.ok) {
+        const body = await response.text();
+
+        console.error('TG4 HISTORY API ERROR');
+        console.error('URL:', url);
+        console.error('Status:', response.status);
+        console.error('Response:', body);
+
+        throw new Error(`API Error: ${response.status}`);
+    }
+
+    return response.json();
+}
