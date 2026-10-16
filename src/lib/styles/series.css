@@ -373,15 +373,30 @@
 /* --------------------------------
    MOBILE
 -------------------------------- */
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
     .episode-hero {
         height: 650px;
     }
+    .episode-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
     .hero-overlay {
         padding: 40px;
     }
     .hero-content h1 {
         font-size: 2.8rem;
+    }
+}
+
+@media (max-width: 800px) {
+    .episode-hero {
+        height: 500px;
+    }
+    .episode-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
@@ -407,9 +422,6 @@
 }
 
 @media (max-width: 600px) {
-    .episode-hero {
-        height: 500px;
-    }
     .hero-overlay {
         padding: 25px;
     }
@@ -424,19 +436,10 @@
     }
 }
 
-@media (max-width: 1200px) {
-    .episode-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 800px) {
-    .episode-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
 @media (max-width: 500px) {
+    .episode-hero {
+        height: 300px;
+    }
     .episode-grid {
         grid-template-columns: 1fr;
     }

@@ -60,7 +60,7 @@
 .series-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
+    gap: 6px;
 }
 
 .series-card {
@@ -80,12 +80,25 @@
     font-size: 1.1rem;
 }
 
-@media(max-width:1000px){
-    .series-grid {grid-template-columns: repeat(3,1fr);}
+@media(max-width:1000px) {
+    .series-grid {
+        grid-template-columns: repeat(3,1fr);
+    }
 }
 
-@media(max-width:700px){
-    .series-grid {grid-template-columns: repeat(2,1fr);}
+@media(max-width:700px) {
+    .series-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+@media(max-width:550px) {
+    .series-page {
+        padding: 10px 0;
+    }
+    .episodes {
+        padding: 10px 7px;
+    }
 }
 
 @media(max-width:450px){
