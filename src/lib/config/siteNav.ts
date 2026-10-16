@@ -20,50 +20,50 @@ export const navigation: NavItem[] = [
             {
                 titleEn: 'Documentaries',
                 titleGa: 'Faisnéis',
-                hrefEn: '/en/player/top-documentaries',
+                hrefEn: '/en/player/documentaries',
                 hrefGa: '/ga/player/faisneis'
             },
             {
                 titleEn: 'Music',
                 titleGa: 'Ceol',
-                hrefEn: '/en/player/irish-music-series',
+                hrefEn: '/en/player/music',
                 hrefGa: '/ga/player/ceol'
             },
             {
                 titleEn: 'Drama',
                 titleGa: 'Dramaíocht',
-                hrefEn: '/en/player/drama-tv-shows',
+                hrefEn: '/en/player/drama',
                 hrefGa: '/ga/player/dramaiocht'
             },
             {
                 titleEn: 'Current Affairs',
                 titleGa: 'Cúrsaí Reatha',
-                hrefEn: '/en/player/news-stories',
-                hrefGa: '/ga/player/nuacht'
+                hrefEn: '/en/player/current-affairs',
+                hrefGa: '/ga/player/cursai-reatha'
             },
             {
                 titleEn: 'Entertainment',
                 titleGa: 'Siamsaíocht',
-                hrefEn: '/en/player/entertainment-shows',
+                hrefEn: '/en/player/entertainment',
                 hrefGa: '/ga/player/siamsaiocht'
             },
             {
                 titleEn: 'Sport',
                 titleGa: 'Spórt',
-                hrefEn: '/en/player/sport-tv-player',
+                hrefEn: '/en/player/sport',
                 hrefGa: '/ga/player/sport'
             },
             {
                 titleEn: 'Lifestyle',
                 titleGa: 'Saolchláir',
-                hrefEn: '/en/player/lifestyle-tv-shows',
+                hrefEn: '/en/player/lifestyle',
                 hrefGa: '/ga/player/saolchlar'
             },
             {
                 titleEn: 'Cúla4',
                 titleGa: 'Cúla4',
-                hrefEn: '/en/player/childrens-tv-shows',
-                hrefGa: '/ga/player/gasuir'
+                hrefEn: '/en/player/cula4',
+                hrefGa: '/ga/player/cula4'
             }
         ]
     },

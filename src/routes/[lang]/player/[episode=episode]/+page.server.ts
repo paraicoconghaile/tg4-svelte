@@ -7,21 +7,19 @@ export async function load({ params }) {
 
     const categoryMap: Record<string, string> = {
         faisneis: 'documentaries',
-        'top-documentaries': 'documentaries',
+        documentaries: 'documentaries',
         ceol: 'music',
-        'irish-music-series': 'music',
+        music: 'music',
         dramaiocht: 'Drama',
-        'drama-tv-shows': 'Drama',
-        nuacht: 'news',
-        'news-stories': 'news',
+        drama: 'Drama',
+        'cursai-reatha': 'cursai-reatha',
+        'current-affairs': 'cursai-reatha',
         siamsaiocht: 'entertainment',
-        'entertainment-shows': 'entertainment',
+        entertainment: 'entertainment',
         sport: 'Sport',
-        'sport-tv-player': 'Sport',
         saolchlar: 'lifestyle',
-        'lifestyle-tv-shows': 'lifestyle',
-        gasuir: 'Cula4',
-        'childrens-tv-shows': 'Cula4'
+        lifestyle: 'lifestyle',
+        cula4: 'Cula4'
     };
 
     /* const currentGenre = getGenreByKey(params.section);

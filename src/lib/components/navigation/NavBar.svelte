@@ -2,6 +2,7 @@
     import { navigation } from '$lib/config/siteNav';
     import { page } from '$app/state';
     import { withBase, stripBase } from '$lib/utils/paths';
+    import { getGenreByKey } from '$lib/config/playerNav';
 
     const isIrish = $derived(stripBase(page.url.pathname) === '/ga' || stripBase(page.url.pathname).startsWith('/ga/'));
 
@@ -12,24 +13,34 @@
 
     const switchLanguage = $derived.by(() => {
         const currentPath = stripBase(page.url.pathname);
+        const targetLang = isIrish ? 'en' : 'ga';
+
+        const categoryMatch = currentPath.match(
+            /^\/(en|ga)\/player\/([^/]+)(\/.*)?$/
+        );
+
+        if (categoryMatch) {
+            const [, , section, suffix = ''] = categoryMatch;
+            const genre = getGenreByKey(section);
+
+            if (genre) {
+                const targetSection = genre.key[targetLang];
+
+                return withBase(
+                    `/${targetLang}/player/${targetSection}${suffix}`
+                ) + page.url.search + page.url.hash;
+            }
+        }
 
         function findTranslation(items: typeof navigation): string | null {
             for (const item of items) {
                 if (item.children) {
                     const result = findTranslation(item.children);
-
-                    if (result) {
-                        return result;
-                    }
+                    if (result) return result;
                 }
 
-                if (isIrish && item.hrefGa === currentPath) {
-                    return item.hrefEn ?? null;
-                }
-
-                if (!isIrish && item.hrefEn === currentPath) {
-                    return item.hrefGa ?? null;
-                }
+                if (isIrish && item.hrefGa === currentPath) return item.hrefEn ?? null;
+                if (!isIrish && item.hrefEn === currentPath) return item.hrefGa ?? null;
             }
 
             return null;

@@ -385,6 +385,9 @@
 }
 
 @media (max-width: 750px) {
+    .single-hero {
+        margin: 0;
+    }
     .play-box {
         width: 54px;
         height: 54px;

@@ -6,21 +6,19 @@ import { genres, getGenreByKey } from '$lib/config/playerNav';
 export async function load({ params }) {
     const categoryMap: Record<string, string> = {
         faisneis: 'faisneis',
-        'top-documentaries': 'faisneis',
+        documentaries: 'faisneis',
         ceol: 'ceol',
-        'irish-music-series': 'ceol',
+        music: 'ceol',
         dramaiocht: 'drama',
-        'drama-tv-shows': 'drama',
-        nuacht: 'cursai-reatha',
-        'news-stories': 'cursai-reatha',
+        drama: 'drama',
+        'cursai-reatha': 'cursai-reatha',
+        'current-affairs': 'cursai-reatha',
         siamsaiocht: 'siamsaiocht',
-        'entertainment-shows': 'siamsaiocht',
+        entertainment: 'siamsaiocht',
         sport: 'sport',
-        'sport-tv-player': 'sport',
         saolchlar: 'saolchlar',
-        'lifestyle-tv-shows': 'saolchlar',
-        gasuir: 'cula4',
-        'childrens-tv-shows': 'cula4'
+        lifestyle: 'saolchlar',
+        cula4: 'cula4'
     };
 
     const currentGenre = getGenreByKey(params.section);
