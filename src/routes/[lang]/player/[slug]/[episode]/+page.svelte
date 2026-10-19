@@ -224,27 +224,18 @@
             </div>
 
             <div class="bookmark">
-                <button
-                    class="bookmark-icon"
-                    type="button"
-                    onclick={() => openBookmarkModal?.()}
-                    aria-label={isIrish ? 'Cuir leabharmharc leis' : 'Add bookmark'}
-                >
-                    +
+                <button class="bookmark-icon" type="button" onclick={() => openBookmarkModal?.()} aria-label={isIrish ? 'Cuir leabharmharc leis' : 'Add bookmark'}>
+                    <svg width="27" height="26" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8.9079 10.0013V25.6H15.6689V15.6169H23.5105L26.4 10.0013H8.9079Z" fill="#2B2A2A"/>
+                        <path d="M15.6586 15.5987L15.6586 0L8.89755 5.64766e-07L8.89755 9.98315H0L5.13447e-07 15.5987L15.6586 15.5987Z" fill="#2B2A2A"/>
+                    </svg>
                 </button>
 
-                <button
-                    class="bookmark-text"
-                    type="button"
-                    onclick={() => openBookmarkModal?.()}
-                >
+                <button class="bookmark-text" type="button" onclick={() => openBookmarkModal?.()}>
                     {isIrish ? 'Leabharmharc' : 'Bookmark'}
                 </button>
 
-                <BookmarkButton
-                    bookmark={data.video.videoId}
-                    lang={data.lang}
-                    onReady={registerBookmarkModal}
+                <BookmarkButton bookmark={data.video.videoID} lang={data.lang} onReady={registerBookmarkModal} showButton={false}
                 />
             </div>
         </section>
@@ -285,6 +276,55 @@
 .player-container :global(.vjs-tech) {
     width: 100%;
     height: 100%;
+}
+
+.bookmark {
+    display: inline-flex;
+    width: fit-content;
+    gap: 4px;
+}
+
+.bookmark-icon {
+    width: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    border: 0;
+    background: white;
+    cursor: pointer
+}
+
+.bookmark-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 12px;
+    border: 0;
+    background: white;
+    color: var(--tg4-grey-2);
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 700;
+    line-height: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.bookmark:hover .bookmark-text {
+    color: var(--tg4-pink);
+}
+
+.bookmark-icon {
+    width: 34px;
+    height: 34px;
+    font-size: 24px;
+}
+
+.bookmark-text {
+    min-height: 34px;
+    padding: 0 20px;
+    font: inherit;
 }
 
 @media (max-width: 1346px) {

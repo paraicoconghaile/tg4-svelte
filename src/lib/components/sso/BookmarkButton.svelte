@@ -5,11 +5,13 @@
     let {
         bookmark,
         lang,
-        onReady
+        onReady,
+        showButton = true
     }: {
         bookmark: string | number;
         lang: 'ga' | 'en';
         onReady?: (openModal: () => void) => void;
+        showButton?: boolean;
     } = $props();
 
     let modalOpen = $state(false);
@@ -83,7 +85,9 @@
     }
 </script>
 
-<button class="hero-button-text" type="button" onclick={openModal} disabled={loading}>{loading ? (isIrish ? 'Ag lódáil…' : 'Loading…') : 'Bookmark'}</button>
+{#if showButton}
+    <button class="hero-button-text" type="button" onclick={openModal} disabled={loading}>{loading ? (isIrish ? 'Ag lódáil…' : 'Loading…') : 'Bookmark'}</button>
+{/if}
 
 {#if modalOpen}
     <div class="bookmark-modal-backdrop" role="presentation" onclick={(event) => {

@@ -156,8 +156,6 @@
                         </button>
                         
                         <BookmarkButton bookmark={data.slug} lang={data.lang} onReady={registerBookmarkModal} />
-
-                        <!-- <button class="hero-button-text" type="button">{data.lang === 'ga' ? 'Bookmark' : 'Bookmark'}</button> -->
                     </div>
                 </div>
             </div>
@@ -206,29 +204,10 @@
                             />
 
                             <a href={withBase(`/${data.lang}/player/${data.slug}/${ep.episodeID}`)}>
-                                <svg
-                                    class="play-icon"
-                                    width="40"
-                                    height="40"
-                                    viewBox="0 0 40 40"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <rect
-                                        width="40"
-                                        height="40"
-                                        fill="#EBEBEB"
-                                    />
-
-                                    <path
-                                        d="M30.6867 20.4249L25.9734 15.8788L11.0911 30.2412L15.8031 34.7886L30.6867 20.4249Z"
-                                        fill="#2B2A2A"
-                                    />
-
-                                    <path
-                                        d="M25.9539 24.9922L30.6645 20.4435L15.7823 6.08105L11.0703 10.6285L25.9539 24.9922Z"
-                                        fill="#2B2A2A"
-                                    />
+                                <svg class="play-icon" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="40" height="40" fill="#EBEBEB"/>
+                                    <path d="M30.6867 20.4249L25.9734 15.8788L11.0911 30.2412L15.8031 34.7886L30.6867 20.4249Z" fill="#2B2A2A"/>
+                                    <path d="M25.9539 24.9922L30.6645 20.4435L15.7823 6.08105L11.0703 10.6285L25.9539 24.9922Z" fill="#2B2A2A"/>
                                 </svg>
                             </a>
                         </div>
