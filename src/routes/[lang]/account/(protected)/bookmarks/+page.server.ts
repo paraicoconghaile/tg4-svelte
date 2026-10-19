@@ -4,9 +4,7 @@ import type { PageServerLoad } from './$types';
 const PAGE_SIZE = 20;
 
 export const load: PageServerLoad = async ({ cookies, url }) => {
-    //const peachSid = cookies.get('identity.provider.sid');
-    const peachSid = 'b4d67533-69bc-416c-ae52-012774a980b8';
-
+    const peachSid = cookies.get('identity.provider.sid');
     const requestedPage = Number(url.searchParams.get('page') ?? 1);
     const page = Number.isInteger(requestedPage) && requestedPage > 0
         ? requestedPage
