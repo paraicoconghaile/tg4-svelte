@@ -7,7 +7,7 @@
     const review = $derived(rail.staffReview);
 
     const image = $derived(
-        series?.mainImage?.large ?? series?.boxsetImage?.large ?? series?.poster
+        rail?.image?.xLarge ?? series?.boxsetImage?.large ?? series?.poster
     );
 
     const href = $derived(

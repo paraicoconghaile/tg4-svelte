@@ -182,7 +182,42 @@ export async function getContinueWatching(peachSid: string) {
     return response.json();
 }
 
-export async function getBookmarks(peachSid: string) {
+export async function getBookmarks(
+    peachSid: string,
+    skip = 0,
+    limit = 20
+) {
+    const url = new URL('https://api.tg4dev.com/api/user/bookmarks');
+
+    url.searchParams.set('skip', String(skip));
+    url.searchParams.set('limit', String(limit));
+
+    const response = await fetch(url.toString(), {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Peach-Authorization': peachSid
+        }
+    });
+
+    if (response.status === 401) {
+        return [];
+    }
+
+    if (!response.ok) {
+        const body = await response.text();
+
+        console.error('TG4 BOOKMARKS API ERROR');
+        console.error('URL:', url.toString());
+        console.error('Status:', response.status);
+        console.error('Response:', body);
+
+        throw new Error(`API Error: ${response.status}`);
+    }
+
+    return response.json();
+}
+
+/* export async function getBookmarks(peachSid: string) {
     const url = `https://api.tg4dev.com/api/user/bookmarks`;
 
     const response = await fetch(url, {
@@ -208,7 +243,7 @@ export async function getBookmarks(peachSid: string) {
     }
 
     return response.json();
-}
+} */
 
 export async function getHistory(peachSid: string) {
     const url = `https://api.tg4dev.com/api/user/history`;

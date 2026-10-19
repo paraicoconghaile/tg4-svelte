@@ -19,15 +19,60 @@
         {:else if data.bookmarks?.length}
             <div class="bookmarks-grid">
                 {#each data.bookmarks as bookmark (bookmark.bookmarkId)}
-                    <a class="bookmark-card" href={withBase(`/${data.lang}/player/${bookmark.video.vid}`)}>
-                        <img src={bookmark.video?.image?.large
-                                    ?? bookmark.video?.image?.original
-                                    ?? bookmark.video?.poster}
-                                alt={bookmark.video?.displayName ?? ''}
-                                loading="lazy" onerror={(e) => {e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';}}/>
-                        <h3>{bookmark.video?.displayName ?? ''}</h3>
-                    </a>
+                    {#if bookmark.type === 'SERIES' && bookmark.series}
+                        <a
+                            class="bookmark-card"
+                            href={withBase(`/${data.lang}/player/${bookmark.series.slug}`)}
+                        >
+                            <img
+                                src={bookmark.series.mainImage?.large
+                                    ?? bookmark.series.mainImage?.original
+                                    ?? bookmark.series.poster}
+                                alt={bookmark.series.name ?? ''}
+                                loading="lazy"
+                                onerror={(e) => {
+                                    e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';
+                                }}
+                            />
+                            <h3>{bookmark.series.name}</h3>
+                        </a>
+
+                    {:else if bookmark.type === 'VIDEO' && bookmark.video}
+                        <a
+                            class="bookmark-card"
+                            href={withBase(`/${data.lang}/player/${bookmark.video.vid}`)}
+                        >
+                            <img
+                                src={bookmark.video.image?.large
+                                    ?? bookmark.video.image?.original
+                                    ?? bookmark.video.poster}
+                                alt={bookmark.video.displayName ?? ''}
+                                loading="lazy"
+                                onerror={(e) => {
+                                    e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';
+                                }}
+                            />
+                            <h3>{bookmark.video.displayName ?? ''}</h3>
+                        </a>
+                    {/if}
                 {/each}
+            </div>
+            <div class="bookmarks-pagination">
+                {#if data.page > 1}
+                    <a href={`?page=${data.page - 1}`} class="pagination-link">
+                        {isIrish ? 'Roimhe Seo' : 'Previous'}
+                    </a>
+                {/if}
+
+                <span>
+                    {isIrish ? 'Leathanach' : 'Page'} {data.page}
+                </span>
+
+                {#if data.hasMore}
+                    <a href={`?page=${data.page + 1}`} class="pagination-link">
+                        {isIrish ? 'Ar Aghaidh' : 'Next'}
+                    </a>
+                {/if}
             </div>
         {:else}
             <p class="message">{isIrish ? 'Níl aon leabharmharcanna agat fós.' : 'You have no bookmarks yet.'}</p>
@@ -42,7 +87,7 @@
 
 .bookmarks-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
 }
 
@@ -68,13 +113,32 @@
     line-height: 1.5;
 }
 
+.bookmarks-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 32px;
+}
+
+.pagination-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    padding: 10px 16px;
+    border: 1px solid var(--text-primary);
+}
+
+.pagination-link:hover {
+    opacity: 0.7;
+}
+
 @media(max-width:1000px){
     .bookmarks-grid {
         grid-template-columns: repeat(3,1fr);
     }
 }
 
-@media(max-width:700px){
+@media(max-width:900px){
     .bookmarks-grid {
         grid-template-columns: repeat(2,1fr);
     }

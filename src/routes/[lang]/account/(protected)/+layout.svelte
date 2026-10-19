@@ -369,6 +369,13 @@
         row-gap: 0rem;
     }
 
+    .account-layout.bookmarks-layout {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto auto auto;
+        column-gap: 0.2rem;
+        row-gap: 1.5rem;
+    }
+
     .account-main-nav {
         flex-direction: row;
         flex-wrap: wrap;
