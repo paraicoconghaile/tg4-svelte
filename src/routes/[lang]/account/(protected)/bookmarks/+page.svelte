@@ -87,8 +87,8 @@
 
 .bookmarks-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
 }
 
 .bookmark-card {
