@@ -1,11 +1,18 @@
 <script lang="ts">
-    let { data } = $props();
-    let isIrish = $derived(data.lang === 'ga');
-    
     import { genres } from '$lib/config/playerNav';
     import { tick } from 'svelte';
     import { withBase } from '$lib/utils/paths';
+    import BookmarkButton from '$lib/components/sso/BookmarkButton.svelte';
 
+    let { data } = $props();
+    let isIrish = $derived(data.lang === 'ga');
+
+    let openBookmarkModal: (() => void) | undefined;
+
+    function registerBookmarkModal(openModal: () => void) {
+        openBookmarkModal = openModal;
+    }
+    
     let playerElement: HTMLVideoElement;
     let playing = $state(false);
     let playerID = "HJlOg6KUz";
@@ -117,12 +124,6 @@
 </script>
 
 <section class="episode-page">
-    <!-- <nav>
-        {#each genres as g}
-            <a class="language-switch" href={withBase(`/${data.lang}/player/${g.key[data.lang]}`)}>{g.label[data.lang]}</a>&nbsp;&nbsp;
-        {/each}
-    </nav> -->
-
     {#if !playing}
         <div class="poster">
             <img src={getImageUrl(data)} alt={data.video.seriesTitle} onerror={(e) => {
@@ -220,16 +221,31 @@
                 {/if}
 
                 <p>{formatDate(data.video.airDate)}</p>
-
-                <!-- <p><br />
-                    <a class="language-switch" href={withBase(`/${data.lang}/player/${data.slug}`)}>
-                        {data.backLabel}
-                    </a>
-                </p> -->
             </div>
 
             <div class="bookmark">
-                <a class="language-switch">+</a>&nbsp;<a class="language-switch">Bookmark</a>
+                <button
+                    class="bookmark-icon"
+                    type="button"
+                    onclick={() => openBookmarkModal?.()}
+                    aria-label={isIrish ? 'Cuir leabharmharc leis' : 'Add bookmark'}
+                >
+                    +
+                </button>
+
+                <button
+                    class="bookmark-text"
+                    type="button"
+                    onclick={() => openBookmarkModal?.()}
+                >
+                    {isIrish ? 'Leabharmharc' : 'Bookmark'}
+                </button>
+
+                <BookmarkButton
+                    bookmark={data.video.videoID}
+                    lang={data.lang}
+                    onReady={registerBookmarkModal}
+                />
             </div>
         </section>
     </section>

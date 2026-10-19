@@ -1,10 +1,17 @@
 <script lang="ts">
-    let { data } = $props();
-    let isIrish = $derived(data.lang === 'ga');
-    
     import { genres } from '$lib/config/playerNav';
     import { tick } from 'svelte';
     import { withBase } from '$lib/utils/paths';
+    import BookmarkButton from '$lib/components/sso/BookmarkButton.svelte';
+
+    let { data } = $props();
+    let isIrish = $derived(data.lang === 'ga');
+    
+    let openBookmarkModal: (() => void) | undefined;
+
+    function registerBookmarkModal(openModal: () => void) {
+        openBookmarkModal = openModal;
+    }
 
     let playerElement: HTMLVideoElement;
     let playing = $state(false);
@@ -214,10 +221,6 @@
                 {/if}
 
                 <p>{formatDate(data.video.airDate)}</p>
-
-                <!-- <p><br />
-                    <a class="language-switch" href={withBase(`/${data.lang}/player/${data.slug}`)}>{data.backLabel}</a>
-                </p> -->
             </div>
 
             <div class="bookmark">
@@ -281,5 +284,5 @@
 </style>
 
 <!-- <pre>
-    {JSON.stringify(data.video, null, 2)}
+    {JSON.stringify("Episode Data:", data, null, 2)}
 </pre> -->

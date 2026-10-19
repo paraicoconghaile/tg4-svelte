@@ -1,9 +1,17 @@
 <script lang="ts">
-    let { data } = $props();
-    let isIrish = $derived(data.lang === 'ga');
-    
     import { genres } from '$lib/config/playerNav';
     import { tick } from 'svelte';
+    import { withBase } from '$lib/utils/paths';
+    import BookmarkButton from '$lib/components/sso/BookmarkButton.svelte';
+
+    let { data } = $props();
+    let isIrish = $derived(data.lang === 'ga');
+
+    let openBookmarkModal: (() => void) | undefined;
+
+    function registerBookmarkModal(openModal: () => void) {
+        openBookmarkModal = openModal;
+    }
 
     let playerElement: HTMLVideoElement;
     let playing = $state(false);
@@ -215,7 +223,7 @@
                 <p>{formatDate(data.video.airDate)}</p>
 
                 <!-- <p><br />
-                    <a class="language-switch" href={`/${data.lang}/player/${data.slug}`}>{data.backLabel}</a>
+                    <a class="language-switch" href={withBase(`/${data.lang}/player/${data.slug}`)}>{data.backLabel}</a>
                 </p> -->
             </div>
 
@@ -231,10 +239,7 @@
 
             <div class="episode-grid">
                 {#each data.otherEpisodes as ep}
-                    <a
-                        class="episode-card"
-                        href={`/${data.lang}/player/${data.slug}/${ep.episodeID}`}
-                    >
+                    <a class="episode-card" href={withBase(`/${data.lang}/player/${data.slug}/${ep.episodeID}`)}>
                         <img
                             src={ep.prodCode
                                 ? `https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto:eco/${ep.prodCode}.jpg`
@@ -298,5 +303,5 @@
 </style>
 
 <!-- <pre>
-    {JSON.stringify(data.video, null, 2)}
+    {JSON.stringify("Episode Data:", data, null, 2)}
 </pre> -->

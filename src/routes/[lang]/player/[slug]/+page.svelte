@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { genres } from '$lib/config/playerNav';
-    import { onMount } from 'svelte';
     import { withBase } from '$lib/utils/paths';
     import BookmarkButton from '$lib/components/sso/BookmarkButton.svelte';
 
@@ -251,17 +249,11 @@
                                 {/if}
                             </p>
 
-                            <p>{ep.episodeDescription}</p>
+                            <p>{ep.episodeDescription}...</p>
                         </div>
                     </article>
                 {/each}
             </div>
-
-            <!-- {#if visibleEpisodes < selectedSeason.episodes.length}
-                <div class="load-more">
-                    <button onclick={loadMoreEpisodes}>{data.lang === 'ga' ? 'Tuilleadh' : 'Load more'}</button>
-                </div>
-            {/if} -->
 
             {#if visibleEpisodes < selectedSeason.episodes.length}
                 <div class="load-more-trigger" bind:this={loadMoreTrigger}></div>

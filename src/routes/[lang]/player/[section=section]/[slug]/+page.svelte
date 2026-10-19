@@ -8,11 +8,11 @@
     let seasonDropdownOpen = $state(false);
     let visibleEpisodes = $state(8);
 
-    /* function selectSeason(season: any) {
-        selectedSeason = season;
-        visibleEpisodes = 8;
-        seasonDropdownOpen = false;
-    } */
+    let openBookmarkModal: (() => void) | undefined = $state();
+
+    function registerBookmarkModal(openModal: () => void) {
+        openBookmarkModal = openModal;
+    }
 
     async function selectSeason(season: any) {
         seasonDropdownOpen = false;
@@ -26,14 +26,14 @@
         }
 
         selectedSeason = await response.json();
+
+        /* console.log('Selected season data:', selectedSeason);
+        console.log('First episode:', selectedSeason.episodes?.[0]); */
     }
 
     function loadMoreEpisodes() {
         visibleEpisodes += 8;
     }
-
-    import { genres } from '$lib/config/playerNav';
-    import { onMount } from 'svelte';
 
     let loadMoreTrigger: HTMLDivElement;
 
@@ -86,7 +86,21 @@
         );
     }
 
-    //console.log("Data", JSON.stringify(data, null, 2));
+    const subtitleLanguages: Record<string, Record<string, string>> = {
+        en: {
+            en: 'English',
+            ga: 'Irish'
+        }, ga: {
+            en: 'Béarla',
+            ga: 'Gaeilge'
+        }
+    };
+
+    function getLanguageName(code: string, lang: string) {
+        return subtitleLanguages[lang]?.[code] ?? code;
+    }
+
+    //console.log("Series Data", JSON.stringify(data, null, 2));
 </script>
 
 <section class="episode-page">
@@ -109,7 +123,15 @@
                     <p>{description}</p>
                 {/if}
                     
-                <p>{data.series.series.subtitles} {data.series.series.contentRating}</p>
+                <p>
+                    {#each data.series.series.subtitles as subtitle}
+                        <!-- <span class="subtitles-icon" title="Subtitles">CC</span> -->
+                        <span class="languages">{getLanguageName(subtitle, data.lang)}</span>
+                    {/each}
+                    {#if data.series.series.contentRating}
+                        <span class="content-rating">{data.series.series.contentRating}</span>
+                    {/if}
+                </p>
 
                 <div class="hero-buttons">
                     <div class="hero-button">
@@ -126,14 +148,14 @@
                     </div>
 
                     <div class="hero-button">
-                        <button class="hero-button-icon" type="button">
+                        <button class="hero-button-icon" type="button" onclick={() => openBookmarkModal?.()} aria-label={isIrish ? 'Cuir leabharmharc leis' : 'Add bookmark'}>
                             <svg width="27" height="26" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M8.9079 10.0013V25.6H15.6689V15.6169H23.5105L26.4 10.0013H8.9079Z" fill="#2B2A2A"/>
                                 <path d="M15.6586 15.5987L15.6586 0L8.89755 5.64766e-07L8.89755 9.98315H0L5.13447e-07 15.5987L15.6586 15.5987Z" fill="#2B2A2A"/>
                             </svg>
                         </button>
                         
-                        <BookmarkButton bookmark={data.slug} lang={data.lang} />
+                        <BookmarkButton bookmark={data.slug} lang={data.lang} onReady={registerBookmarkModal} />
 
                         <!-- <button class="hero-button-text" type="button">{data.lang === 'ga' ? 'Bookmark' : 'Bookmark'}</button> -->
                     </div>
@@ -170,7 +192,6 @@
         <!-- Selected season -->
         <section class="series">
             <div class="episode-grid">
-                <!-- {#each selectedSeason.episodes as ep} -->
                 {#each selectedSeason.episodes.slice(0, visibleEpisodes) as ep}
                     <article class="episode">
                         <div class="episode-media">
@@ -215,9 +236,20 @@
                         <div class="episode-info">
                             <h3>{data.lang === 'ga' ? 'Eipeasóid' : 'Episode'} {ep.episodeNumber}</h3>
 
-                            <p>S{ep.seriesNumber} E{ep.episodeNumber}</p>
+                            <p>
+                                S{ep.seriesNumber}
+                                E{ep.episodeNumber}
+                                {#if ep.duration >= 3600}
+                                    {Math.floor(ep.duration / 3600)}{data.lang === 'ga' ? 'h' : 'h'}
+                                    {#if Math.floor((ep.duration % 3600) / 60) > 0}
+                                        {Math.floor((ep.duration % 3600) / 60)}{data.lang === 'ga' ? 'm' : 'm'}
+                                    {/if}
+                                {:else}
+                                    {Math.floor(ep.duration / 60)}{data.lang === 'ga' ? 'm' : 'm'}
+                                {/if}
+                            </p>
 
-                            <p>{ep.episodeDescription}</p>
+                            <p>{ep.episodeDescription}...</p>
                         </div>
                     </article>
                 {/each}
@@ -231,5 +263,5 @@
 </section>
 
 <!-- <pre>
-    {JSON.stringify(data.episodes, null, 2)}
+    {JSON.stringify(data, null, 2)}
 </pre> -->
