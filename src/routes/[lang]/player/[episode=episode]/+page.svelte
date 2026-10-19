@@ -239,7 +239,7 @@
                     {isIrish ? 'Leabharmharc' : 'Bookmark'}
                 </button>
 
-                <BookmarkButton bookmark={data.video.videoID} lang={data.lang} onReady={registerBookmarkModal} showButton={false}
+                <BookmarkButton bookmark={data.video.videoId} lang={data.lang} onReady={registerBookmarkModal} showButton={false}
                 />
             </div>
         </section>

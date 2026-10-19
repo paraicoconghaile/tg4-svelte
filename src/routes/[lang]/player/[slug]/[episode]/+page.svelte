@@ -190,7 +190,7 @@
                     {/if}
                 </p>
 
-                <p>{data.video.description}, {data.video.videoId}</p>
+                <p>{data.video.description}</p>
 
                 <p>
                     {#if data.video.subtitles?.length}
@@ -235,7 +235,7 @@
                     {isIrish ? 'Leabharmharc' : 'Bookmark'}
                 </button>
 
-                <BookmarkButton bookmark={data.video.videoID} lang={data.lang} onReady={registerBookmarkModal} showButton={false}
+                <BookmarkButton bookmark={data.video.videoId} lang={data.lang} onReady={registerBookmarkModal} showButton={false}
                 />
             </div>
         </section>
