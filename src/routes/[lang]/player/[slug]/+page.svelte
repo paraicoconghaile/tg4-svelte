@@ -92,8 +92,7 @@
         en: {
             en: 'English',
             ga: 'Irish'
-        },
-        ga: {
+        }, ga: {
             en: 'Béarla',
             ga: 'Gaeilge'
         }

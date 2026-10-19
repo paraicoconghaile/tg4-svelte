@@ -83,9 +83,7 @@
     }
 </script>
 
-<button class="hero-button-text" type="button" onclick={openModal} disabled={loading}>
-    {loading ? (isIrish ? 'Ag lódáil…' : 'Loading…') : 'Bookmark'}
-</button>
+<button class="hero-button-text" type="button" onclick={openModal} disabled={loading}>{loading ? (isIrish ? 'Ag lódáil…' : 'Loading…') : 'Bookmark'}</button>
 
 {#if modalOpen}
     <div class="bookmark-modal-backdrop" role="presentation" onclick={(event) => {
