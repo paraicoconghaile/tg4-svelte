@@ -254,7 +254,7 @@
 .episode-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 20px;
+    gap: 6px;
 }
 
 .episode {
@@ -434,12 +434,15 @@
     .episode {
         grid-template-columns: 1fr;
     }
+    .hero-button {
+        height: 30px;
+    }
 }
 
 @media (max-width: 500px) {
-    .episode-hero {
-        height: 300px;
-    }
+    /* .episode-hero {
+        height: 350px;
+    } */
     .episode-grid {
         grid-template-columns: 1fr;
     }

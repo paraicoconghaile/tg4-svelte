@@ -2,7 +2,7 @@
     import { getContext, onMount } from 'svelte';
     import { page } from '$app/state';
 
-    let loading = $state(true);
+    let loading = $state(false);
     let error = $state('');
 
     const account = getContext<{
@@ -79,7 +79,7 @@
 
     const messages = $derived(prefMessages [page.params.lang === 'ga' ? 'ga' : 'en']);
     
-    onMount(() => {
+    /* onMount(() => {
         profile = account.profile;
 
         if (!profile) {
@@ -99,7 +99,7 @@
         genres = [...(extraPref.genres ?? [])];
 
         loading = false;
-    });
+    }); */
 
     async function handleSubmit() {
         saved = false;

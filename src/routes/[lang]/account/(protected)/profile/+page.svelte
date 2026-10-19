@@ -375,8 +375,10 @@ select {
 
 .radio-options {
     display: flex;
+    flex-wrap: wrap;
     width: 100%;
     margin-top: 12px;
+    row-gap: 10px;
 }
 
 .radio-options label {
@@ -499,5 +501,11 @@ select {
     background: var(--tg4-grey-2);
     color: white;
     border-radius: 0;
+}
+
+@media (max-width: 500px) {
+    .radio-options label {
+        flex: 0 0 50%;
+    }
 }
 </style>

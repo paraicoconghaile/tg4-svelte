@@ -383,4 +383,10 @@
         display: none;
     }
 }
+
+@media (max-width: 600px) {
+    .account-page {
+        padding: 0;
+    }
+}
 </style>
