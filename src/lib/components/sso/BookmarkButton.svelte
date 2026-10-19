@@ -103,37 +103,19 @@
                 <p class="bookmark-error">{error}</p>
 
                 {#if error.includes('logged in') || error.includes('logáil isteach')}
-                    <a href={withBase(`/${lang}/account/login`)}>
-                        {isIrish ? 'Logáil isteach' : 'Log in / Register'}
-                    </a>
+                    <p><a href={withBase(`/${lang}/account/login`)}>{isIrish ? 'Logáil isteach' : 'Log in / Register'}</a></p>
                 {/if}
             {:else if message}
                 <p class="bookmark-success">{message}</p>
             {:else}
-                <p>
-                    {isIrish
-                        ? 'Cliceáil thíos chun an clár a chur le do sheinnliosta.'
-                        : 'Click below to add this programme to your playlist.'}
-                </p>
+                <p>{isIrish ? 'Cliceáil thíos chun an clár a chur le do sheinnliosta.' : 'Click below to add this programme to your playlist.'}</p>
 
-                <ul class="playlist-list">
-                    {#each playlists as playlist (playlist.businessId)}
-                        <li>
-                            <button
-                                type="button"
-                                onclick={() => addBookmark(playlist.businessId)}
-                                disabled={loading}
-                            >
-                                {isIrish ? 'Mo Sheinnliosta' : 'My Playlist'}
-                            </button>
-                        </li>
-                    {/each}
-                </ul>
+                {#each playlists as playlist (playlist.businessId)}
+                    <p><button type="button" onclick={() => addBookmark(playlist.businessId)} disabled={loading}>{isIrish ? 'Mo Sheinnliosta' : 'My Playlist'}</button></p>
+                {/each}
             {/if}
 
-            <button type="button" onclick={() => modalOpen = false}>
-                {isIrish ? 'DÚN' : 'CLOSE'}
-            </button>
+            <button type="button" onclick={() => modalOpen = false}>{isIrish ? 'DÚN' : 'CLOSE'}</button>
         </section>
     </div>
 {/if}
