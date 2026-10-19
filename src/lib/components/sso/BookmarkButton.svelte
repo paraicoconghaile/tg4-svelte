@@ -103,7 +103,7 @@
                 <p class="bookmark-error">{error}</p>
 
                 {#if error.includes('logged in') || error.includes('logáil isteach')}
-                    <p><a href={withBase(`/${lang}/account/login`)}>{isIrish ? 'Logáil isteach' : 'Log in / Register'}</a></p>
+                    <p><a class="regLink" href={withBase(`/${lang}/account/login`)}>{isIrish ? 'Logáil isteach' : 'Log in / Register'}</a></p>
                 {/if}
             {:else if message}
                 <p class="bookmark-success">{message}</p>
@@ -141,5 +141,14 @@
     padding: 24px;
     background: #fff;
     color: #222;
+}
+
+.regLink {
+    cursor: pointer;
+    color: var(--tg4-pink);
+}
+
+.regLink:hover {
+    color: #000;
 }
 </style>
