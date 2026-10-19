@@ -2,6 +2,7 @@
     import { genres } from '$lib/config/playerNav';
     import { onMount } from 'svelte';
     import { withBase } from '$lib/utils/paths';
+    import BookmarkButton from '$lib/components/sso/BookmarkButton.svelte';
 
     let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
@@ -150,10 +151,10 @@
                                 <path d="M15.6586 15.5987L15.6586 0L8.89755 5.64766e-07L8.89755 9.98315H0L5.13447e-07 15.5987L15.6586 15.5987Z" fill="#2B2A2A"/>
                             </svg>
                         </button>
+                        
+                        <BookmarkButton bookmark={data.slug} lang={data.lang} />
 
-                        <button class="hero-button-text" type="button">
-                            {data.lang === 'ga' ? 'Bookmark' : 'Bookmark'}
-                        </button>
+                        <!-- <button class="hero-button-text" type="button">{data.lang === 'ga' ? 'Bookmark' : 'Bookmark'}</button> -->
                     </div>
                 </div>
             </div>

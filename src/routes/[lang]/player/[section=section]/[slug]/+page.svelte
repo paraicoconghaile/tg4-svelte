@@ -1,10 +1,12 @@
 <script lang="ts">
+    import { withBase } from '$lib/utils/paths';
+    import BookmarkButton from '$lib/components/sso/BookmarkButton.svelte';
+
     let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
     let selectedSeason = $state(data.seasons[0]);
     let seasonDropdownOpen = $state(false);
     let visibleEpisodes = $state(8);
-    import { withBase } from '$lib/utils/paths';
 
     /* function selectSeason(season: any) {
         selectedSeason = season;
@@ -130,10 +132,10 @@
                                 <path d="M15.6586 15.5987L15.6586 0L8.89755 5.64766e-07L8.89755 9.98315H0L5.13447e-07 15.5987L15.6586 15.5987Z" fill="#2B2A2A"/>
                             </svg>
                         </button>
+                        
+                        <BookmarkButton bookmark={data.slug} lang={data.lang} />
 
-                        <button class="hero-button-text" type="button">
-                            {data.lang === 'ga' ? 'Bookmark' : 'Bookmark'}
-                        </button>
+                        <!-- <button class="hero-button-text" type="button">{data.lang === 'ga' ? 'Bookmark' : 'Bookmark'}</button> -->
                     </div>
                 </div>
             </div>
