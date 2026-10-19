@@ -10,6 +10,12 @@
     let seasonDropdownOpen = $state(false);
     let visibleEpisodes = $state(8);
 
+    let openBookmarkModal: (() => void) | undefined = $state();
+
+    function registerBookmarkModal(openModal: () => void) {
+        openBookmarkModal = openModal;
+    }
+
     async function selectSeason(season: any) {
         seasonDropdownOpen = false;
         visibleEpisodes = 8;
@@ -97,7 +103,7 @@
         return subtitleLanguages[lang]?.[code] ?? code;
     }
 
-    console.log("Series Data", JSON.stringify(data, null, 2));
+    //console.log("Series Data", JSON.stringify(data, null, 2));
 </script>
 
 <section class="episode-page">
@@ -145,14 +151,14 @@
                     </div>
 
                     <div class="hero-button">
-                        <button class="hero-button-icon" type="button">
+                        <button class="hero-button-icon" type="button" onclick={() => openBookmarkModal?.()} aria-label={isIrish ? 'Cuir leabharmharc leis' : 'Add bookmark'}>
                             <svg width="27" height="26" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M8.9079 10.0013V25.6H15.6689V15.6169H23.5105L26.4 10.0013H8.9079Z" fill="#2B2A2A"/>
                                 <path d="M15.6586 15.5987L15.6586 0L8.89755 5.64766e-07L8.89755 9.98315H0L5.13447e-07 15.5987L15.6586 15.5987Z" fill="#2B2A2A"/>
                             </svg>
                         </button>
                         
-                        <BookmarkButton bookmark={data.slug} lang={data.lang} />
+                        <BookmarkButton bookmark={data.slug} lang={data.lang} onReady={registerBookmarkModal} />
 
                         <!-- <button class="hero-button-text" type="button">{data.lang === 'ga' ? 'Bookmark' : 'Bookmark'}</button> -->
                     </div>

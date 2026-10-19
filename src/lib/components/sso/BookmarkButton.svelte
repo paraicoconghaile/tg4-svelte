@@ -4,15 +4,19 @@
 
     let {
         bookmark,
-        lang
+        lang,
+        onReady
     }: {
         bookmark: string | number;
         lang: 'ga' | 'en';
+        onReady?: (openModal: () => void) => void;
     } = $props();
 
     let modalOpen = $state(false);
     let loading = $state(false);
     let error = $state('');
+    let playlists = $state<any[]>([]);
+    let message = $state('');
 
     const isIrish = $derived(lang === 'ga');
     
@@ -45,6 +49,10 @@
         }
     }
 
+    $effect(() => {
+        onReady?.(openModal);
+    });
+
     async function addBookmark(playlist: string) {
         loading = true;
         error = '';
@@ -75,15 +83,8 @@
     }
 </script>
 
-<button
-    class="bookmark-button"
-    type="button"
-    onclick={openModal}
-    disabled={loading}
->
-    {loading
-        ? (isIrish ? 'Á LÓDÁIL…' : 'LOADING…')
-        : '+ BOOKMARK'}
+<button class="hero-button-text" type="button" onclick={openModal} disabled={loading}>
+    {loading ? (isIrish ? 'Ag lódáil…' : 'Loading…') : 'Bookmark'}
 </button>
 
 {#if modalOpen}
