@@ -79,7 +79,7 @@
 
     const messages = $derived(prefMessages [page.params.lang === 'ga' ? 'ga' : 'en']);
     
-    /* onMount(() => {
+    onMount(() => {
         profile = account.profile;
 
         if (!profile) {
@@ -99,7 +99,7 @@
         genres = [...(extraPref.genres ?? [])];
 
         loading = false;
-    }); */
+    });
 
     async function handleSubmit() {
         saved = false;

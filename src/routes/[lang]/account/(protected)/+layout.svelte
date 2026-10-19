@@ -8,7 +8,7 @@
 
     let { children } = $props();
 
-    let loading = $state(true);
+    let loading = $state(false);
     let error = $state('');
     let pu = $state<any>(null);
     let profile = $state<any>(null);
