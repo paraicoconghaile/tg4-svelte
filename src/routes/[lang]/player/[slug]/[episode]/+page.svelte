@@ -1,6 +1,6 @@
 <script lang="ts">
     import { genres } from '$lib/config/playerNav';
-    import { tick } from 'svelte';
+    import { tick, onDestroy } from 'svelte';
     import { withBase } from '$lib/utils/paths';
     import { page } from '$app/state';
     import { loadPeachUser } from '$lib/sso/peach';
@@ -22,37 +22,52 @@
     let lastHistoryUpdate = 0;
     let historyUpdateInProgress = false;
     let historyAuthenticated = false;
+    let pendingHistoryPosition: number | null = null;
+    
+    let activePlayer: any = null;
 
     const startAt = $derived(
         Math.max(0, Number(page.url.searchParams.get('startAt')) || 0)
     );
 
     async function savePlaybackPosition(player: any) {
-        if (!historyAuthenticated || historyUpdateInProgress) return;
-
-        const playbackPosition = Math.floor(player.currentTime());
-
-        // Don't overwrite useful history with zero or an older position
-        if (playbackPosition <= 0 || playbackPosition === lastHistoryUpdate) return;
-
-        historyUpdateInProgress = true;
+        if (!historyAuthenticated) return;
 
         try {
-            const pu = await loadPeachUser();
+            const playbackPosition = Math.floor(player.currentTime());
 
-            await pu.updateMediaPlaybackPosition(
-                0,
-                data.video.videoId,
-                playbackPosition
-            );
+            if (playbackPosition <= 0 || playbackPosition === lastHistoryUpdate) return;
 
-            console.log('History position saved:', playbackPosition);
+            // Remember the newest position, even if a save is in progress
+            pendingHistoryPosition = playbackPosition;
 
-            lastHistoryUpdate = playbackPosition;
+            if (historyUpdateInProgress) return;
+
+            historyUpdateInProgress = true;
+
+            try {
+                const pu = await loadPeachUser();
+
+                while (pendingHistoryPosition !== null) {
+                    const positionToSave = pendingHistoryPosition;
+                    pendingHistoryPosition = null;
+
+                    if (positionToSave === lastHistoryUpdate) continue;
+
+                    await pu.updateMediaPlaybackPosition(
+                        0,
+                        data.video.videoId,
+                        positionToSave
+                    );
+
+                    console.log('History position saved:', positionToSave);
+                    lastHistoryUpdate = positionToSave;
+                }
+            } finally {
+                historyUpdateInProgress = false;
+            }
         } catch (error) {
             console.error('Failed to update playback history:', error);
-        } finally {
-            historyUpdateInProgress = false;
         }
     }
 
@@ -96,6 +111,8 @@
             const videojs = (window as any).videojs;
             const player = videojs?.getPlayer?.('Subtitles');
 
+            activePlayer = player;
+
             if (!player) {
                 console.error('Brightcove player not found');
                 return;
@@ -137,6 +154,17 @@
 
         //console.log('6. SCRIPT INSERTED');
     }
+
+    onDestroy(() => {
+        const player = activePlayer;
+
+        if (!player || player.isDisposed?.()) return;
+
+        void savePlaybackPosition(player);
+
+        player.off('timeupdate');
+        player.off('pause');
+    });
 
     function getImageUrl(data: any) {
         /* if (data.video?.prodCode) {
