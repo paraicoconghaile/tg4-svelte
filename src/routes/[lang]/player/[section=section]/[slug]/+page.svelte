@@ -120,7 +120,7 @@
                 {/if}
 
                 {#if description}
-                    <p>{description}</p>
+                    <p class="hero-description">{description}</p>
                 {/if}
                     
                 <p>
@@ -161,6 +161,12 @@
             </div>
         </div>
     </section>
+
+    {#if description}
+        <div class="mobile-description">
+            <p>{description}</p>
+        </div>
+    {/if}
 
     <!-- Seasons -->
     <section class="episodes">
