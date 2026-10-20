@@ -66,7 +66,7 @@ export async function load({ params }) {
         })
         .slice(0, 4)
         .map((ep) => ({
-            title: ep.displayName,
+            title: ep.displayTitle,
             episodeID: ep.vid,
             episodeNumber: ep.episodeNumber,
             seriesNumber: ep.seasonNumber,

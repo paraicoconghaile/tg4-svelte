@@ -102,7 +102,7 @@
                         : (content.mainImage?.large ?? content.image?.large)
                     }
 
-                    {@const name = isSeries ? content.name : content.displayName}
+                    {@const name = isSeries ? content.name : content.displayTitle}
 
                     <div class="embla__slide">
                         {#if isSeries}
@@ -123,7 +123,7 @@
                             <!-- Keep your existing VIDEO URL here -->
                             <a href="#">
                                 <img src={image} alt={name} />
-                                {#if content.seriesTitle === content.displayName}
+                                {#if content.seriesTitle === content.displayTitle}
                                     <h3>{content.seriesTitle}</h3>
                                     <p>
                                     {#if content.seasonNumber}
@@ -140,7 +140,10 @@
                                     {/if}
                                     {#if content.episodeNumber}
                                         E{content.episodeNumber}
-                                    {/if}: {content.displayName}</p>
+                                    {/if}
+                                    {#if content.displayTitle}
+                                        : {content.displayTitle}
+                                    {/if}</p>
                                 {/if}
                             </a>
                         {/if}

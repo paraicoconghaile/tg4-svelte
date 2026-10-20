@@ -174,7 +174,7 @@
                     {data.lang === 'ga' ? 'Seasúr' : 'Season'}
                     {data.video.seriesNumber},
                     {data.lang === 'ga' ? 'Eipeasóid' : 'Episode'}
-                    {data.video.episodeNumber}
+                    {data.video.episodeNumber}<br />{data.video.title}
                 </h2>
 
                 <p>

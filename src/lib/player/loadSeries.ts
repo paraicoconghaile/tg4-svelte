@@ -30,7 +30,7 @@ export async function loadSeries(slug: string, lang: string) {
     //console.log("Raw Episodes:", rawEpisodes);
 
     const episodes = rawEpisodes?.videos?.map((ep) => ({
-        title: ep.displayName,
+        title: ep.displayTitle,
         episodeID: ep.vid,
         episodeNumber: ep.episodeNumber,
         seriesNumber: ep.seasonNumber,
@@ -65,7 +65,7 @@ export async function loadSeason(
     );
 
     const episodes = rawEpisodes?.videos?.map((ep) => ({
-        title: ep.displayName,
+        title: ep.displayTitle,
         episodeID: ep.vid,
         episodeNumber: ep.episodeNumber,
         seriesNumber: ep.seasonNumber,

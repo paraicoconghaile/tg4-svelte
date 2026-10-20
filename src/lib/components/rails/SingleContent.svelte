@@ -14,7 +14,7 @@
 
     let image = '';
     let link = '#';
-    let displayName = '';
+    let displayTitle = '';
 
     if (item?.type === 'VIDEO' && item.video) {
         const video = item.video;
@@ -25,7 +25,7 @@
             ?? '';
 
         link = `/${isIrish ? 'ga' : 'en'}/player/${video.vid}`;
-        displayName = video.displayName ?? '';
+        displayTitle = video.displayTitle ?? '';
 
     } else if (item?.type === 'SERIES' && item.series) {
         const series = item.series;
@@ -36,13 +36,13 @@
             ?? '';
 
         link = `/${isIrish ? 'ga' : 'en'}/player/${series.slug}`;
-        displayName = series.name ?? '';
+        displayTitle = series.name ?? '';
     }
 </script>
 
 <section class="single-content">
     <a class="single-card" href={withBase(link)}>
-        <img src={image} alt={displayName}/>
+        <img src={image} alt={displayTitle}/>
 
         <div class="play-box">
             <svg

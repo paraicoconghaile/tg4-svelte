@@ -36,11 +36,11 @@
                         <article class="search-result">
                             <img
                                 src={result.video.image.large}
-                                alt={result.video.displayName}
+                                alt={result.video.displayTitle}
                             />
 
                             <div>
-                                <h2>{result.video.displayName}</h2>
+                                <h2>{result.video.displayTitle}</h2>
 
                                 {#if result.video.customFields?.seriestitle}
                                     <p class="series">

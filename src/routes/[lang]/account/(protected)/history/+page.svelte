@@ -23,9 +23,9 @@
                         <img src={history?.image?.large
                                     ?? history?.image?.original
                                     ?? history?.poster}
-                                alt={history?.displayName ?? ''}
+                                alt={history?.displayTitle ?? history?.displayName}
                                 loading="lazy" onerror={(e) => {e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';}}/>
-                        <h3>{history?.displayName ?? ''}</h3>
+                        <h3>{history?.displayTitle ?? history?.displayName}</h3>
                     </a>
                 {/each}
             </div>
@@ -87,6 +87,6 @@
 }
 </style>
 
-<!-- <pre>
+<pre>
     {JSON.stringify(data, null, 2)}
-</pre> -->
+</pre>

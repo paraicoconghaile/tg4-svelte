@@ -102,7 +102,7 @@
                         : (content.mainImage?.large ?? content.image?.large)
                     }
 
-                    {@const name = isSeries ? content.seriesTitle : content.displayName}
+                    {@const name = isSeries ? content.seriesTitle : content.displayTitle}
 
                     <div class="embla__slide">
                         {#if isSeries}
@@ -133,7 +133,7 @@
                                         </div>
                                     {/if}
                                 </div>
-                                {#if content.seriesTitle === content.displayName}
+                                {#if content.seriesTitle === content.displayTitle}
                                     <h3>{content.seriesTitle}</h3>
                                     <p>
                                     {#if content.seasonNumber}
@@ -150,7 +150,10 @@
                                     {/if}
                                     {#if content.episodeNumber}
                                         E{content.episodeNumber}
-                                    {/if}: {content.displayName}</p>
+                                    {/if}
+                                    {#if content.displayTitle}
+                                        : {content.displayTitle}
+                                    {/if}</p>
                                 {/if}
                             </a>
                         {/if}

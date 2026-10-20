@@ -46,13 +46,13 @@
                                 src={bookmark.video.image?.large
                                     ?? bookmark.video.image?.original
                                     ?? bookmark.video.poster}
-                                alt={bookmark.video.displayName ?? ''}
+                                alt={bookmark.video.displayTitle ?? ''}
                                 loading="lazy"
                                 onerror={(e) => {
                                     e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';
                                 }}
                             />
-                            <h3>{bookmark.video.displayName ?? ''}</h3>
+                            <h3>{bookmark.video.displayTitle ?? ''}</h3>
                         </a>
                     {/if}
                 {/each}
