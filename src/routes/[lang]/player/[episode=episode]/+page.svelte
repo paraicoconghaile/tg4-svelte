@@ -33,7 +33,7 @@
         const playbackPosition = Math.floor(player.currentTime());
 
         // Don't overwrite useful history with zero or an older position
-        if (playbackPosition <= 0 || playbackPosition <= lastHistoryUpdate) return;
+        if (playbackPosition <= 0 || playbackPosition === lastHistoryUpdate) return;
 
         historyUpdateInProgress = true;
 
@@ -255,7 +255,7 @@
     <section class="episodes">
         <section class="video-info">
             <div class="video-details">
-                <h1>{data.video.seriesTitle}...</h1>
+                <h1>{data.video.seriesTitle}</h1>
 
                 <h2>
                     {data.lang === 'ga' ? 'Seasúr' : 'Season'}
