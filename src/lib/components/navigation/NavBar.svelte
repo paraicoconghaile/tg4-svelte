@@ -508,6 +508,7 @@
     font-weight: 700;
     line-height: 1;
     text-transform: uppercase;
+    border: 3px solid var(--tg4-white);
 }
 
 .mobile-nav,
