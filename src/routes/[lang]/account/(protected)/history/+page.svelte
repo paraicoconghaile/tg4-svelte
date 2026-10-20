@@ -19,7 +19,7 @@
         {:else if data.history?.length}
             <div class="bookmarks-grid">
                 {#each data.history as history}
-                    <a class="bookmark-card" href={withBase(`/${data.lang}/player/${history.vid}`)}>
+                    <a class="bookmark-card" href={withBase(`/${data.lang}/player/${history.vid}?startAt=${history.playbackLastPosition ?? 0}`)}>
                         <div class="history-card-image">
                             <img src={history?.image?.large
                                         ?? history?.image?.original

@@ -269,7 +269,7 @@
         </ul>
         <div class="mobile-menu-footer">
             <a href={switchLanguage} class="language-switch" onclick={closeMobileMenu}>{isIrish ? 'English' : 'Gaeilge'}</a>
-            <a href={withBase(isIrish ? '/ga/account/login' : '/en/account/login')}><img src="/icons/profile.svg" alt="TG4 Account" class="sso_logo"></a>
+            <a href={withBase(isIrish ? '/ga/account/login' : '/en/account/login')}><img src={withBase('/icons/profile.svg')} alt="TG4 Account" class="sso_logo"></a>
         </div>
     </div>
 {/if}

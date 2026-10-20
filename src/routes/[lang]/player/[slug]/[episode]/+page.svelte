@@ -3,6 +3,7 @@
     import { tick } from 'svelte';
     import { withBase } from '$lib/utils/paths';
     import BookmarkButton from '$lib/components/sso/BookmarkButton.svelte';
+    import { page } from '$app/state';
 
     let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
@@ -16,6 +17,10 @@
     let playerElement: HTMLVideoElement;
     let playing = $state(false);
     let playerID = "HJlOg6KUz";
+
+    const startAt = $derived(
+        Math.max(0, Number(page.url.searchParams.get('startAt')) || 0)
+    );
 
     async function startPlayer() {
         //console.log('1. PLAY CLICKED');
@@ -36,17 +41,31 @@
 
         const script = document.createElement('script');
 
-        script.src =
-            `https://players.brightcove.net/1555966122001/${playerID}_default/index.min.js`;
+        script.src = `https://players.brightcove.net/1555966122001/${playerID}_default/index.min.js`;
 
         script.async = true;
 
+        script.onload = () => {
+            const videojs = (window as any).videojs;
+            const player = videojs?.getPlayer?.('Subtitles');
+
+            if (!player) {
+                console.error('Brightcove player not found');
+                return;
+            }
+
+            player.ready(() => {
+                if (startAt > 0) {
+                    player.one('loadedmetadata', () => {
+                        player.currentTime(startAt);
+                    });
+                }
+            });
+        };
+
         //console.log('5. Loading Brightcove:', script.src);
 
-        playerElement.insertAdjacentElement(
-            'afterend',
-            script
-        );
+        playerElement.insertAdjacentElement('afterend', script);
 
         //console.log('6. SCRIPT INSERTED');
     }
