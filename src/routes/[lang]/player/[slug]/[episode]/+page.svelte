@@ -147,6 +147,10 @@
                 player.on('pause', () => {
                     void savePlaybackPosition(player);
                 });
+
+                player.on('ended', () => {
+                    void savePlaybackPosition(player);
+                });
             });
 
         };
