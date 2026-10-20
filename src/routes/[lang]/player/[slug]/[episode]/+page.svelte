@@ -2,8 +2,9 @@
     import { genres } from '$lib/config/playerNav';
     import { tick } from 'svelte';
     import { withBase } from '$lib/utils/paths';
-    import BookmarkButton from '$lib/components/sso/BookmarkButton.svelte';
     import { page } from '$app/state';
+    import { loadPeachUser } from '$lib/sso/peach';
+    import BookmarkButton from '$lib/components/sso/BookmarkButton.svelte';
 
     let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
@@ -18,9 +19,55 @@
     let playing = $state(false);
     let playerID = "HJlOg6KUz";
 
+    let lastHistoryUpdate = 0;
+    let historyUpdateInProgress = false;
+    let historyAuthenticated = false;
+
     const startAt = $derived(
         Math.max(0, Number(page.url.searchParams.get('startAt')) || 0)
     );
+
+    async function savePlaybackPosition(player: any) {
+        if (!historyAuthenticated || historyUpdateInProgress) return;
+
+        const playbackPosition = Math.floor(player.currentTime());
+
+        // Don't overwrite useful history with zero or an older position
+        if (playbackPosition <= 0 || playbackPosition <= lastHistoryUpdate) return;
+
+        historyUpdateInProgress = true;
+
+        try {
+            const pu = await loadPeachUser();
+
+            await pu.updateMediaPlaybackPosition(
+                0,
+                data.video.videoId,
+                playbackPosition
+            );
+
+            console.log('History position saved:', playbackPosition);
+
+            lastHistoryUpdate = playbackPosition;
+        } catch (error) {
+            console.error('Failed to update playback history:', error);
+        } finally {
+            historyUpdateInProgress = false;
+        }
+    }
+
+    async function checkHistoryAuthentication() {
+        try {
+            const pu = await loadPeachUser();
+            const result = await pu.getPlaylists();
+
+            historyAuthenticated = result?.error !== 'Unauthorized'
+                && !result?.error;
+        } catch (error) {
+            historyAuthenticated = false;
+            console.error('History authentication check failed:', error);
+        }
+    }
 
     async function startPlayer() {
         //console.log('1. PLAY CLICKED');
@@ -54,13 +101,34 @@
                 return;
             }
 
-            player.ready(() => {
+            player.ready(async () => {
+                await checkHistoryAuthentication();
+
                 if (startAt > 0) {
                     player.one('loadedmetadata', () => {
                         player.currentTime(startAt);
                     });
                 }
+
+                // Save playback position every 10 seconds
+                player.on('timeupdate', () => {
+                    const playbackPosition = Math.floor(player.currentTime());
+
+                    if (
+                        playbackPosition > 0 &&
+                        playbackPosition % 10 === 0 &&
+                        playbackPosition !== lastHistoryUpdate
+                    ) {
+                        void savePlaybackPosition(player);
+                    }
+                });
+
+                // Save immediately when playback pauses
+                player.on('pause', () => {
+                    void savePlaybackPosition(player);
+                });
             });
+
         };
 
         //console.log('5. Loading Brightcove:', script.src);
@@ -187,7 +255,7 @@
     <section class="episodes">
         <section class="video-info">
             <div class="video-details">
-                <h1>{data.video.seriesTitle}</h1>
+                <h1>{data.video.seriesTitle}...</h1>
 
                 <h2>
                     {data.lang === 'ga' ? 'Seasúr' : 'Season'}
