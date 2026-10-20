@@ -3,6 +3,8 @@
     import { page } from '$app/state';
     import { withBase, stripBase } from '$lib/utils/paths';
     import { getGenreByKey } from '$lib/config/playerNav';
+    import { loadPeachUser } from '$lib/sso/peach';
+    import { onMount } from 'svelte';
 
     const isIrish = $derived(stripBase(page.url.pathname) === '/ga' || stripBase(page.url.pathname).startsWith('/ga/'));
 
@@ -10,6 +12,9 @@
     let searchOpen = $state(false);
     let searchTerm = $state('');
     let mobileMenuOpen = $state(false);
+
+    let isLoggedIn = $state(false);
+    let userInitials = $state('');
 
     const switchLanguage = $derived.by(() => {
         const currentPath = stripBase(page.url.pathname);
@@ -66,6 +71,31 @@
 
         window.location.href = withBase(`/${isIrish ? 'ga' : 'en'}/search?q=${encodeURIComponent(query)}`);
     }
+
+    async function checkUserSession() {
+        try {
+            const pu = await loadPeachUser();
+            const result = await pu.getCombinedSessionAndPreferenceProfile();
+
+            if (result?.profile?.verified === true) {
+                const firstName = result.profile.firstName ?? '';
+                const lastName = result.profile.lastName ?? '';
+
+                userInitials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+                isLoggedIn = true;
+            } else {
+                isLoggedIn = false;
+                userInitials = '';
+            }
+        } catch (error) {
+            isLoggedIn = false;
+            userInitials = '';
+        }
+    }
+
+    onMount(() => {
+        void checkUserSession();
+    });
 </script>
 
 <nav class="navbar" class:search-open={searchOpen}>
