@@ -260,7 +260,13 @@
 
         <a href={switchLanguage} class="language-switch">{isIrish ? 'English' : 'Gaeilge'}</a>
 
-        <a href={withBase(isIrish ? '/ga/account/login' : '/en/account/login')}><img src={withBase('/icons/profile.svg')} alt="TG4 Account" class="sso_logo"></a>
+        <a href={withBase(isLoggedIn ? (isIrish ? '/ga/account/account' : '/en/account/account') : (isIrish ? '/ga/account/login' : '/en/account/login'))} aria-label={isLoggedIn ? 'My Account' : 'Log in'}>
+            {#if isLoggedIn && userInitials}
+                <span class="account-avatar">{userInitials}</span>
+            {:else}
+                <img src={withBase('/icons/profile.svg')} alt="TG4 Account" class="sso_logo" />
+            {/if}
+        </a>
     </div>
 </nav>
 
@@ -299,7 +305,13 @@
         </ul>
         <div class="mobile-menu-footer">
             <a href={switchLanguage} class="language-switch" onclick={closeMobileMenu}>{isIrish ? 'English' : 'Gaeilge'}</a>
-            <a href={withBase(isIrish ? '/ga/account/login' : '/en/account/login')}><img src={withBase('/icons/profile.svg')} alt="TG4 Account" class="sso_logo"></a>
+            <a href={withBase(isLoggedIn ? (isIrish ? '/ga/account/account' : '/en/account/account') : (isIrish ? '/ga/account/login' : '/en/account/login'))} aria-label={isLoggedIn ? 'My Account' : 'Log in'}>
+                {#if isLoggedIn && userInitials}
+                    <span class="account-avatar">{userInitials}</span>
+                {:else}
+                    <img src={withBase('/icons/profile.svg')} alt="TG4 Account" class="sso_logo" />
+                {/if}
+            </a>
         </div>
     </div>
 {/if}
@@ -481,6 +493,21 @@
     display: block;
     width: 45px;
     cursor: pointer;
+}
+
+.account-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #FF126C;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
 }
 
 .mobile-nav,
