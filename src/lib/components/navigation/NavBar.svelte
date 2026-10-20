@@ -81,7 +81,14 @@
                 const firstName = result.profile.firstName ?? '';
                 const lastName = result.profile.lastName ?? '';
 
-                userInitials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+                const surnameInitials = lastName
+                    .replace(/^O['’]/i, 'O ')
+                    .split(/[\s-]+/)
+                    .filter(Boolean)
+                    .map(part => part.charAt(0))
+                    .join('');
+
+                userInitials = `${firstName.charAt(0)}${surnameInitials}`.toUpperCase();
                 isLoggedIn = true;
             } else {
                 isLoggedIn = false;
