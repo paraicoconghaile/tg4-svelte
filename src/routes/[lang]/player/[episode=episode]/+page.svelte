@@ -23,6 +23,7 @@
     let historyUpdateInProgress = false;
     let historyAuthenticated = false;
     let pendingHistoryPosition: number | null = null;
+    let historyVideoId: string | number | null = null;
     
     let activePlayer: any = null;
 
@@ -31,7 +32,7 @@
     );
     
     async function savePlaybackPosition(player: any) {
-        if (!historyAuthenticated) return;
+        if (!historyAuthenticated || historyVideoId == null) return;
 
         try {
             const playbackPosition = Math.floor(player.currentTime());
@@ -56,7 +57,7 @@
 
                     await pu.updateMediaPlaybackPosition(
                         0,
-                        data.video.videoId,
+                        historyVideoId,
                         positionToSave
                     );
 
@@ -119,6 +120,8 @@
             }
 
             player.ready(async () => {
+                historyVideoId = data.video.videoId;
+                
                 await checkHistoryAuthentication();
 
                 if (startAt > 0) {
