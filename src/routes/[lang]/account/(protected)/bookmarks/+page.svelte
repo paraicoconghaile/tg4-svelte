@@ -20,10 +20,7 @@
             <div class="bookmarks-grid">
                 {#each data.bookmarks as bookmark (bookmark.bookmarkId)}
                     {#if bookmark.type === 'SERIES' && bookmark.series}
-                        <a
-                            class="bookmark-card"
-                            href={withBase(`/${data.lang}/player/${bookmark.series.slug}`)}
-                        >
+                        <a class="bookmark-card" href={withBase(`/${data.lang}/player/${bookmark.series.slug}`)}>
                             <img
                                 src={bookmark.series.mainImage?.large
                                     ?? bookmark.series.mainImage?.original
@@ -34,14 +31,12 @@
                                     e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';
                                 }}
                             />
-                            <h3>{bookmark.series.name}</h3>
+                            {#if bookmark.series.name}
+                                <h3>{bookmark.series.name}</h3>
+                            {/if}
                         </a>
-
                     {:else if bookmark.type === 'VIDEO' && bookmark.video}
-                        <a
-                            class="bookmark-card"
-                            href={withBase(`/${data.lang}/player/${bookmark.video.vid}`)}
-                        >
+                        <a class="bookmark-card" href={withBase(`/${data.lang}/player/${bookmark.video.vid}`)}>
                             <img
                                 src={bookmark.video.image?.large
                                     ?? bookmark.video.image?.original
@@ -52,7 +47,28 @@
                                     e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';
                                 }}
                             />
-                            <h3>{bookmark.video.displayTitle ?? ''}</h3>
+                            {#if bookmark.video.seriesTitle === bookmark.video.displayTitle}
+                                <h3>{bookmark.video.seriesTitle}</h3>
+                                <p>
+                                {#if bookmark.video.seasonNumber}
+                                    S{bookmark.video.seasonNumber}
+                                {/if}
+                                {#if bookmark.video.episodeNumber}
+                                    E{bookmark.video.episodeNumber}
+                                {/if}</p>
+                            {:else}
+                                <h3>{bookmark.video.seriesTitle}</h3>
+                                <p>
+                                {#if bookmark.video.seasonNumber}
+                                    S{bookmark.video.seasonNumber}
+                                {/if}
+                                {#if bookmark.video.episodeNumber}
+                                    E{bookmark.video.episodeNumber}
+                                {/if}
+                                {#if bookmark.video.displayTitle}
+                                    : {bookmark.video.displayTitle}
+                                {/if}</p>
+                            {/if}
                         </a>
                     {/if}
                 {/each}
@@ -106,6 +122,10 @@
 .bookmark-card h3 {
     margin-top: 12px;
     font-size: 1.1rem;
+}
+
+.bookmark-card p {
+    margin-top: -15px;
 }
 
 .bookmark-info p {

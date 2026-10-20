@@ -2,7 +2,7 @@
     import { getContext, onMount } from 'svelte';
     import { page } from '$app/state';
 
-    let loading = $state(false);
+    let loading = $state(true);
     let error = $state('');
 
     const account = getContext<{

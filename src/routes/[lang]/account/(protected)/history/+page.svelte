@@ -20,12 +20,48 @@
             <div class="bookmarks-grid">
                 {#each data.history as history}
                     <a class="bookmark-card" href={withBase(`/${data.lang}/player/${history.vid}`)}>
-                        <img src={history?.image?.large
-                                    ?? history?.image?.original
-                                    ?? history?.poster}
+                        <div class="history-card-image">
+                            <img src={history?.image?.large
+                                        ?? history?.image?.original
+                                        ?? history?.poster}
                                 alt={history?.displayTitle ?? history?.displayName}
-                                loading="lazy" onerror={(e) => {e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';}}/>
-                        <h3>{history?.displayTitle ?? history?.displayName}</h3>
+                                loading="lazy"
+                                onerror={(e) => {
+                                    e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';
+                                }}
+                            />
+
+                            {#if history.playbackProgress > 0}
+                                <div class="playback-progress">
+                                    <div
+                                        class="playback-progress-fill"
+                                        style={`width: ${Math.min(100, Math.max(0, history.playbackProgress * 100))}%`}
+                                    ></div>
+                                </div>
+                            {/if}
+                        </div>
+                        {#if history.seriesTitle === history.displayTitle}
+                            <h3>{history.seriesTitle}</h3>
+                            <p>
+                            {#if history.seasonNumber}
+                                S{history.seasonNumber}
+                            {/if}
+                            {#if history.episodeNumber}
+                                E{history.episodeNumber}
+                            {/if}</p>
+                        {:else}
+                            <h3>{history.seriesTitle}</h3>
+                            <p>
+                            {#if history.seasonNumber}
+                                S{history.seasonNumber}
+                            {/if}
+                            {#if history.episodeNumber}
+                                E{history.episodeNumber}
+                            {/if}
+                            {#if history.displayTitle}
+                                : {history.displayTitle}
+                            {/if}</p>
+                        {/if}
                     </a>
                 {/each}
             </div>
@@ -63,9 +99,39 @@
     font-size: 1.1rem;
 }
 
+.bookmark-card p {
+    margin-top: -15px;
+}
+
 .bookmark-info p {
     margin: 0;
     line-height: 1.5;
+}
+
+.history-card-image {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.history-card-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.playback-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.45);
+}
+
+.playback-progress-fill {
+    height: 100%;
+    background: #ff126c;
 }
 
 @media(max-width:1000px){
@@ -87,6 +153,6 @@
 }
 </style>
 
-<pre>
+<!-- <pre>
     {JSON.stringify(data, null, 2)}
-</pre>
+</pre> -->
