@@ -41,7 +41,7 @@
             </p> -->
 
             <div class="staff-pick">
-                <p>STAFF PICK<br /><svg width="48" height="18" viewBox="0 0 48 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <p>{isIrish ? `ROGHA AN RÉALTA` : `STAR PICK`}<br /><svg width="48" height="18" viewBox="0 0 48 18" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M48.0003 0H30.3633V17.5712H48.0003V0Z" fill="#FF126C"/>
 <path d="M45.0792 11.8532H43.0308V14.9627L40.3573 15.7936V11.8532H33.2992C33.2498 11.483 33.2334 11.0799 33.2334 10.7591C33.2334 5.70821 37.075 2.22852 41.8298 2.22852C42.1506 2.22852 42.6524 2.22852 43.0391 2.29433V9.5334H45.0874V11.8532H45.0792ZM35.981 9.5334H40.3491V4.85268C38.0869 5.28044 36.2689 7.1478 35.981 9.5334Z" fill="#EBEBEB"/>
 <path d="M29.0961 0H0V17.5712H29.0961V0Z" fill="#FF126C"/>
