@@ -85,17 +85,45 @@
         }
     }
 
-    async function startPlayer() {
-        //console.log('1. PLAY CLICKED');
+    async function shouldShowAds(): Promise<boolean> {
+        // Ads are only available to viewers in Ireland
+        if (data.territory?.countryCode !== 'IE') {
+            return false;
+        }
 
+        try {
+            const pu = await loadPeachUser();
+            const profile = await pu.getCombinedSessionAndPreferenceProfile();
+
+            // An unauthenticated visitor gets the Ads player
+            const unauthorized =
+                profile?.profile?.error === 'Unauthorized' ||
+                profile?.preferences?.error === 'Unauthorized';
+
+            if (unauthorized) {
+                return true;
+            }
+
+            // If the visitor has a saved preference, respect it.
+            // Otherwise, default to Ads.
+            const adsPreference = profile?.preferences?.extraPref?.ads;
+
+            return adsPreference === false ? false : true;
+        } catch (error) {
+            console.error('Could not retrieve ad preference:', error);
+
+            // Default to Ads for visitors in Ireland
+            return true;
+        }
+    }
+
+    async function startPlayer() {
+        const showAds = await shouldShowAds();
+
+        playerID = showAds ? 'vJxvEpuW2' : 'HJlOg6KUz';
         playing = true;
 
-        //console.log('2. playing =', playing);
-
         await tick();
-
-        //console.log('3. AFTER TICK');
-        //console.log('4. playerElement =', playerElement);
 
         if (!playerElement) {
             console.error('VIDEO ELEMENT NOT FOUND');
@@ -121,7 +149,7 @@
 
             player.ready(async () => {
                 historyVideoId = data.video.videoId;
-                
+
                 await checkHistoryAuthentication();
 
                 if (startAt > 0) {
@@ -155,11 +183,7 @@
 
         };
 
-        //console.log('5. Loading Brightcove:', script.src);
-
         playerElement.insertAdjacentElement('afterend', script);
-
-        //console.log('6. SCRIPT INSERTED');
     }
 
     onDestroy(() => {
