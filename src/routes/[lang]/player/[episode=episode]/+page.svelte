@@ -369,7 +369,7 @@
 
             <div class="episode-grid">
                 {#each data.otherEpisodes as ep}
-                    <a class="episode-card" href={withBase(`/${data.lang}/player/${data.slug}/${ep.episodeID}`)}>
+                    <a class="episode-card" href={withBase(`/${data.lang}/player/${data.video.slug}/${ep.episodeID}`)}>
                         <img
                             src={ep.prodCode
                                 ? `https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto:eco/${ep.prodCode}.jpg`
