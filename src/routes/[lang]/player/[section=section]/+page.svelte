@@ -38,9 +38,7 @@
         loadingMore = true;
 
         try {
-            const response = await fetch(
-                `/api/genre-series?category=${encodeURIComponent(data.genre)}&skip=${skip}&limit=${limit}`
-            );
+            const response = await fetch(withBase(`/api/genre-series?category=${encodeURIComponent(data.genre)}&skip=${skip}&limit=${limit}`));
 
             if (!response.ok) {
                 throw new Error(`Failed to load series: ${response.status}`);
