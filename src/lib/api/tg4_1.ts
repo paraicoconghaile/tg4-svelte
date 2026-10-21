@@ -2,22 +2,40 @@ import { env } from '$env/dynamic/private';
 const API_KEY = env.TG4_API_KEY;
 const NEW_API_KEY = env.TG4_NEW_API_KEY;
 
-/* export async function getGenre(genre: string) {
-    const response = await fetch(`https://api.tg4dev.com/api/series?limit=150&category=${genre}`,
-        {
-            headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': API_KEY
-            }
-        }
-    );
+export type Tg4Territory = {
+    region: string | null;
+    countryCode: string | null;
+    city: string | null;
+};
+
+export type Tg4ApiResponse<T> = {
+    data: T;
+    territory: Tg4Territory;
+};
+
+function getTg4Territory(response: Response): Tg4Territory {
+    return {
+        region: response.headers.get('x-tg4-region'),
+        countryCode: response.headers.get('x-tg4-country-code'),
+        city: response.headers.get('x-tg4-city')
+    };
+}
+
+async function fetchTg4Api<T>(
+    url: string,
+    init?: RequestInit
+): Promise<Tg4ApiResponse<T>> {
+    const response = await fetch(url, init);
 
     if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`);
+        throw new Error(`TG4 API Error: ${response.status}`);
     }
 
-    return response.json();
-} */
+    const territory = getTg4Territory(response);
+    const data = (await response.json()) as T;
+
+    return { data, territory };
+}
 
 export async function getGenre(
     genre: string,
@@ -69,22 +87,29 @@ export async function getSeriesVideos(seriesTitle: string, seasonNumber: number)
 export async function getVideo(videoId: string) {
     const url = `https://api.tg4dev.com/api/videos/${videoId}`;
 
-    const response = await fetch(url, {
+    const result = await fetchTg4Api(url,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': API_KEY
+            }
+        }
+    );
+
+    console.log('Video territory:', result.territory);
+
+    return result.data;
+}
+
+export async function getVideoWithTerritory(videoId: string) {
+    const url = `https://api.tg4dev.com/api/videos/${videoId}`;
+
+    return fetchTg4Api(url, {
         headers: {
             'Content-Type': 'application/json',
             'x-api-key': API_KEY
         }
     });
-
-
-    /* console.log('Status:', response.status);
-    console.log('Response:', response); */
-
-    if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`);
-    }
-
-    return response.json();
 }
 
 export async function getSeries(slug: string) {
@@ -107,12 +132,11 @@ export async function getSeries(slug: string) {
 export async function getRails() {
     const url = `https://api.tg4dev.com/api/rails/home?api_key=d3b8f0c1-2e4a-4f5b-9c6d-7e8f9a0b1c2d`;
 
-    const response = await fetch(url, {
-        /* headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': NEW_API_KEY
-        } */
-    });
+    const response = await fetch(url);
+
+    console.log('TG4 region:', response.headers.get('x-tg4-region'));
+    console.log('TG4 country:', response.headers.get('x-tg4-country-code'));
+    console.log('TG4 city:', response.headers.get('x-tg4-city'));
 
     if (!response.ok) {
         const body = await response.text();

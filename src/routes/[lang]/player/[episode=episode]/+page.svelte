@@ -343,10 +343,6 @@
                 {/if}
 
                 <p>{formatDate(data.video.airDate)}</p>
-
-                <!-- <p><br />
-                    <a class="language-switch" href={withBase(`/${data.lang}/player/${data.slug}`)}>{data.backLabel}</a>
-                </p> -->
             </div>
 
             <div class="bookmark">
@@ -486,5 +482,5 @@
 </style>
 
 <!-- <pre>
-    {JSON.stringify("Episode Data:", data, null, 2)}
+    {JSON.stringify(data, null, 2)}
 </pre> -->

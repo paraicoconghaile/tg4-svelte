@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { getGenre, getVideo, getSeriesVideos } from '$lib/api/tg4_1';
+import { getGenre, getVideoWithTerritory, getSeriesVideos } from '$lib/api/tg4_1';
 import { getGenreByKey } from '$lib/config/playerNav';
 
 export async function load({ params }) {
@@ -22,14 +22,11 @@ export async function load({ params }) {
         cula4: 'Cula4'
     };
 
-    /* const currentGenre = getGenreByKey(params.section);
+    //const rawVideo = await getVideo(params.episode);
 
-    if (!currentGenre) {
-        throw error(404, 'Unknown category');
-    } */
-
-    const rawVideo = await getVideo(params.episode);
-    //console.log('Raw Video', JSON.stringify(rawVideo, null, 2));
+    const result = await getVideoWithTerritory(params.episode);
+    const rawVideo = result.data;
+    const territory = result.territory;
 
     if (!rawVideo) {
         throw error(404, 'Video not found');
@@ -49,12 +46,13 @@ export async function load({ params }) {
         airDate: rawVideo.video.airDate,
         categories: rawVideo.categories,
         subtitles: rawVideo.video.subtitles,
-        contentRating: rawVideo.video.contentRating
+        contentRating: rawVideo.video.contentRating,
+        slug: rawVideo.series.slug
     };
 
     const rawEpisodes = await getSeriesVideos(
-        params.slug,
-        Number(rawVideo.video.customFields.series)
+        video.slug,
+        Number(video.seriesNumber)
     );
 
     const otherEpisodes = (rawEpisodes?.videos ?? [])
@@ -83,11 +81,8 @@ export async function load({ params }) {
         lang: params.lang,
         section: params.section,
         slug: params.slug,
-        backLabel: params.lang === 'ga' ? 'SIAR' : 'BACK',
-        //backRoute: currentGenre.key[params.lang],
-        //routeGa: currentGenre.key.ga,
-        //routeEn: currentGenre.key.en,
         video,
-        otherEpisodes
+        otherEpisodes,
+        territory
     };
 }
