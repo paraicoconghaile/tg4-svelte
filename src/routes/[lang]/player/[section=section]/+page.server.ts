@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { getGenre, getCategoryRails } from '$lib/api/tg4_1';
+import { getGenre, getCategoryRails, getDiscoverRails } from '$lib/api/tg4_1';
 import { slugify } from '$lib/utils/slugify';
 import { genres, getGenreByKey } from '$lib/config/playerNav';
 
@@ -20,6 +20,21 @@ export async function load({ params }) {
         lifestyle: 'saolchlar',
         cula4: 'cula4'
     };
+
+    if (params.section === 'discover' || params.section === 'aimsigh') {
+        const rails = await getDiscoverRails();
+
+        return {
+            lang: params.lang,
+            section: params.section,
+            rails,
+            labelEn: 'Discover',
+            labelGa: 'Aimsigh',
+            routeEn: 'discover',
+            routeGa: 'aimsigh',
+            series: []
+        };
+    }
 
     const currentGenre = getGenreByKey(params.section);
 

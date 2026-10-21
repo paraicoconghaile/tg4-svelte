@@ -194,12 +194,23 @@
             {#each navigation as item, index}
                 <li class="menu-item" onmouseenter={() => openMenu = index} onmouseleave={() => openMenu = null}>
                     {#if item.children}
-                        <button type="button">
-                            <span>
-                                {isIrish ? item.titleGa : item.titleEn}
-                            </span>
-                            <span class="arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.14889 4.68113L9.59961 1.31321L8.25033 -5.8979e-08L4.79961 3.36792L1.34889 -3.6065e-07L-0.00039011 1.31321L4.79961 6L6.14889 4.68113Z" fill="white"/></svg></span>
-                        </button>
+                        <div class="menu-parent">
+                            {#if item.hrefEn || item.hrefGa}
+                                <a href={withBase(isIrish ? item.hrefGa : item.hrefEn)}>
+                                    {isIrish ? item.titleGa : item.titleEn}
+                                </a>
+                            {:else}
+                                <span>{isIrish ? item.titleGa : item.titleEn}</span>
+                            {/if}
+
+                            <button
+                                type="button"
+                                aria-label={isIrish ? `Oscail roghchlár ${item.titleGa}` : `Open ${item.titleEn} menu`}
+                                onclick={() => openMenu = openMenu === index ? null : index}
+                            >
+                                <span class="arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.14889 4.68113L9.59961 1.31321L8.25033 -5.8979e-08L4.79961 3.36792L1.34889 -3.6065e-07L-0.00039011 1.31321L4.79961 6L6.14889 4.68113Z" fill="white"/></svg></span>
+                            </button>
+                        </div>
                         {#if openMenu === index}
                             <ul class="dropdown">
                                 {#each item.children as child}
@@ -381,6 +392,25 @@
 
 .menu button {
     gap: 6px;
+}
+
+.menu-parent {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.menu-parent > a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.menu-parent > button {
+    display: flex;
+    align-items: center;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
 }
 
 .arrow {

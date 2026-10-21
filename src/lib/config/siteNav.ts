@@ -16,6 +16,8 @@ export const navigation: NavItem[] = [
     {
         titleEn: 'Discover',
         titleGa: 'Aimsigh',
+        hrefEn: '/en/player/discover',
+        hrefGa: '/ga/player/aimsigh',
         children: [
             {
                 titleEn: 'Documentaries',

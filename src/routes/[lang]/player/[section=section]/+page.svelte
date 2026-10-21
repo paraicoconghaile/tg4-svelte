@@ -2,12 +2,85 @@
     import CardCarouselPortrait from '$lib/components/rails/CardCarouselPortrait.svelte';
     import CardCarousel from '$lib/components/rails/CardCarousel.svelte'
     import Marketing from '$lib/components/rails/Marketing.svelte';
+    import DoubleContent from '$lib/components/rails/DoubleContent.svelte';
     import { withBase } from '$lib/utils/paths';
+    import { genres } from '$lib/config/playerNav';
 
   	let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
-    
-    import { genres } from '$lib/config/playerNav';
+
+    let isDiscover = $derived(data.section === 'discover' || data.section === 'aimsigh');
+
+    let series = $state(data.series ?? []);
+    let loadingMore = $state(false);
+    let hasMore = $state(true);
+    let loadMoreTrigger = $state<HTMLDivElement>();
+
+    let skip = $state(series.length);
+    const limit = 24;
+
+    let currentPage = $state(`${data.lang}/${data.section}`);
+
+    $effect(() => {
+        const page = `${data.lang}/${data.section}`;
+
+        if (currentPage !== page) {
+            currentPage = page;
+            series = data.series ?? [];
+            skip = series.length;
+            hasMore = true;
+        }
+    });
+
+    async function loadMoreSeries() {
+        if (loadingMore || !hasMore) return;
+
+        loadingMore = true;
+
+        try {
+            const response = await fetch(
+                `/api/genre-series?category=${encodeURIComponent(data.genre)}&skip=${skip}&limit=${limit}`
+            );
+
+            if (!response.ok) {
+                throw new Error(`Failed to load series: ${response.status}`);
+            }
+
+            const result = await response.json();
+            const existingSlugs = new Set(series.map((item) => item.slug));
+            const newSeries = result.series.filter(
+                (item) => !existingSlugs.has(item.slug)
+            );
+
+            series = [...series, ...newSeries];
+            skip += result.series.length;
+            hasMore = result.hasMore && result.series.length > 0;
+        } catch (error) {
+            console.error('Error loading more series:', error);
+        } finally {
+            loadingMore = false;
+        }
+    }
+
+    $effect(() => {
+        const trigger = loadMoreTrigger;
+        const page = `${data.lang}/${data.section}`;
+
+        if (!trigger || !hasMore || isDiscover) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting) {
+                    loadMoreSeries();
+                }
+            },
+            { rootMargin: '400px' }
+        );
+
+        observer.observe(trigger);
+
+        return () => observer.disconnect();
+    });
 
     function getImageUrl(item: any) {
         return (
@@ -22,34 +95,95 @@
     //console.log('GENRE RAILS API:', data.rails);
 </script>
 
+{#if isDiscover}
+    <section class="discover-page">
+        <section class="episodes">
+            <h1>{isIrish ? 'Aimsigh' : 'Discover'}</h1>
+
+            <div class="discover-categories">
+                {#each genres as genre}
+                    <a
+                        class="discover-category"
+                        href={withBase(`/${data.lang}/player/${genre.key[data.lang]}`)}
+                    >
+                        {genre.label[data.lang]}
+                    </a>
+                {/each}
+            </div>
+        </section>
+    </section>
+{/if}
+
 <!-- CATEGORY RAILS -->
 {#each data.rails?.rails ?? [] as rail}
     {#if rail.type === 'HORIZONTAL' && rail.showItemsAsBoxset}
         <CardCarouselPortrait {rail} {isIrish}/>
     {:else if  rail.type === 'HORIZONTAL'}
         <CardCarousel {rail} {isIrish}/>
+    {:else if rail.type === 'DOUBLE_CONTENT'}
+        <DoubleContent {rail} {isIrish}/>
     {:else if rail.type === 'MARKETING'}
         <Marketing {rail} {isIrish} />
     {/if}
 {/each}
 
-<section class="series-page">
-    <section class="episodes">
-        <h1>{data.lang === 'ga' ? data.labelGa : data.labelEn}</h1>
+{#if !isDiscover}
+    <section class="series-page">
+        <section class="episodes">
+            <h1>{data.lang === 'ga' ? data.labelGa : data.labelEn}</h1>
 
-        <div class="series-grid">
-            {#each data.series as item}
-                <a class="series-card" href={withBase(`/${data.lang}/player/${item.slug}`)}>
-                    <img src={getImageUrl(item)} alt={item.title} onerror={(e) => {e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';}}/>
-                    <h3>{item.title}</h3>
-                    <!-- <p>{item.description}</p> -->
-                </a>
-            {/each}
-        </div>
+            <div class="series-grid">
+                {#each series as item (item.slug)}
+                    <a class="series-card" href={withBase(`/${data.lang}/player/${item.slug}`)}>
+                        <img src={getImageUrl(item)} alt={item.title} onerror={(e) => {e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';}}/>
+                        <h3>{item.title}</h3>
+                        <!-- <p>{item.description}</p> -->
+                    </a>
+                {/each}
+            </div>
+
+            {#if hasMore}
+                <div bind:this={loadMoreTrigger} class="load-more-trigger">
+                    {#if loadingMore}
+                        <p>{isIrish ? 'Ag lódáil...' : 'Loading more...'}</p>
+                    {/if}
+                </div>
+            {/if}
+        </section>
     </section>
-</section>
+{/if}
 
 <style>
+.discover-page {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--genre-background);
+}
+
+.discover-categories {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.discover-category {
+    display: flex;
+    align-items: center;
+    min-height: 64px;
+    padding: 12px 16px;
+    background: var(--tg4-grey-2);
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.discover-category:hover,
+.discover-category:focus-visible {
+    background-color: var(--tg4-pink);
+}
+
 .series-page {
     max-width: var(--page-width);
     margin: 0 auto;
@@ -80,9 +214,22 @@
     font-size: 1.1rem;
 }
 
+.load-more-trigger {
+    min-height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 @media(max-width:1000px) {
     .series-grid {
         grid-template-columns: repeat(3,1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .discover-categories {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
@@ -96,8 +243,22 @@
     .series-page {
         padding: 10px 0;
     }
+
     .episodes {
         padding: 10px 7px;
+    }
+
+    .discover-page {
+        padding: 10px 7px;
+    }
+
+    .discover-categories {
+        gap: 8px;
+    }
+
+    .discover-category {
+        min-height: 56px;
+        padding: 10px;
     }
 }
 

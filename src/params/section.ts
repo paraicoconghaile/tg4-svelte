@@ -1,5 +1,8 @@
 export function match(param: string) {
     return [
+        'discover',
+        'aimsigh',
+        
         'drama',
         'documentaries',
         'current-affairs',
