@@ -1,32 +1,21 @@
 import { error } from '@sveltejs/kit';
+import { loadSearchCollection } from '$lib/api/search';
 
-export async function load({ url, params, fetch }) {
-    const query = url.searchParams.get('q')?.trim() ?? '';
+export async function load({ params, fetch }) {
+    try {
+        const collection = await loadSearchCollection(fetch);
 
-    if (!query) {
         return {
             lang: params.lang,
-            query: '',
-            results: []
+            collection,
+            results: collection.items ?? []
         };
-    }
+    } catch (err) {
+        console.error('Search collection error:', err);
 
-    const response = await fetch(
-        `https://api.tg4dev.com/api/search/advanced?query=${encodeURIComponent(query)}`
-    );
-
-    if (!response.ok) {
         throw error(
-            response.status,
-            'Unable to load search results'
+            500,
+            'Unable to load search collection'
         );
     }
-
-    const data = await response.json();
-
-    return {
-        lang: params.lang,
-        query,
-        results: data.results ?? []
-    };
 }

@@ -14,6 +14,30 @@ export const navigation: NavItem[] = [
         hrefGa: '/ga'
     },
     {
+        titleEn: 'Live',
+        titleGa: 'Beo',
+        children: [
+            {
+                titleEn: 'TG4',
+                titleGa: 'TG4',
+                hrefEn: '/en/player/live/TG4',
+                hrefGa: '/ga/player/live/TG4'
+            },
+            {
+                titleEn: 'Cúla4',
+                titleGa: 'Cúla4',
+                hrefEn: '/en/player/live/CULA4',
+                hrefGa: '/ga/player/live/CULA4'
+            },
+            {
+                titleEn: 'TG4+1',
+                titleGa: 'TG4+1',
+                hrefEn: '/en/player/live/TG4PLUSONE',
+                hrefGa: '/ga/player/live/TG4PLUSONE'
+            }
+        ]
+    },
+    {
         titleEn: 'Discover',
         titleGa: 'Aimsigh',
         hrefEn: '/en/player/discover',
@@ -106,27 +130,9 @@ export const navigation: NavItem[] = [
         ]
     },
     {
-        titleEn: 'Live',
-        titleGa: 'Beo',
-        children: [
-            {
-                titleEn: 'TG4',
-                titleGa: 'TG4',
-                hrefEn: '/en/player/live/TG4',
-                hrefGa: '/ga/player/live/TG4'
-            },
-            {
-                titleEn: 'Cúla4',
-                titleGa: 'Cúla4',
-                hrefEn: '/en/player/live/CULA4',
-                hrefGa: '/ga/player/live/CULA4'
-            },
-            {
-                titleEn: 'TG4+1',
-                titleGa: 'TG4+1',
-                hrefEn: '/en/player/live/TG4PLUSONE',
-                hrefGa: '/ga/player/live/TG4PLUSONE'
-            }
-        ]
+        titleEn: 'Search',
+        titleGa: 'Cuardaigh',
+        hrefEn: '/en/search',
+        hrefGa: '/ga/search'
     }
 ];
