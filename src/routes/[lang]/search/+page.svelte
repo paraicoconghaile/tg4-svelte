@@ -128,7 +128,6 @@
         {/if}
 
         {#if results.length === 0}
-            <p>{isIrish ? 'Níor aimsíodh aon torthaí.' : 'No results found.'}</p>
         {:else}
             <div class="search-results">
                 {#each results as result, i (`${result.type}-${result.video?.vid ?? result.series?.id ?? i}`)}
