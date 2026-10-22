@@ -99,9 +99,14 @@
         </div>
 
         <header class="search-header">
-            <h1>{isIrish ? collection.titleGa : collection.titleEn}</h1>
-
-            <p class="subtitle">{isIrish ? collection.subtitleGa : collection.subtitleEn}</p>
+            {#if searchText.trim()}
+                <h1>{isIrish ? 'Torthaí cuardaigh' : 'Search results'}</h1>
+            {:else}
+                <h1>{isIrish ? collection.titleGa : collection.titleEn}</h1>
+                <p class="subtitle">
+                    {isIrish ? collection.subtitleGa : collection.subtitleEn}
+                </p>
+            {/if}
         </header>
 
         {#if loading}
