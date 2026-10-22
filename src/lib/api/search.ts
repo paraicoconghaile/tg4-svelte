@@ -8,7 +8,7 @@ export interface SearchFilters {
 
 export async function loadSearchCollection(fetchFn: typeof fetch) {
     const response = await fetchFn(
-        'https://staging.api.tg4dev.com/api/collection/search'
+        'https://api.tg4dev.com/api/collection/search'
     );
 
     if (!response.ok) {
@@ -44,7 +44,7 @@ export async function searchAdvanced(
     }
 
     const response = await fetchFn(
-        `https://staging.api.tg4dev.com/api/search/advanced?${params}`
+        `https://api.tg4dev.com/api/search/advanced?${params}`
     );
 
     if (!response.ok) {
