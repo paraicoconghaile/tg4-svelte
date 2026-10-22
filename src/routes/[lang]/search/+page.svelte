@@ -229,7 +229,6 @@
     gap: 12px;
     padding: 0 16px;
     border: 1px solid #888;
-    border-radius: 6px;
     background: var(--background, #fff);
     color: var(--foreground, #222);
 }
@@ -294,7 +293,6 @@
     font-size: 0.75rem;
     padding: 3px 6px;
     border: 1px solid currentColor;
-    border-radius: 3px;
 }
 
 .search-card:hover h3 {
