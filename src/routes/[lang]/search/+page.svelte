@@ -9,15 +9,30 @@
     const collection = $derived(data.collection);
 
     let searchText = $state('');
+    let selectedCategory = $state('');
+    let selectedSubtitle = $state('');
+    let selectedRating = $state('');
+    let selectedType = $state('');
+
     let results = $state(data.results ?? []);
     let loading = $state(false);
     let searchError = $state('');
-
+    
     $effect(() => {
         const query = searchText.trim();
+        const category = selectedCategory;
+        const subtitleLanguage = selectedSubtitle;
+        const contentRating = selectedRating;
+        const types = selectedType;
+
         let cancelled = false;
 
         if (!query) {
+            selectedCategory = '';
+            selectedSubtitle = '';
+            selectedRating = '';
+            selectedType = '';
+            
             results = data.results ?? [];
             loading = false;
             searchError = '';
@@ -30,7 +45,11 @@
         const timer = setTimeout(async () => {
             try {
                 const response = await searchAdvanced(fetch, {
-                    query
+                    query,
+                    category: category || undefined,
+                    subtitleLanguage: subtitleLanguage || undefined,
+                    contentRating: contentRating || undefined,
+                    types: types || undefined
                 });
 
                 if (!cancelled) {
@@ -44,9 +63,7 @@
                         : 'Unable to perform search.';
                 }
             } finally {
-                if (!cancelled) {
-                    loading = false;
-                }
+                if (!cancelled) loading = false;
             }
         }, 300);
 
@@ -96,6 +113,42 @@
                     autocomplete="off"
                 />
             </div>
+        </div>
+
+        <div class="search-filters">
+            <select bind:value={selectedCategory} aria-label={isIrish ? 'Catagóir' : 'Category'}>
+                <option value="">{isIrish ? 'Gach catagóir' : 'All categories'}</option>
+                <option value="faisneis">{isIrish ? 'Faisnéis' : 'Documentaries'}</option>
+                <option value="ceol">{isIrish ? 'Ceol' : 'Music'}</option>
+                <option value="dramaiocht">{isIrish ? 'Drámaíocht' : 'Drama'}</option>
+                <option value="nuacht">{isIrish ? 'Nuacht' : 'News'}</option>
+                <option value="siamsaiocht">{isIrish ? 'Siamsaíocht' : 'Entertainment'}</option>
+                <option value="sport">{isIrish ? 'Spórt' : 'Sport'}</option>
+                <option value="saolchlar">{isIrish ? 'Saol & Stíl' : 'Lifestyle'}</option>
+                <option value="gasuir">{isIrish ? 'Páistí' : 'Children'}</option>
+            </select>
+
+            <select bind:value={selectedSubtitle} aria-label={isIrish ? 'Fotheidil' : 'Subtitles'}>
+                <option value="">{isIrish ? 'Gach fotheideal' : 'All subtitles'}</option>
+                <option value="ga">{isIrish ? 'Gaeilge' : 'Irish'}</option>
+                <option value="en">{isIrish ? 'Béarla' : 'English'}</option>
+            </select>
+
+            <select bind:value={selectedRating} aria-label={isIrish ? 'Rátáil aoise' : 'Content rating'}>
+                <option value="">{isIrish ? 'Gach rátáil' : 'All ratings'}</option>
+                <option value="G">G</option>
+                <option value="PG">PG</option>
+                <option value="12">12</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="18">18</option>
+            </select>
+
+            <select bind:value={selectedType} aria-label={isIrish ? 'Cineál ábhair' : 'Content type'}>
+                <option value="">{isIrish ? 'Gach cineál' : 'All content types'}</option>
+                <option value="VIDEO">{isIrish ? 'Físeáin' : 'Videos'}</option>
+                <option value="SERIES">{isIrish ? 'Sraitheanna' : 'Series'}</option>
+            </select>
         </div>
 
         <header class="search-header">
@@ -251,6 +304,23 @@
 
 .search-status {
     margin: 20px 0;
+}
+
+.search-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 16px 0 24px;
+}
+
+.search-filters select {
+    min-width: 160px;
+    max-width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    background: white;
+    color: #222;
+    font: inherit;
 }
 
 .subtitle {
