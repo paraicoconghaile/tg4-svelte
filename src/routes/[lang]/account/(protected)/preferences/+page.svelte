@@ -169,7 +169,7 @@
                 <div class="form-field">
                     <p class="frmTitle">{messages.labels.ads}</p>
                     <div class="form-setting-row">
-                        <p>Allow advertisements in-between watching content</p>
+                        <p>{messages.labels.adsIntro}</p>
                         <label class="toggle">
                             <input
                                 class="toggle-checkbox"
@@ -184,7 +184,7 @@
                 <div class="form-field">
                     <p class="frmTitle">{messages.labels.subtitles}</p>
                     <div class="form-setting-row">
-                        <p>Allow subtitles to be on automatically</p>
+                        <p>{messages.labels.subtitlesIntro}</p>
                         <label class="toggle">
                             <input
                                 class="toggle-checkbox"
@@ -199,7 +199,7 @@
                 <div class="form-field">
                     <p class="frmTitle">{messages.labels.promos}</p>
                     <div class="form-setting-row">
-                        <p>Allow promos in-between watching content</p>
+                        <p>{messages.labels.promosIntro}</p>
                         <label class="toggle">
                             <input
                                 class="toggle-checkbox"
@@ -213,7 +213,7 @@
                 </div>
                 <div class="form-field">
                     <p class="frmTitle">{messages.labels.genres}</p>
-                    <p>Select your favourite genre(s)</p>
+                    <p>{messages.labels.genresIntro}</p>
                     <div class="genre-options">
                         {#each availableGenres as genre}
                             <label class:selected={genres.includes(genre.value)}>
@@ -237,7 +237,7 @@
                 <div class="form-field">
                     <p class="frmTitle">{messages.labels.credits}</p>
                     <div class="form-setting-row">
-                        <p>Allow credits to be on automatically</p>
+                        <p>{messages.labels.creditsIntro}</p>
                         <label class="toggle">
                             <input
                                 class="toggle-checkbox"
@@ -252,7 +252,7 @@
                 <div class="form-field">
                     <p class="frmTitle">{messages.labels.nextEpisode}</p>
                     <div class="form-setting-row">
-                        <p>Automatically plays the next episode</p>
+                        <p>{messages.labels.nextEpisodeIntro}</p>
                         <label class="toggle">
                             <input
                                 class="toggle-checkbox"
@@ -267,7 +267,7 @@
                 <div class="form-field">
                     <p class="frmTitle">{messages.labels.accessibilityView}</p>
                     <div class="form-setting-row">
-                        <p>Switch to high accessibility view</p>
+                        <p>{messages.labels.accessibilityViewIntro}</p>
                         <label class="toggle">
                             <input
                                 class="toggle-checkbox"
