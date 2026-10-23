@@ -41,6 +41,7 @@
                 profile: 'Profile',
                 preferences: 'Edit your preferences',
                 preferencesLink: 'Preferences',
+                preferencesIntro: 'Allowing these options will give you have a personalised experience for all TG4 content. Giving you access to personalised newsletters and recommendations from us based on your interests.',
                 genres: 'Genres',
                 ads: 'Ads',
                 subtitles: 'Subtitles',
@@ -61,6 +62,7 @@
                 profile: 'Próifíl',
                 preferences: 'Athraigh do sainrogha phearsanta',
                 preferencesLink: 'Sainrogha phearsanta',
+                preferencesIntro: 'Trí na roghanna seo a cheadú, beidh eispéireas pearsantaithe agat ar fud ábhar TG4. Gheobhaidh tú nuachtlitreacha agus moltaí uainn atá bunaithe ar do chuid spéiseanna.',
                 genres: 'Séanraí',
                 ads: 'Fógraí',
                 subtitles: 'Fotheidil',
@@ -146,7 +148,7 @@
 {:else}
     <div class="account-page-content">
         <p class="frmTitle">{messages.labels.preferences}</p>
-        <p>Allowing these options will give you have a personalised experience for all TG4 content. Giving you access to personalised newsletters and recommendations from us based on your interests.</p>
+        <p>{messages.labels.preferencesIntro}</p>
 
         <form onsubmit={(event) => {event.preventDefault(); handleSubmit();}} class="account-section">
             <fieldset>
