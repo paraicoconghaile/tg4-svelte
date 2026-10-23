@@ -93,12 +93,7 @@
     <div class="bookmark-modal-backdrop" role="presentation" onclick={(event) => {
         if (event.target === event.currentTarget) modalOpen = false;
     }}>
-        <section
-            class="bookmark-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="bookmark-modal-title"
-        >
+        <div class="bookmark-modal" role="dialog" aria-modal="true" aria-labelledby="bookmark-modal-title">
             <h2 id="bookmark-modal-title">
                 {isIrish ? 'Seinnliosta' : 'Playlists'}
             </h2>
@@ -120,7 +115,7 @@
             {/if}
 
             <button type="button" onclick={() => modalOpen = false}>{isIrish ? 'DÚN' : 'CLOSE'}</button>
-        </section>
+        </div>
     </div>
 {/if}
 

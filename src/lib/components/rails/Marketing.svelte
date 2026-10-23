@@ -9,11 +9,12 @@
     const image = $derived(rail.image);
     const buttonText = $derived(isIrish ? rail.actionButtonTextGa : rail.actionButtonTextEn);
     const buttonUrl = $derived(
-        rail.actionButtonUrl ??
-        (rail.items?.[0]?.series?.slug
-            ? withBase(`/${isIrish ? 'ga' : 'en'}/player/${rail.items[0].series.slug}`)
-            : null)
-    );
+    rail.actionButtonUrl ??
+    (rail.items?.[0]?.series?.slug
+        ? withBase(`/${isIrish ? 'ga' : 'en'}/player/${rail.items[0].series.slug}`)
+        : rail.items?.[0]?.video?.vid
+            ? withBase(`/${isIrish ? 'ga' : 'en'}/player/${rail.items[0].video.vid}`)
+            : null));
     const altText = $derived(isIrish ? rail.image?.altTextGa : rail.image?.altTextEn);
 
     /* console.log('========== MARKETING RAIL JSON ==========');
@@ -24,10 +25,7 @@
 <section class="marketing-rail">
     {#if image}
         <div class="marketing-image">
-            <img
-                src={image.xLarge ?? image.large}
-                alt={altText ?? ''}
-            />
+            <img src={image.xLarge ?? image.large} alt={altText ?? ''} />
 
             <div class="overlay">
                 <div class="marketing-text">
@@ -37,9 +35,7 @@
 
                 {#if buttonText}
                     <div class="marketing-action">
-                        <a href={buttonUrl} class="marketing-button">
-                            {buttonText}
-                        </a>
+                        <a href={buttonUrl} class="marketing-button">{buttonText}</a>
                     </div>
                 {/if}
             </div>
@@ -105,6 +101,7 @@
     font-weight: 700;
     font-size: 1rem;
     transition: background .2s ease;
+    cursor: pointer;
 }
 
 .marketing-button:hover {

@@ -159,19 +159,14 @@
     <section class="carousel">
         <button class="arrow left" onclick={previous}>‹</button>
 
-        <div
-            class:animating
-            class:next-animation={direction === 'next'}
-            class:prev-animation={direction === 'prev'}
-            class="stage"
-        >
+        <div class:animating class:next-animation={direction === 'next'} class:prev-animation={direction === 'prev'} class="stage">
             <!-- Previous -->
             <div class="card sliver">
                 <img src={getSlide(-1).image} alt={getSlide(-1).title} />
             </div>
 
             <!-- Hero -->
-            <div class="card hero" onpointerdown={handlePointerDown}>
+            <div class="card hero" role="region" aria-label="Featured programmes carousel" onpointerdown={handlePointerDown}>
                 {#key current}
                     <a class="hero-card" href={withBase(`/${isIrish ? 'ga' : 'en'}/player/${getSlide(0).slug}`)} onclick={handleClick}>
                         <div in:fly={{x: direction === 'next' ? 750 : -750, duration: 350}} out:fly={{x: direction === 'next' ? -750 : 750, duration: 350}}>

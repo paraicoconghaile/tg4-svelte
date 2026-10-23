@@ -151,7 +151,7 @@
         <form onsubmit={(event) => {event.preventDefault(); handleSubmit();}} class="account-section">
             <fieldset>
                 <div class="form-field">
-                    <label class="frmTitle">{messages.labels.ads}</label>
+                    <p class="frmTitle">{messages.labels.ads}</p>
                     <div class="form-setting-row">
                         <p>Allow advertisements in-between watching content</p>
                         <label class="toggle">
@@ -166,7 +166,7 @@
                     </div>
                 </div>
                 <div class="form-field">
-                    <label class="frmTitle">{messages.labels.subtitles}</label>
+                    <p class="frmTitle">{messages.labels.subtitles}</p>
                     <div class="form-setting-row">
                         <p>Allow subtitles to be on automatically</p>
                         <label class="toggle">
@@ -181,7 +181,7 @@
                     </div>
                 </div>
                 <div class="form-field">
-                    <label class="frmTitle">{messages.labels.promos}</label>
+                    <p class="frmTitle">{messages.labels.promos}</p>
                     <div class="form-setting-row">
                         <p>Allow promos in-between watching content</p>
                         <label class="toggle">
@@ -196,7 +196,7 @@
                     </div>
                 </div>
                 <div class="form-field">
-                    <label class="frmTitle">{messages.labels.genres}</label>
+                    <p class="frmTitle">{messages.labels.genres}</p>
                     <p>Select your favourite genre(s)</p>
                     <div class="genre-options">
                         {#each availableGenres as genre}
@@ -219,8 +219,7 @@
                     </div>
                 </div>
                 <div class="form-field">
-                    <label class="frmTitle">{messages.labels.credits}</label>
-
+                    <p class="frmTitle">{messages.labels.credits}</p>
                     <div class="form-setting-row">
                         <p>Allow credits to be on automatically</p>
                         <label class="toggle">
@@ -235,8 +234,7 @@
                     </div>
                 </div>
                 <div class="form-field">
-                    <label class="frmTitle">{messages.labels.nextEpisode}</label>
-
+                    <p class="frmTitle">{messages.labels.nextEpisode}</p>
                     <div class="form-setting-row">
                         <p>Automatically plays the next episode</p>
                         <label class="toggle">
@@ -251,8 +249,7 @@
                     </div>
                 </div>
                 <div class="form-field">
-                    <label class="frmTitle">{messages.labels.accessibilityView}</label>
-
+                    <p class="frmTitle">{messages.labels.accessibilityView}</p>
                     <div class="form-setting-row">
                         <p>Switch to high accessibility view</p>
                         <label class="toggle">

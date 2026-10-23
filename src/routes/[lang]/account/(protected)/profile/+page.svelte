@@ -245,7 +245,7 @@
                     <input id="displayName" type="text" bind:value={displayName} required />
                 </div>
                 <div class="form-field">
-                    <label class="frmTitle">{messages.labels.age}</label>
+                    <p class="frmTitle">{messages.labels.age}</p>
                     <p>Some TG4 programming contains mature content, including adult language, graphic violence, and/or explicit sexual content. It is intended for adult audiences only. Viewer discretion is advised.</p>
 
                     <label class="toggle">
@@ -255,7 +255,7 @@
                     </label>
                 </div>
                 <div class="form-field">
-                    <label class="frmTitle">{messages.labels.gender}</label>
+                    <p class="frmTitle">{messages.labels.gender}</p>
 
                     <div class="radio-options">
                         <label>
@@ -280,7 +280,7 @@
                     </div>
                 </div>
                 <div class="form-field">
-                    <label class="frmTitle">{messages.labels.irishLevel}</label>
+                    <p class="frmTitle">{messages.labels.irishLevel}</p>
 
                     <div class="irish-options">
                         <label class:selected={irish === '1'}>
@@ -305,7 +305,7 @@
                     </div>
                 </div>
                 <div class="form-field">
-                    <label for="nationality">{messages.labels.nationality}</label>
+                    <p for="nationality">{messages.labels.nationality}</p>
 
                     <select id="nationality" bind:value={nationality}>
                         <option value="">Select nationality</option>
@@ -316,7 +316,7 @@
                     </select>
                 </div>
                 <div class="form-field">
-                    <label for="residence">{messages.labels.country}</label>
+                    <p for="residence">{messages.labels.country}</p>
 
                     <select id="residence" bind:value={residence}>
                         <option value="">Select country of residence</option>
@@ -327,7 +327,7 @@
                     </select>
                 </div>
                 <div class="form-field">
-                    <label></label>
+                    <p>&nbsp;</p>
                     <label class="toggle">
                         <input class="toggle-checkbox" type="checkbox" bind:checked={newsletter} />
                         <span class="toggle-switch"></span>

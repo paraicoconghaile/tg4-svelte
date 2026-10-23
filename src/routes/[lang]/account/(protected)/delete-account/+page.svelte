@@ -156,7 +156,7 @@
 
 {#if modalOpen}
     <div class="modal-backdrop">
-        <section class="delete-modal" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title">
+        <div class="delete-modal" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title">
             <div class="modal-header">  
                 <h2 id="delete-modal-title">{text.title}</h2>
                 <button type="button" class="modal-close" onclick={closeModal} disabled={deleting} aria-label={text.close}>&times;</button>
@@ -201,7 +201,7 @@
                     </button>
                 </div>
             </form>
-        </section>
+        </div>
     </div>
 {/if}
 

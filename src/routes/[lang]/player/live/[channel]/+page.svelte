@@ -760,7 +760,7 @@
         videoElement = null;
     });
 
-    console.log('Live Data:', data);
+    //console.log('Live Data:', data);
 </script>
 
 <section class="live-page">
