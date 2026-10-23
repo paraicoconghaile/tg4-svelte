@@ -134,9 +134,9 @@ export async function getRails() {
 
     const response = await fetch(url);
 
-    console.log('TG4 region:', response.headers.get('x-tg4-region'));
+    /* console.log('TG4 region:', response.headers.get('x-tg4-region'));
     console.log('TG4 country:', response.headers.get('x-tg4-country-code'));
-    console.log('TG4 city:', response.headers.get('x-tg4-city'));
+    console.log('TG4 city:', response.headers.get('x-tg4-city')); */
 
     if (!response.ok) {
         const body = await response.text();

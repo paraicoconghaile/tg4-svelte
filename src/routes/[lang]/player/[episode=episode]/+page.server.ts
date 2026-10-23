@@ -28,7 +28,7 @@ export async function load({ params }) {
     const rawVideo = result.data;
     const territory = result.territory;
 
-    console.log("RAW VIDEO", rawVideo);
+    //console.log("RAW VIDEO", rawVideo);
 
     if (!rawVideo) {
         throw error(404, 'Video not found');
