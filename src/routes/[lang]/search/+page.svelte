@@ -1,4 +1,3 @@
-
 <script lang="ts">
     import { withBase } from '$lib/utils/paths';
     import { searchAdvanced } from '$lib/api/search';
@@ -32,7 +31,7 @@
             selectedSubtitle = '';
             selectedRating = '';
             selectedType = '';
-            
+
             results = data.results ?? [];
             loading = false;
             searchError = '';
@@ -83,10 +82,6 @@
 <section class="search-page">
     <section class="episodes">
         <div class="search-input-wrapper">
-            <!-- <label for="search-input">
-                {isIrish ? 'Cuardaigh cláir' : 'Search programmes'}
-            </label> -->
-
             <div class="search-input">
                 <svg
                     width="22"
@@ -180,8 +175,7 @@
             <!-- Keep your existing search-results grid here -->
         {/if}
 
-        {#if results.length === 0}
-        {:else}
+        {#if results.length > 0}
             <div class="search-results">
                 {#each results as result, i (`${result.type}-${result.video?.vid ?? result.series?.id ?? i}`)}
                     {@const item = result.type === 'VIDEO'
@@ -270,12 +264,6 @@
     margin-bottom: 28px;
 }
 
-.search-input-wrapper label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-}
-
 .search-input {
     display: flex;
     align-items: center;
@@ -357,12 +345,12 @@
     font-size: 1rem;
 }
 
-.rating {
+/* .rating {
     display: inline-block;
     font-size: 0.75rem;
     padding: 3px 6px;
     border: 1px solid currentColor;
-}
+} */
 
 .search-card:hover h3 {
 }

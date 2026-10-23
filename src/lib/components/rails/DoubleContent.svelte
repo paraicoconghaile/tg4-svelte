@@ -76,14 +76,6 @@
     background: var(--tg4-pink);
 }
 
-.text {
-    padding: 20px;
-}
-
-.intro h3 {
-    margin: 0 0 10px;
-}
-
 .intro p {
     max-width: 50%;
 }

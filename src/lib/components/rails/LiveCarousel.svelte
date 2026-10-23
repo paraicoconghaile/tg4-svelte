@@ -153,11 +153,6 @@
                                 {/key}
                             </div>
 
-                            <!-- <div class="live-status">
-                                <span class="live-dot"></span>
-                                {isIrish ? 'BEO' : 'LIVE'}
-                            </div> -->
-
                             <div class="programme">
                                 <h3>
                                     {show.title}
@@ -170,12 +165,6 @@
                                 </h3>
 
                                 <p>{formatTime(show.startTime)} – {formatTime(show.endTime)}</p>
-
-                                <!-- <span class="time">
-                                    {formatTime(show.startTime)}
-                                    –
-                                    {formatTime(show.endTime)}
-                                </span> -->
                             </div>
                             {#if showNext && nextshow?.title}
                                 <div class="nextprogramme">
@@ -315,22 +304,6 @@
     }
 }
 
-.live-status {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    margin-top: 25px;
-    font-size: .85rem;
-    font-weight: 700;
-}
-
-.live-dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: red;
-}
-
 .programme {
     margin-top: 10px;
 }
@@ -354,10 +327,6 @@
     margin: 0;
     font-size: .95rem;
     font-weight: 400;
-}
-
-.time {
-    font-size: .9rem;
 }
 
 .ireland-flag {

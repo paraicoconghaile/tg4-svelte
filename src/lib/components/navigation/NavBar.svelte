@@ -98,7 +98,7 @@
         <button class="mobile-menu-button" aria-label="Open menu" onclick={() => mobileMenuOpen = !mobileMenuOpen}>☰</button>
 
         <div class="mobile-logo">
-            <a href={withBase(isIrish ? '/ga' : '/en')}><svg width="135" id="TG4_x2B__logo_x5F_020926_x5F_bándearg_x5F_neg" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 757.1 277.2"><g id="TG"><g id="TG1"><g><rect fill="#ff126c" y="0" width="459" height="277.2"></rect><path fill="#fff" d="M418.8,139.6v-12.1h-92.9l-17.4,35.2h64c-7.5,23.9-27,40.2-55.5,40.2s-61.5-26.5-61.5-63.4,24.3-64.2,58.8-64.2,35.6,10.5,43.7,22.1h52.8c-20.1-42.2-58.2-62.3-96.4-62.3-56.2,0-103,41.2-103,103.4s44.8,104.4,105,104.4,102.4-41.2,102.4-103.4h0Z"></path><polygon fill="#fff" points="204.9 74.8 223 38.2 40.2 38.2 40.2 74.8 107.4 74.8 107.4 243 149.5 243 149.5 74.8 204.9 74.8"></polygon></g></g></g><g id="Layer_38_copy_16"><rect fill="#ff126c" x="479" y="0" width="278.1" height="277.2"></rect><g id="_x34_"><path fill="#fff" d="M561.7,154.4c2.2-14.5,10.2-44.2,44.5-67,32-21.2,67.8-16.6,67.8-16.6v-35.1h0s-26.8-2.5-53.5,5c-31.7,8.9-59.2,29.8-72.2,46.9-22.4,29.4-24.9,47.1-27.7,63.6s0,35.7,0,35.7h42s-3.4-15.7-1-32.4h0Z"></path><polygon fill="#fff" points="726 150.4 674 150.4 674 88.1 631.7 101 631.7 150.4 589.9 150.4 579.2 186.7 631.7 186.7 631.7 248.3 674 235.6 674 186.7 715.2 186.7 726 150.4"></polygon></g></g></svg></a>
+            <a aria-label={isIrish ? 'TG4 Logo' : 'TG4 Logo'} href={withBase(isIrish ? '/ga' : '/en')}><svg width="135" id="TG4_x2B__logo_x5F_020926_x5F_bándearg_x5F_neg" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 757.1 277.2"><g id="TG"><g id="TG1"><g><rect fill="#ff126c" y="0" width="459" height="277.2"></rect><path fill="#fff" d="M418.8,139.6v-12.1h-92.9l-17.4,35.2h64c-7.5,23.9-27,40.2-55.5,40.2s-61.5-26.5-61.5-63.4,24.3-64.2,58.8-64.2,35.6,10.5,43.7,22.1h52.8c-20.1-42.2-58.2-62.3-96.4-62.3-56.2,0-103,41.2-103,103.4s44.8,104.4,105,104.4,102.4-41.2,102.4-103.4h0Z"></path><polygon fill="#fff" points="204.9 74.8 223 38.2 40.2 38.2 40.2 74.8 107.4 74.8 107.4 243 149.5 243 149.5 74.8 204.9 74.8"></polygon></g></g></g><g id="Layer_38_copy_16"><rect fill="#ff126c" x="479" y="0" width="278.1" height="277.2"></rect><g id="_x34_"><path fill="#fff" d="M561.7,154.4c2.2-14.5,10.2-44.2,44.5-67,32-21.2,67.8-16.6,67.8-16.6v-35.1h0s-26.8-2.5-53.5,5c-31.7,8.9-59.2,29.8-72.2,46.9-22.4,29.4-24.9,47.1-27.7,63.6s0,35.7,0,35.7h42s-3.4-15.7-1-32.4h0Z"></path><polygon fill="#fff" points="726 150.4 674 150.4 674 88.1 631.7 101 631.7 150.4 589.9 150.4 579.2 186.7 631.7 186.7 631.7 248.3 674 235.6 674 186.7 715.2 186.7 726 150.4"></polygon></g></g></svg></a>
         </div>
 
         <a href={withBase(isLoggedIn ? (isIrish ? '/ga/account/account' : '/en/account/account') : (isIrish ? '/ga/account/login' : '/en/account/login'))} aria-label={isLoggedIn ? 'My Account' : 'Log in'}>
@@ -111,7 +111,7 @@
     </div>
     <div class="nav-left">
         <div class="logo">
-            <a href={withBase(isIrish ? '/ga' : '/en')}><svg width="135" id="TG4_x2B__logo_x5F_020926_x5F_bándearg_x5F_neg" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 757.1 277.2"><g id="TG"><g id="TG1"><g><rect fill="#ff126c" y="0" width="459" height="277.2"></rect><path fill="#fff" d="M418.8,139.6v-12.1h-92.9l-17.4,35.2h64c-7.5,23.9-27,40.2-55.5,40.2s-61.5-26.5-61.5-63.4,24.3-64.2,58.8-64.2,35.6,10.5,43.7,22.1h52.8c-20.1-42.2-58.2-62.3-96.4-62.3-56.2,0-103,41.2-103,103.4s44.8,104.4,105,104.4,102.4-41.2,102.4-103.4h0Z"></path><polygon fill="#fff" points="204.9 74.8 223 38.2 40.2 38.2 40.2 74.8 107.4 74.8 107.4 243 149.5 243 149.5 74.8 204.9 74.8"></polygon></g></g></g><g id="Layer_38_copy_16"><rect fill="#ff126c" x="479" y="0" width="278.1" height="277.2"></rect><g id="_x34_"><path fill="#fff" d="M561.7,154.4c2.2-14.5,10.2-44.2,44.5-67,32-21.2,67.8-16.6,67.8-16.6v-35.1h0s-26.8-2.5-53.5,5c-31.7,8.9-59.2,29.8-72.2,46.9-22.4,29.4-24.9,47.1-27.7,63.6s0,35.7,0,35.7h42s-3.4-15.7-1-32.4h0Z"></path><polygon fill="#fff" points="726 150.4 674 150.4 674 88.1 631.7 101 631.7 150.4 589.9 150.4 579.2 186.7 631.7 186.7 631.7 248.3 674 235.6 674 186.7 715.2 186.7 726 150.4"></polygon></g></g></svg></a>
+            <a aria-label={isIrish ? 'TG4 Logo' : 'TG4 Logo'} href={withBase(isIrish ? '/ga' : '/en')}><svg width="135" id="TG4_x2B__logo_x5F_020926_x5F_bándearg_x5F_neg" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 757.1 277.2"><g id="TG"><g id="TG1"><g><rect fill="#ff126c" y="0" width="459" height="277.2"></rect><path fill="#fff" d="M418.8,139.6v-12.1h-92.9l-17.4,35.2h64c-7.5,23.9-27,40.2-55.5,40.2s-61.5-26.5-61.5-63.4,24.3-64.2,58.8-64.2,35.6,10.5,43.7,22.1h52.8c-20.1-42.2-58.2-62.3-96.4-62.3-56.2,0-103,41.2-103,103.4s44.8,104.4,105,104.4,102.4-41.2,102.4-103.4h0Z"></path><polygon fill="#fff" points="204.9 74.8 223 38.2 40.2 38.2 40.2 74.8 107.4 74.8 107.4 243 149.5 243 149.5 74.8 204.9 74.8"></polygon></g></g></g><g id="Layer_38_copy_16"><rect fill="#ff126c" x="479" y="0" width="278.1" height="277.2"></rect><g id="_x34_"><path fill="#fff" d="M561.7,154.4c2.2-14.5,10.2-44.2,44.5-67,32-21.2,67.8-16.6,67.8-16.6v-35.1h0s-26.8-2.5-53.5,5c-31.7,8.9-59.2,29.8-72.2,46.9-22.4,29.4-24.9,47.1-27.7,63.6s0,35.7,0,35.7h42s-3.4-15.7-1-32.4h0Z"></path><polygon fill="#fff" points="726 150.4 674 150.4 674 88.1 631.7 101 631.7 150.4 589.9 150.4 579.2 186.7 631.7 186.7 631.7 248.3 674 235.6 674 186.7 715.2 186.7 726 150.4"></polygon></g></g></svg></a>
         </div>
         <ul class="menu">
             {#each navigation as item, index}
@@ -227,11 +227,6 @@
     display: flex;
     align-items: center;
     gap: 25px;
-}
-
-.logo img {
-    width: 150px;
-    height: auto;
 }
 
 .menu {
@@ -403,11 +398,6 @@
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
-    }
-
-    .mobile-logo img {
-        width: 150px;
-        height: auto;
     }
 
     .mobile-menu-button {

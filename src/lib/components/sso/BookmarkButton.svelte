@@ -125,10 +125,6 @@
 {/if}
 
 <style>
-.bookmark-button {
-    cursor: pointer;
-}
-
 .bookmark-modal-backdrop {
     position: fixed;
     inset: 0;

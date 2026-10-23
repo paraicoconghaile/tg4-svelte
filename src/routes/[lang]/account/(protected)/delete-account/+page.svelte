@@ -206,13 +206,6 @@
 {/if}
 
 <style>
-.delete-account {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: var(--genre-background);
-}
-
 .warning-message {
     padding: 1rem;
     color: #8a1c2d;

@@ -161,37 +161,6 @@ input {
     padding: 10px;
 }
 
-.password-input {
-    position: relative;
-}
-
-.password-input input {
-    width: 100%;
-    padding-right: 45px;
-}
-
-.password-toggle {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    border: 0;
-    background: none;
-    padding: 5px;
-    cursor: pointer;
-}
-
-.notification {
-    display: block;
-    padding: 10px 20px;
-    background: var(--tg4-grey-2);
-    color: white;
-    border-radius: 0px;
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease;
-}
-
 .account-links {
     margin-top: 1.5rem;
     text-align: center;
@@ -200,10 +169,6 @@ input {
 .account-links > a {
     display: inline-block;
     margin-bottom: 1rem;
-}
-
-.account-links p {
-    margin: 0;
 }
 
 .account-links a {

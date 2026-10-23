@@ -254,25 +254,9 @@ input {
     cursor: pointer;
 }
 
-.notification {
-    display: block;
-    padding: 10px 20px;
-    background: var(--tg4-grey-2);
-    color: white;
-    border-radius: 0px;
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease;
-}
-
 .account-links {
     margin-top: 1.5rem;
     text-align: center;
-}
-
-.account-links > a {
-    display: inline-block;
-    margin-bottom: 1rem;
 }
 
 .account-links p {

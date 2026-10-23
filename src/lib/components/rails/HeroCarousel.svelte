@@ -306,10 +306,6 @@
     transition: opacity .45s ease;
 }
 
-.hero.changing img {
-    opacity: .4;
-}
-
 .overlay {
     position: absolute;
     inset: 0;

@@ -1,6 +1,7 @@
 <script lang="ts">
     import emblaCarouselSvelte from 'embla-carousel-svelte';
     import type { EmblaCarouselType } from 'embla-carousel';
+    import { withBase } from '$lib/utils/paths';
 
     let emblaApi: EmblaCarouselType | undefined;
 
@@ -31,54 +32,32 @@
 
 <section class="rail">
     <div class="rail-heading">
-        {#if rail.titleEn || rail.titleGa}
-            <h2>{isIrish ? rail.titleGa : rail.titleEn}</h2>
-        {/if}
+        {#if rail.titleEn || rail.titleGa}<h2>{isIrish ? rail.titleGa : rail.titleEn}</h2>{/if}
 
-        {#if rail.subtitleEn || rail.subtitleGa}
-            <p>{isIrish ? rail.subtitleGa : rail.subtitleEn}</p>
-        {/if}
+        {#if rail.subtitleEn || rail.subtitleGa}<p>{isIrish ? rail.subtitleGa : rail.subtitleEn}</p>{/if}
     </div>
 
     <div class="carousel-wrapper">
-        <button
-            class="arrow left"
-            onclick={previous}
-            aria-label="Previous"
-        >
+        <button class="arrow left" onclick={previous} aria-label="Previous">
             ‹
         </button>
 
-        <div
-            class="embla"
-            use:emblaCarouselSvelte={{options}}
-            onemblaInit={onEmblaInit}
-        >
+        <div class="embla" use:emblaCarouselSvelte={{options}} onemblaInit={onEmblaInit}>
             <div class="embla__container">
-
                 {#each rail.luckyDipItems as item}
                     <div class="embla__slide">
                         <div class="lucky-dip-card">
-                            <img
-                                src={item.imageUrl}
-                                alt={isIrish ? item.titleGa : item.titleEn}
-                            />
-
-                            <h3>
-                                {isIrish ? item.titleGa : item.titleEn}
-                            </h3>
+                            <a href={withBase(`/${isIrish ? 'ga' : 'en'}/lucky-dip?new=true`)}>
+                                <img src={item.imageUrl} alt={isIrish ? item.titleGa : item.titleEn} />
+                                <h3>{isIrish ? item.titleGa : item.titleEn}</h3>
+                            </a>
                         </div>
                     </div>
                 {/each}
-
             </div>
         </div>
 
-        <button
-            class="arrow right"
-            onclick={next}
-            aria-label="Next"
-        >
+        <button class="arrow right" onclick={next} aria-label="Next">
             ›
         </button>
     </div>

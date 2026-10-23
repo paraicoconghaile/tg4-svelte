@@ -103,11 +103,6 @@
     margin-top: -15px;
 }
 
-.bookmark-info p {
-    margin: 0;
-    line-height: 1.5;
-}
-
 .history-card-image {
     position: relative;
     width: 100%;

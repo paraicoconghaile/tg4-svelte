@@ -209,7 +209,7 @@
                                 }}
                             />
 
-                            <a href={withBase(`/${data.lang}/player/${data.slug}/${ep.episodeID}`)}>
+                            <a aria-label={isIrish ? 'Seinn' : 'Play'} href={withBase(`/${data.lang}/player/${data.slug}/${ep.episodeID}`)}>
                                 <svg class="play-icon" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <rect width="40" height="40" fill="#EBEBEB"/>
                                     <path d="M30.6867 20.4249L25.9734 15.8788L11.0911 30.2412L15.8031 34.7886L30.6867 20.4249Z" fill="#2B2A2A"/>

@@ -132,7 +132,7 @@
 
             <div class="series-grid">
                 {#each series as item (item.slug)}
-                    <a class="series-card" href={withBase(`/${data.lang}/player/${item.slug}`)}>
+                    <a aria-label={isIrish ? 'Féach' : 'Watch Now'} class="series-card" href={withBase(`/${data.lang}/player/${item.slug}`)}>
                         <img src={getImageUrl(item)} alt={item.title} onerror={(e) => {e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';}}/>
                         <h3>{item.title}</h3>
                         <!-- <p>{item.description}</p> -->

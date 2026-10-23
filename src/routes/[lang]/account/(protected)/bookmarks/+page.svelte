@@ -128,11 +128,6 @@
     margin-top: -15px;
 }
 
-.bookmark-info p {
-    margin: 0;
-    line-height: 1.5;
-}
-
 .bookmarks-pagination {
     display: flex;
     align-items: center;

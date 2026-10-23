@@ -286,15 +286,6 @@
     margin-bottom: 20px;
 }
 
-.form-row {
-    display: flex;
-    gap: 15px;
-}
-
-.form-row .form-field {
-    flex: 1;
-}
-
 .form-setting-row {
     display: flex;
     align-items: center;

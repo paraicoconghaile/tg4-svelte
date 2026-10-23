@@ -35,11 +35,6 @@
 
             <p class="review-text">{isIrish ? review.reviewGa : review.reviewEn}</p>
 
-            <!-- <h3>{series.name}</h3>
-            <p class="series-description">
-                {isIrish ? series.taglineGa ?? series.descGa : series.taglineEn ?? series.descEn}
-            </p> -->
-
             <div class="staff-pick">
                 <p>{isIrish ? `ROGHA AN RÉALTA` : `STAR PICK`}<br /><svg width="48" height="18" viewBox="0 0 48 18" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M48.0003 0H30.3633V17.5712H48.0003V0Z" fill="#FF126C"/>
@@ -105,11 +100,6 @@
     font-weight: 400;
 }
 
-.intro h3 {
-    margin: 20px 0 8px;
-    font-size: 1.5rem;
-}
-
 .intro p {
     margin: 0;
     font-size: 1.25rem;
@@ -121,10 +111,6 @@
     margin-bottom: 16px;
     font-size: 0.9rem;
     font-weight: 700;
-}
-
-.series-description {
-    opacity: 0.85;
 }
 
 .content-card {

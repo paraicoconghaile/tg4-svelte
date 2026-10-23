@@ -96,20 +96,6 @@
     align-items: center;
 }
 
-.marketing-action.left {
-    margin-right: auto;
-}
-
-.marketing-action.center {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.marketing-action.right {
-    margin-left: auto;
-}
-
 .marketing-button {
     display: inline-block;
     background: var(--tg4-pink);

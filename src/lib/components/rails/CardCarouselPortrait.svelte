@@ -121,7 +121,7 @@
                             </a>
                         {:else}
                             <!-- Keep your existing VIDEO URL here -->
-                            <a href="#">
+                            <a href={withBase(`/${isIrish ? 'ga' : 'en'}/player/${content.vid}`)}>
                                 <img src={image} alt={name} />
                                 {#if content.seriesTitle === content.displayTitle}
                                     <h3>{content.seriesTitle}</h3>
