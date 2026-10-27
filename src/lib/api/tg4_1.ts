@@ -200,11 +200,13 @@ export async function getCategoryRails(category: string) {
 export async function getContinueWatching(peachSid: string) {
     const url = `https://api.tg4dev.com/api/user/continue-watching`;
 
+    console.error('SESSION TOKEN', {peachSid});
+
     const response = await fetch(url, {
         headers: {
             'Content-Type': 'application/json',
             //'X-Peach-Authorization': peachSid
-            'X-Peach-Authorization': `sessionToken {peachSid}`
+            'X-Peach-Authorization': `{peachSid}`
         }
     });
 
