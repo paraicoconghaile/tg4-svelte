@@ -200,8 +200,6 @@ export async function getCategoryRails(category: string) {
 export async function getContinueWatching(peachSid: string) {
     const url = `https://api.tg4dev.com/api/user/continue-watching`;
 
-    console.error('SESSION TOKEN', {peachSid});
-
     const response = await fetch(url, {
         headers: {
             'Content-Type': 'application/json',
@@ -241,7 +239,7 @@ export async function getBookmarks(
     const response = await fetch(url.toString(), {
         headers: {
             'Content-Type': 'application/json',
-            'X-Peach-Authorization': peachSid
+            'X-Peach-Authorization': `sessionToken ${peachSid}`
         }
     });
 
@@ -269,7 +267,7 @@ export async function getHistory(peachSid: string) {
     const response = await fetch(url, {
         headers: {
             'Content-Type': 'application/json',
-            'X-Peach-Authorization': peachSid
+            'X-Peach-Authorization': `sessionToken ${peachSid}`
         }
     });
 
