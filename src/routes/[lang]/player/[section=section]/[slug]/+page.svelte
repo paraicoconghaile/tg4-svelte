@@ -135,14 +135,14 @@
 
                 <div class="hero-buttons">
                     <div class="hero-button">
-                        <a aria-label={isIrish ? 'Féach' : 'Watch now'} class="hero-button-icon" href={withBase(`/${data.lang}/player/${data.slug}/`)}>
+                        <a class="hero-button-icon" href={withBase(`/${data.lang}/player/${data.slug}/${selectedSeason.episodes[0]?.episodeID ?? ''}`)} aria-label={isIrish ? 'Féach' : 'Watch Now'}>
                             <svg width="20" height="29" viewBox="0 0 20 29" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M19.6164 14.3439L14.903 9.79771L0.020813 24.1602L4.73281 28.7076L19.6164 14.3439Z" fill="#2B2A2A"/>
                                 <path d="M14.8835 18.9111L19.5942 14.3624L4.712 0L0 4.54743L14.8835 18.9111Z" fill="#2B2A2A"/>
                             </svg>
                         </a>
 
-                        <a aria-label={isIrish ? 'Féach' : 'Watch now'} class="hero-button-text" href={withBase(`/${data.lang}/player/${data.slug}/`)}>
+                        <a class="hero-button-text" href={withBase(`/${data.lang}/player/${data.slug}/${selectedSeason.episodes[0]?.episodeID ?? ''}`)}>
                             {data.lang === 'ga' ? 'Féach' : 'Watch now'}
                         </a>
                     </div>
