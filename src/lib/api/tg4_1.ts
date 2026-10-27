@@ -206,7 +206,7 @@ export async function getContinueWatching(peachSid: string) {
         headers: {
             'Content-Type': 'application/json',
             //'X-Peach-Authorization': peachSid
-            'X-Peach-Authorization': `{peachSid}`
+            'X-Peach-Authorization': `sessionToken ${peachSid}`
         }
     });
 
