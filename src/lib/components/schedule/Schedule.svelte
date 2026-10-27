@@ -94,8 +94,12 @@
     }
 
     function scrollDates(direction: number) {
-        datesContainer?.scrollBy({
-            left: direction * 200,
+        const dateWidth = datesContainer?.querySelector('.date')?.getBoundingClientRect().width;
+
+        if (!dateWidth) return;
+
+        datesContainer.scrollBy({
+            left: direction * (dateWidth + 8),
             behavior: 'smooth'
         });
     }

@@ -18,17 +18,17 @@
 
 {#each data.rails.rails as rail}
     {#if rail.type === 'CAROUSEL'}
-        <HeroCarousel {rail} {isIrish}/>
+        <HeroCarousel {rail} {isIrish} />
     {:else if rail.type === 'HORIZONTAL' && rail.showItemsAsBoxset === false}
-        <CardCarousel {rail} {isIrish}/>
+        <CardCarousel {rail} {isIrish} showCategoryOnSeries={rail.showCategoryOnSeries} />
     {:else if rail.type === 'HORIZONTAL' && rail.showItemsAsBoxset === true}
-        <CardCarouselPortrait {rail} {isIrish}/>
+        <CardCarouselPortrait {rail} {isIrish} showCategoryOnSeries={rail.showCategoryOnSeries} />
     {:else if rail.type === 'CATEGORY_RAIL'}
-        <CategoryRail {rail} {isIrish}/>
+        <CategoryRail {rail} {isIrish} />
     {:else if rail.type === 'DOUBLE_CONTENT'}
-        <DoubleContent {rail} {isIrish}/>
+        <DoubleContent {rail} {isIrish} />
     {:else if rail.type === 'SINGLE_CONTENT'}
-        <SingleContent {rail} {isIrish}/>
+        <SingleContent {rail} {isIrish} />
     {:else if rail.type === 'MARKETING'}
         <Marketing {rail} {isIrish} />
     {:else if rail.type === 'LIVE'}
@@ -36,9 +36,9 @@
     {:else if rail.type === 'LUCKY_DIP'}
         <LuckyDipCarousel {rail} {isIrish} />
     {:else if rail.type === 'CONTINUE_WATCHING' && rail.items.length > 0}
-        <CardCarousel {rail} {isIrish}/>
+        <CardCarousel {rail} {isIrish} />
     {:else if rail.type === 'STAFF_REVIEW'}
-        <StaffReview {rail} {isIrish}/>
+        <StaffReview {rail} {isIrish} />
     {/if}
 {/each}
 

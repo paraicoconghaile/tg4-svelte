@@ -3,6 +3,7 @@
     import type { EmblaCarouselType } from 'embla-carousel';
     import { withBase } from '$lib/utils/paths';
     import { railGlyphs } from '$lib/utils/railGlyphs';
+    import { categoryLabels } from '$lib/config/categoryLabels';
 
     let emblaApi: EmblaCarouselType | undefined;
 
@@ -72,8 +73,19 @@
 
     let {
         rail,
-        isIrish
+        isIrish,
+        showCategoryOnSeries = false
     } = $props();
+
+    function getCategoryLabel(rawCategory: string | null | undefined) {
+        if (!rawCategory) return '';
+
+        const category = categoryLabels[rawCategory];
+
+        if (!category) return rawCategory;
+
+        return isIrish ? category.ga : category.en;
+    }
 
     let glyphUrl = $derived(
         rail.backgroundGlyph
@@ -140,6 +152,11 @@
                                     }}
                                 />
                                 <h3>{content.name}</h3>
+                                {#if showCategoryOnSeries && content.rawCategory}
+                                    <p class="series-category">
+                                        {getCategoryLabel(content.rawCategory)}
+                                    </p>
+                                {/if}
                             </a>
                         {:else}
                             <a href={withBase(`/${isIrish ? 'ga' : 'en'}/player/${content.vid}`)}>
@@ -270,6 +287,12 @@
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.series-category {
+    margin-top: 4px;
+    font-size: 0.85rem;
+    opacity: 0.8;
 }
 
 .arrow {

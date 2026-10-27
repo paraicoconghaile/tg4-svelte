@@ -115,11 +115,11 @@
 <!-- CATEGORY RAILS -->
 {#each data.rails?.rails ?? [] as rail}
     {#if rail.type === 'HORIZONTAL' && rail.showItemsAsBoxset}
-        <CardCarouselPortrait {rail} {isIrish}/>
+        <CardCarouselPortrait {rail} {isIrish} showCategoryOnSeries={rail.showCategoryOnSeries} />
     {:else if  rail.type === 'HORIZONTAL'}
-        <CardCarousel {rail} {isIrish}/>
+        <CardCarousel {rail} {isIrish} showCategoryOnSeries={rail.showCategoryOnSeries} />
     {:else if rail.type === 'DOUBLE_CONTENT'}
-        <DoubleContent {rail} {isIrish}/>
+        <DoubleContent {rail} {isIrish} />
     {:else if rail.type === 'MARKETING'}
         <Marketing {rail} {isIrish} />
     {/if}

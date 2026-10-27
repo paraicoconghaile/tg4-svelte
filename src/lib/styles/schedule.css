@@ -26,15 +26,16 @@
 }
 
 .date {
-    flex: 1 0 90px;
-    min-width: 90px;
-    padding: 12px 8px;
+    flex: 0 0 calc((100% - 48px) / 7);
+    min-width: 0;
+    padding: 12px 4px;
     border: 1px solid #555;
     background: transparent;
     color: inherit;
     cursor: pointer;
     text-align: center;
     font-family: inherit;
+    box-sizing: border-box;
 }
 
 .date:hover {

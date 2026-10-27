@@ -78,6 +78,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center top;
     margin: 10px 0
 }
 
@@ -106,6 +107,10 @@
     .single-content {
         height: 350px;
     }
+
+    .overlay {
+        left: 30px;
+    }
 }
 
 @media (max-width: 600px) {
@@ -113,6 +118,11 @@
         width: 34px;
         height: 34px;
     }
+
+    .overlay {
+        bottom: 25%;
+    }
+
     .single-content {
         height: 250px;
     }

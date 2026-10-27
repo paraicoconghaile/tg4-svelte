@@ -3,6 +3,7 @@
     import type { EmblaCarouselType } from 'embla-carousel';
     import { withBase } from '$lib/utils/paths';
     import { railGlyphs } from '$lib/utils/railGlyphs';
+    import { categoryLabels } from '$lib/config/categoryLabels';
 
     let emblaApi: EmblaCarouselType | undefined;
 
@@ -72,8 +73,19 @@
 
     let {
         rail,
-        isIrish
+        isIrish,
+        showCategoryOnSeries = false
     } = $props();
+
+    function getCategoryLabel(rawCategory: string | null | undefined) {
+        if (!rawCategory) return '';
+
+        const category = categoryLabels[rawCategory];
+
+        if (!category) return rawCategory;
+
+        return isIrish ? category.ga : category.en;
+    }
 
     /* $effect(() => {
         console.log('Rail glyph:', rail.backgroundGlyph);
@@ -151,6 +163,11 @@
                                     }}
                                 />
                                 <h3>{content.name}</h3>
+                                {#if showCategoryOnSeries && content.rawCategory}
+                                    <p class="series-category">
+                                        {getCategoryLabel(content.rawCategory)}
+                                    </p>
+                                {/if}
                             </a>
                         {:else}
                             <!-- Keep your existing VIDEO URL here -->
@@ -273,6 +290,12 @@
     gap: 10px;
 }
 
+.series-category {
+    margin-top: 4px;
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
 .arrow {
     flex: 0 0 45px;
     width: 45px;
@@ -325,6 +348,12 @@
     margin: 15px 0 0;
     font-size: clamp(1rem, 1.5vw, 1.25rem);
     font-weight: 700;
+}
+
+@media (max-width:900px) {
+    .embla__slide{
+        flex: 0 0 calc(25% - 0px);
+    }
 }
 
 @media (max-width: 700px) {

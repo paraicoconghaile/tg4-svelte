@@ -25,7 +25,15 @@
 <section class="marketing-rail">
     {#if image}
         <div class="marketing-image">
-            <img src={image.xLarge ?? image.large} alt={altText ?? ''} />
+            <!-- <img src={image.xLarge ?? image.large} alt={altText ?? ''} /> -->
+
+            <picture>
+                {#if rail.phoneImage}
+                    <source media="(max-width: 599px)" srcset={rail.phoneImage.xLarge ?? rail.phoneImage.large} />
+                {/if}
+
+                <img src={image.xLarge ?? image.large} alt={altText ?? ''} />
+            </picture>
 
             <div class="overlay">
                 <div class="marketing-text">
@@ -34,7 +42,10 @@
                 </div>
 
                 {#if buttonText}
-                    <div class="marketing-action">
+                    <div class="marketing-action"
+        class:position-left={rail.actionButtonPosition === 'LEFT'}
+        class:position-center={rail.actionButtonPosition === 'CENTER'}
+        class:position-right={rail.actionButtonPosition === 'RIGHT'}>
                         <a href={buttonUrl} class="marketing-button">{buttonText}</a>
                     </div>
                 {/if}
@@ -90,6 +101,19 @@
 .marketing-action {
     display: flex;
     align-items: center;
+    width: 100%;
+}
+
+.marketing-action.position-left {
+    justify-content: flex-start;
+}
+
+.marketing-action.position-center {
+    justify-content: center;
+}
+
+.marketing-action.position-right {
+    justify-content: flex-end;
 }
 
 .marketing-button {

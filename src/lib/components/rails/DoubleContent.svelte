@@ -17,8 +17,10 @@
     {#each rail.items as item}
         {@const content = item.type === 'SERIES' ? item.series : item.video}
 
+        {@const hasBoxsetImage = !!item.series?.boxsetImage?.large}
+
         {@const image = item.type === 'SERIES'
-            ? content.mainImage?.large ?? content.boxsetImage?.large
+            ? content.boxsetImage?.large ?? content.mainImage?.large
             : content.image?.large}
 
         {@const title = content.name}
@@ -29,6 +31,12 @@
 
         <a class="content-card" href={withBase(href)}>
             <img src={image} alt={title} />
+
+            {#if item.type === 'SERIES' && !hasBoxsetImage}
+                <div class="content-title">
+                    <h3>{content.name}</h3>
+                </div>
+            {/if}
 
             <div class="play-box">
                 <svg
@@ -59,10 +67,26 @@
 
 .content-card {
     position: relative;
-    background: white;
-    text-decoration: none;
-    color: inherit;
-    overflow: hidden;
+    display: block;
+}
+
+.content-title {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    box-sizing: border-box;
+    color: white;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.content-title h3 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
 }
 
 .content-card img {
