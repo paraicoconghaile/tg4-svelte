@@ -242,7 +242,11 @@
                         </div>
 
                         <div class="episode-info">
-                            <h3>{data.lang === 'ga' ? 'Eipeasóid' : 'Episode'} {ep.episodeNumber}, {ep.title}</h3>
+                            <h3>{data.lang === 'ga' ? 'Eipeasóid' : 'Episode'} {ep.episodeNumber}
+                                {#if ep.title}
+                                    , {ep.title}
+                                {/if}
+                            </h3>
 
                             <p>
                                 S{ep.seriesNumber}

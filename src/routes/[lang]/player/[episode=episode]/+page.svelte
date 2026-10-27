@@ -179,6 +179,15 @@
                 player.on('ended', () => {
                     void savePlaybackPosition(player);
                 });
+
+                // Start playback automatically
+                const playPromise = player.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.catch((error: Error) => {
+                        console.log('Autoplay was blocked:', error.message);
+                    });
+                }
             });
 
         };
@@ -279,7 +288,7 @@
             />
 
             <button type="button" class="play-button" onclick={startPlayer} aria-label="Play video">
-                ▶
+                <svg viewBox="18 0 38 56" width="30" height="38" aria-hidden="true" class="svelte-y23m4k"><path d="M55.9383 27.9696L46.9742 19.3235L35.2362 30.6515L18.6702 46.6389L27.6318 55.2875L55.9383 27.9696Z" fill="#FFFFFF" class="svelte-y23m4k"></path><path d="M46.9354 36.6571L55.8945 28.0061L44.1565 16.6781L27.5905 0.690705L18.6289 9.33929L46.9354 36.6571Z" fill="#FFFFFF" class="svelte-y23m4k"></path></svg>
             </button>
         </div>
     {:else}

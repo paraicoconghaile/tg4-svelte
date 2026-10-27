@@ -21,15 +21,17 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 90px;
-    height: 90px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(255,255,255,.9);
-    color: #2B2A2A;
-    font-size: 2rem;
+    background-color: #000000;
+    font-size: 0em;
+    opacity: .9;
+    width: 120px;
+    height: 65px;
+    margin: auto;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border: 2px solid #ffffff !important;
     cursor: pointer;
-    transition: transform .2s ease;
 }
 
 .play-button:hover {
