@@ -203,7 +203,8 @@ export async function getContinueWatching(peachSid: string) {
     const response = await fetch(url, {
         headers: {
             'Content-Type': 'application/json',
-            'X-Peach-Authorization': peachSid
+            //'X-Peach-Authorization': peachSid
+            'X-Peach-Authorization': `sessionToken {peachSid}`
         }
     });
 

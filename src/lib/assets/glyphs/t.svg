@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="152px" height="143px" viewBox="0 0 152 143" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>gliph_2</title>
+    <defs>
+        <path d="M152,143 L0,143 L0,0 L152,0 Z" id="path-1"></path>
+        <polygon id="path-2" points="0 0 0 142.638954 55.2661 142.638954 55.2661 51.3773912 127.99675 51.3773912 151.61625 0"></polygon>
+    </defs>
+    <g id="gliph_2" stroke="none" fill="none" xlink:href="#path-1">
+        <mask id="mask-3" fill="white">
+            <use xlink:href="#path-2"></use>
+        </mask>
+        <g id="Clip-2"></g>
+        <polygon id="Fill-1" fill="#EBEBEB" fill-rule="evenodd" mask="url(#mask-3)" points="-6 -6.02105263 157.61625 -6.02105263 157.61625 148.660005 -6 148.660005"></polygon>
+    </g>
+</svg>

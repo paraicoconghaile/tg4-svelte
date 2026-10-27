@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="85px" height="200px" viewBox="0 0 85 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>xLeft</title>
+    <g id="xLeft" stroke="none" fill="none" fill-rule="evenodd" stroke-width="1">
+        <g id="Graphic" transform="translate(17.4231, 100) scale(-1, -1) translate(-17.4231, -100)translate(-50.5769, 0)" fill="#2B2A2A">
+            <g id="Group" transform="translate(0.0001, -0.0001)">
+                <polygon id="Path" points="134.830074 99.6721497 102.435286 68.081733 60.0161988 109.470761 0.149316134 167.8834 32.5349948 199.4834"></polygon>
+                <polygon id="Path" points="102.295027 131.410483 134.671682 99.8022886 92.2525948 58.4131219 32.3856695 0 0 31.5993719"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

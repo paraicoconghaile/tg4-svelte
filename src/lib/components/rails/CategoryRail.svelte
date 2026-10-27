@@ -89,13 +89,19 @@
     .category-rail {
         min-height: 300px;
     }
+
     .intro {
         grid-column: auto;
         padding: 15px;
     }
+
     .play-box {
         width: 34px;
         height: 34px;
+    }
+
+    .category {
+        padding: 0 45px;
     }
 }
 </style>

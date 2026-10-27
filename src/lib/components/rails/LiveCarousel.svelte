@@ -5,6 +5,7 @@
     import { onMount } from 'svelte';
     import { invalidateAll } from '$app/navigation';
     import { withBase } from '$lib/utils/paths';
+    import { railGlyphs } from '$lib/utils/railGlyphs';
 
     let emblaApi: EmblaCarouselType | undefined;
 
@@ -32,6 +33,24 @@
         isIrish,
         showNext = true
     } = $props();
+
+    /* $effect(() => {
+        console.log('Rail glyph:', rail.backgroundGlyph);
+        console.log('Glyph URL:', glyphUrl);
+        console.log('Glyph position:', glyphPosition);
+    }); */
+
+    let glyphUrl = $derived(
+        rail.backgroundGlyph
+            ? railGlyphs[rail.backgroundGlyph]
+            : undefined
+    );
+
+    let glyphPosition = $derived(
+        (rail.backgroundGlyphPosition ?? 'BOTTOM_MIDDLE')
+            .toLowerCase()
+            .replaceAll('_', '-')
+    );
 
     let streams = $state(
         rail.items.map((item: any) => item.stream)
@@ -120,7 +139,20 @@
     });
 </script>
 
-<section class="rail">
+<section
+    class="rail"
+    style:--rail-background={rail.backgroundColor ?? 'var(--tg4-grey-2)'}
+    style:--rail-text={rail.textColor ?? 'inherit'}
+>
+    {#if glyphUrl}
+        <div
+            class={`rail-glyph glyph-${glyphPosition}`}
+            style:--glyph-url={`url("${glyphUrl}")`}
+            style:--glyph-color={rail.backgroundGlyphColor ?? 'transparent'}
+            aria-hidden="true"
+        ></div>
+    {/if}
+
     {#if rail.titleEn || rail.titleGa || rail.subtitleEn || rail.subtitleGa}
         <div class="rail-heading">
             {#if rail.titleEn || rail.titleGa}
@@ -133,17 +165,16 @@
     {/if}
 
     <div class="carousel-wrapper">
-        <button class="arrow left" onclick={previous} aria-label="Previous live channels">‹</button>
+        <button class="arrow left" class:has-current-show={streams.some((stream: any) => stream.currentShow)} onclick={previous} aria-label="Previous live channels">‹</button>
         <div class="embla" use:emblaCarouselSvelte={{options}} onemblaInit={onEmblaInit}>
             <div class="embla__container">
-                <!-- {#each rail.items as item}
-                    {@const stream = item.stream} -->
-                {#each streams.filter((stream: any) => stream.state === 'ONAIR' && stream.currentShow) as stream}
+                <!-- {#each streams.filter((stream: any) => stream.state === 'ONAIR' && stream.currentShow) as stream} -->
+                {#each streams.filter((stream: any) => stream.state === 'ONAIR') as stream}
                     {@const show = stream.currentShow}
                     {@const nextshow = stream.nextShow}
 
                     <div class="embla__slide">
-                        <a class="live-card" href={withBase(`/${isIrish ? 'ga' : 'en'}/player/live/${stream.stream}`)}>
+                        <!-- <a class="live-card" href={withBase(`/${isIrish ? 'ga' : 'en'}/player/live/${stream.stream}`)}>
                             <div class="live-image">
                                 <img src={stream.logoUrl} alt={stream.stream} />
                                 {#key `${show.startTime}-${progressKey}`}
@@ -171,12 +202,53 @@
                                     <p>{isIrish ? 'Ag teacht:' : 'Next'} {nextshow.title}</p>
                                 </div>
                             {/if}
+                        </a> -->
+
+                        <a class="live-card" href={withBase(`/${isIrish ? 'ga' : 'en'}/player/live/${stream.stream}`)}>
+                            <div class="live-image">
+                                <img src={stream.logoUrl} alt={stream.stream} />
+
+                                {#if show?.startTime && show?.endTime}
+                                    {#key `${show.startTime}-${progressKey}`}
+                                        <div class="progress-track">
+                                            <div
+                                                class="progress-bar"
+                                                style={`width: 100%; animation-duration: ${new Date(show.endTime).getTime() - new Date(show.startTime).getTime()}ms; animation-delay: -${Date.now() - new Date(show.startTime).getTime()}ms;`}
+                                            ></div>
+                                        </div>
+                                    {/key}
+                                {/if}
+                            </div>
+
+                            <div class="programme">
+                                {#if show}
+                                    <h3>
+                                        {show.title}
+
+                                        {#if show.availability === 'IRELAND_ONLY'}
+                                            <span class="ireland-flag">
+                                                <img src={irelandFlag} alt="Ireland only" />
+                                            </span>
+                                        {/if}
+                                    </h3>
+
+                                    {#if show.startTime && show.endTime}
+                                        <p>{formatTime(show.startTime)} – {formatTime(show.endTime)}</p>
+                                    {/if}
+                                {/if}
+                            </div>
+
+                            {#if showNext && nextshow?.title}
+                                <div class="nextprogramme">
+                                    <p>{isIrish ? 'Ag teacht:' : 'Next'} {nextshow.title}</p>
+                                </div>
+                            {/if}
                         </a>
                     </div>
                 {/each}
             </div>
         </div>
-        <button class="arrow right" onclick={next} aria-label="Next live channels">›</button>
+        <button class="arrow right" class:has-current-show={streams.some((stream: any) => stream.currentShow)} onclick={next} aria-label="Next live channels">›</button>
     </div>
 </section>
 
@@ -185,7 +257,9 @@
     max-width: var(--page-width);
     margin: 0 auto;
     position: relative;
-    background-color: var(--tg4-grey-2);
+    isolation: isolate;
+    background-color: var(--rail-background, var(--tg4-grey-2));
+    color: var(--rail-text, inherit);
     padding: 30px 0 20px 0;
 }
 
@@ -205,6 +279,58 @@
     font-weight: 400;
 }
 
+.rail-glyph {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+
+    background-color: var(--glyph-color, transparent);
+
+    -webkit-mask-image: var(--glyph-url);
+    mask-image: var(--glyph-url);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: auto 100%;
+    mask-size: auto 100%;
+}
+
+.rail-heading,
+.carousel-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+.glyph-bottom-middle {
+    -webkit-mask-position: center bottom;
+    mask-position: center bottom;
+}
+
+.glyph-bottom-left {
+    -webkit-mask-position: left bottom;
+    mask-position: left bottom;
+}
+
+.glyph-bottom-right {
+    -webkit-mask-position: right bottom;
+    mask-position: right bottom;
+}
+
+.glyph-middle-left {
+    -webkit-mask-position: left center;
+    mask-position: left center;
+}
+
+.glyph-middle-right {
+    -webkit-mask-position: right center;
+    mask-position: right center;
+}
+
+.glyph-top-middle {
+    -webkit-mask-position: center top;
+    mask-position: center top;
+}
+
 .carousel-wrapper {
     display: flex;
     align-items: center;
@@ -215,7 +341,6 @@
     flex: 0 0 45px;
     width: 45px;
     height: 45px;
-    border: none;
     border-radius: 50%;
     background: rgba(0,0,0,.6);
     color: white;
@@ -225,11 +350,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: -105px
 }
 
 .arrow:hover {
     background: rgba(0,0,0,.85);
+}
+
+.arrow.left {
+    left: 0;
+}
+
+.arrow.right {
+    right: 0;
+}
+
+.arrow.has-current-show {
+    margin-top: -105px
 }
 
 .embla {

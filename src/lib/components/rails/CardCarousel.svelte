@@ -2,6 +2,7 @@
     import emblaCarouselSvelte from 'embla-carousel-svelte';
     import type { EmblaCarouselType } from 'embla-carousel';
     import { withBase } from '$lib/utils/paths';
+    import { railGlyphs } from '$lib/utils/railGlyphs';
 
     let emblaApi: EmblaCarouselType | undefined;
 
@@ -74,12 +75,33 @@
         isIrish
     } = $props();
 
+    let glyphUrl = $derived(
+        rail.backgroundGlyph
+            ? railGlyphs[rail.backgroundGlyph]
+            : undefined
+    );
+
+    let glyphPosition = $derived(
+        (rail.backgroundGlyphPosition ?? 'BOTTOM_MIDDLE')
+            .toLowerCase()
+            .replaceAll('_', '-')
+    );
+
     /* console.log('========== CARD RAIL JSON ==========');
     console.log("Card Rail Data:", JSON.stringify(rail, null, 2));
     console.log('================================'); */
 </script>
 
-<section class:boxset-rail={rail.showItemsAsBoxset} class="rail">
+<section class:boxset-rail={rail.showItemsAsBoxset} class="rail" style:background-color={rail.backgroundColor ?? undefined} style:color={rail.textColor ?? undefined}>
+    {#if glyphUrl}
+        <div
+            class={`rail-glyph glyph-${glyphPosition}`}
+            style:--glyph-url={`url("${glyphUrl}")`}
+            style:--glyph-color={rail.backgroundGlyphColor ?? 'transparent'}
+            aria-hidden="true"
+        ></div>
+    {/if}
+
     <div class="rail-heading">
         {#if rail.titleEn || rail.titleGa}
             <h2>{isIrish ? rail.titleGa : rail.titleEn}</h2>
@@ -170,7 +192,9 @@
     max-width: var(--page-width);
     margin: 0 auto;
     position: relative;
-    background-color: var(--tg4-grey-2);
+    isolation: isolate;
+    background-color: var(--rail-background, var(--tg4-grey-2));
+    color: var(--rail-text, inherit);
     padding: 30px 0 20px 0;
 }
 
@@ -188,6 +212,58 @@
     margin: 0 0 20px;
     font-size: clamp(1rem, 1.5vw, 1.5rem);
     font-weight: 400;
+}
+
+.rail-glyph {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+
+    background-color: var(--glyph-color, transparent);
+
+    -webkit-mask-image: var(--glyph-url);
+    mask-image: var(--glyph-url);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: auto 100%;
+    mask-size: auto 100%;
+}
+
+.rail-heading,
+.carousel-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+.glyph-bottom-middle {
+    -webkit-mask-position: center bottom;
+    mask-position: center bottom;
+}
+
+.glyph-bottom-left {
+    -webkit-mask-position: left bottom;
+    mask-position: left bottom;
+}
+
+.glyph-bottom-right {
+    -webkit-mask-position: right bottom;
+    mask-position: right bottom;
+}
+
+.glyph-middle-left {
+    -webkit-mask-position: left center;
+    mask-position: left center;
+}
+
+.glyph-middle-right {
+    -webkit-mask-position: right center;
+    mask-position: right center;
+}
+
+.glyph-top-middle {
+    -webkit-mask-position: center top;
+    mask-position: center top;
 }
 
 .carousel-wrapper {
