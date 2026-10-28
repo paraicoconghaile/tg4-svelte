@@ -5,6 +5,7 @@
     import DoubleContent from '$lib/components/rails/DoubleContent.svelte';
     import { withBase } from '$lib/utils/paths';
     import { genres } from '$lib/config/playerNav';
+    import Seo from '$lib/components/seo/Seo.svelte';
 
   	let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
@@ -92,6 +93,28 @@
     //console.log("Section Data", JSON.stringify(data, null, 2));
     //console.log('GENRE RAILS API:', data.rails);
 </script>
+
+{#if isDiscover}
+    <Seo
+        title={isIrish ? 'Aimsigh | TG4' : 'Discover | TG4'}
+        description={isIrish
+            ? 'Aimsigh cláir ar an TG4 Player.'
+            : 'Discover programmes on the TG4 Player.'}
+        canonicalUrl={`https://www.tg4.ie/${data.lang}/player/${data.section}/`}
+        imageUrl="https://dxbg10xwynl92.cloudfront.net/cf-static/images/TG4_2024_corcra_teal_1-1920x1080-1.jpg"
+        lang={data.lang}
+    />
+{:else}
+    <Seo
+        title={`${isIrish ? data.labelGa : data.labelEn} | TG4`}
+        description={isIrish
+            ? `${data.labelGa} ar an TG4 Player.`
+            : `${data.labelEn} on the TG4 Player.`}
+        canonicalUrl={`https://www.tg4.ie/${data.lang}/player/${data.section}/`}
+        imageUrl="https://dxbg10xwynl92.cloudfront.net/cf-static/images/TG4_2024_corcra_teal_1-1920x1080-1.jpg"
+        lang={data.lang}
+    />
+{/if}
 
 {#if isDiscover}
     <section class="discover-page">

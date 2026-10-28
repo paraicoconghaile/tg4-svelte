@@ -16,6 +16,10 @@
     console.log('RAILS API:', data.rails);
 </script>
 
+<svelte:head>
+    <title>{isIrish ? 'TG4 | Teilifís Gaeilge' : 'TG4 | Irish Language Television'}</title>
+</svelte:head>
+
 {#each data.rails.rails as rail}
     {#if rail.type === 'CAROUSEL'}
         <HeroCarousel {rail} {isIrish} />
