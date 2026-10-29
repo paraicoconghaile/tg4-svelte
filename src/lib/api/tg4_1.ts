@@ -72,9 +72,8 @@ export async function getSeriesVideos(seriesTitle: string, seasonNumber: number)
     );
 
     const text = await response.text();
-    
-    /* console.log('getSeriesVideos status:', response.status);
-    console.log('getSeriesVideos response:', text); */
+
+    /* console.log('getSeriesVideos status:', response.status, getSeriesVideos response:', text); */
 
     if (!response.ok) {
         throw new Error(`API Error: ${response.status}`);

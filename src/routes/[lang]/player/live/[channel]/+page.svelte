@@ -501,7 +501,11 @@
         video.setAttribute('data-player', 'D0RgRVjpd');
         video.setAttribute('data-embed', 'default');
         video.setAttribute('data-video-id', data.stream.streamId);
-        video.setAttribute('data-live-playback-token', data.stream.liveToken);
+        if (data.stream.liveToken) {
+            video.setAttribute('data-live-playback-token', data.stream.liveToken);
+        } else {
+            video.removeAttribute('data-live-playback-token');
+        }
 
         await loadBrightcove();
 
@@ -736,6 +740,13 @@
         lastStreamKey = streamKey;
 
         initialisePlayer();
+
+        /* console.log('LIVE STREAM DATA:', {
+            channel: data.channel,
+            streamId: data.stream?.streamId,
+            liveToken: data.stream?.liveToken,
+            stream: data.stream
+        }); */
     });
 
     onDestroy(() => {
