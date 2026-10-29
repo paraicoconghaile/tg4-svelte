@@ -62,8 +62,6 @@ export async function getGenre(
 export async function getSeriesVideos(seriesTitle: string, seasonNumber: number) {
     const url = `https://api.tg4dev.com/api/series/${seriesTitle}/${seasonNumber}`;
 
-    //console.log('getSeriesVideos URL:', url);
-
     const response = await fetch(url,
         {
             headers: {
@@ -74,6 +72,7 @@ export async function getSeriesVideos(seriesTitle: string, seasonNumber: number)
     );
 
     const text = await response.text();
+    
     /* console.log('getSeriesVideos status:', response.status);
     console.log('getSeriesVideos response:', text); */
 
