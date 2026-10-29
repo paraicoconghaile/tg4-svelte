@@ -26,6 +26,30 @@
     let historyVideoId: string | number | null = null;
     
     let activePlayer: any = null;
+    let currentVideoId = $state(data.video.videoId);
+
+    $effect(() => {
+        const nextVideoId = data.video.videoId;
+
+        if (nextVideoId === currentVideoId) return;
+
+        currentVideoId = nextVideoId;
+
+        const player = activePlayer;
+
+        if (player && !player.isDisposed?.()) {
+            void savePlaybackPosition(player);
+
+            player.pause();
+            player.dispose();
+        }
+
+        activePlayer = null;
+        playing = false;
+        lastHistoryUpdate = 0;
+        historyVideoId = null;
+        pendingHistoryPosition = null;
+    });
 
     const startAt = $derived(
         Math.max(0, Number(page.url.searchParams.get('startAt')) || 0)
@@ -398,7 +422,7 @@
 
     {#if data.otherEpisodes?.length}
         <section class="episodes">
-            <h2>{data.lang === 'ga' ? 'Tuilleadh Eipeasóid...' : 'More episodes'}</h2>
+            <h2>{data.lang === 'ga' ? 'Tuilleadh Eipeasóid...' : 'More episodes...'}</h2>
 
             <div class="episode-grid">
                 {#each data.otherEpisodes as ep}
