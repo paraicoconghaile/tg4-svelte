@@ -43,7 +43,7 @@ export async function getGenre(
     limit = 24
 ) {
     const response = await fetch(
-        `https://api.tg4dev.com/api/series?skip=${skip}&limit=${limit}&category=${genre}`,
+        `https://api.tg4dev.com/api/series?skip=${skip}&limit=${limit}&category=${genre}&sites=TG4`,
         {
             headers: {
                 'Content-Type': 'application/json',
