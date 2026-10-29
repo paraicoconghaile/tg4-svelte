@@ -26,6 +26,10 @@ a:hover {
     color: var(--tg4-pink);
 }
 
+.rail.pink-rail a:hover {
+    color: #fff;
+}
+
 img {
     max-width: 100%;
     display: block;

@@ -104,7 +104,13 @@
     console.log('================================'); */
 </script>
 
-<section class:boxset-rail={rail.showItemsAsBoxset} class="rail" style:background-color={rail.backgroundColor ?? undefined} style:color={rail.textColor ?? undefined}>
+<section
+    class:boxset-rail={rail.showItemsAsBoxset}
+    class:pink-rail={rail.backgroundColor?.toUpperCase() === '#FF126C'}
+    class="rail"
+    style:background-color={rail.backgroundColor ?? undefined}
+    style:color={rail.textColor ?? undefined}
+>
     {#if glyphUrl}
         <div
             class={`rail-glyph glyph-${glyphPosition}`}

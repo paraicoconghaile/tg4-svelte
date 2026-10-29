@@ -91,7 +91,7 @@
     }
 
     //console.log("Section Data", JSON.stringify(data, null, 2));
-    //console.log('GENRE RAILS API:', data.rails);
+    console.log('GENRE RAILS API:', data.rails);
 </script>
 
 {#if isDiscover}

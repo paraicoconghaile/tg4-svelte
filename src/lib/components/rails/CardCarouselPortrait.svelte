@@ -112,9 +112,10 @@
 
 <section
     class:boxset-rail={rail.showItemsAsBoxset}
+    class:pink-rail={rail.backgroundColor?.toUpperCase() === '#FF126C'}
     class="rail"
-    style:--rail-background={rail.backgroundColor ?? 'var(--tg4-grey-2)'}
-    style:--rail-text={rail.textColor ?? 'inherit'}
+    style:background-color={rail.backgroundColor ?? 'var(--tg4-grey-2)'}
+    style:color={rail.textColor ??  'inherit'}
 >
     {#if glyphUrl}
         <div
