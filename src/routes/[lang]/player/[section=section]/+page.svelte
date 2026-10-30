@@ -7,6 +7,7 @@
     import { withBase } from '$lib/utils/paths';
     import { genres } from '$lib/config/playerNav';
     import Seo from '$lib/components/seo/Seo.svelte';
+    import seoFallbackImage from '$lib/assets/images/TG4_2024_corcra_teal_1-1920x1080-1.jpg';
 
   	let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
@@ -102,7 +103,7 @@
             ? 'Aimsigh cláir ar an TG4 Player.'
             : 'Discover programmes on the TG4 Player.'}
         canonicalUrl={`https://www.tg4.ie/${data.lang}/player/${data.section}/`}
-        imageUrl="https://dxbg10xwynl92.cloudfront.net/cf-static/images/TG4_2024_corcra_teal_1-1920x1080-1.jpg"
+        imageUrl={seoFallbackImage}
         lang={data.lang}
     />
 {:else}
@@ -112,7 +113,7 @@
             ? `${data.labelGa} ar an TG4 Player.`
             : `${data.labelEn} on the TG4 Player.`}
         canonicalUrl={`https://www.tg4.ie/${data.lang}/player/${data.section}/`}
-        imageUrl="https://dxbg10xwynl92.cloudfront.net/cf-static/images/TG4_2024_corcra_teal_1-1920x1080-1.jpg"
+        imageUrl={seoFallbackImage}
         lang={data.lang}
     />
 {/if}
