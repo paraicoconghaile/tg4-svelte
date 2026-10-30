@@ -3,19 +3,51 @@
 
     let { rail, isIrish } = $props();
 
-    const series = $derived(rail.items?.[0]?.series);
-    const review = $derived(rail.staffReview);
+    const item = $derived(rail.items?.[0]);
 
-    const image = $derived(
-        rail?.image?.xLarge ?? series?.boxsetImage?.large ?? series?.poster
+    const series = $derived(
+        item?.type === 'SERIES' ? item.series : undefined
     );
 
+    const video = $derived(
+        item?.type === 'VIDEO' ? item.video : undefined
+    );
+
+    const review = $derived(rail.staffReview);
+
+    // Support both series and standalone video images.
+    const image = $derived(
+        rail?.image?.xLarge ??
+        series?.boxsetImage?.large ??
+        series?.poster ??
+        video?.poster ??
+        video?.image?.xLarge ??
+        video?.image?.large
+    );
+
+    // Use the existing series route or the video ID for standalone videos.
     const href = $derived(
-        withBase(`/${isIrish ? 'ga' : 'en'}/player/${series?.slug ?? ''}`)
+        withBase(
+            `/${isIrish ? 'ga' : 'en'}/player/${series?.slug ?? video?.vid ?? ''}`
+        )
+    );
+
+    const contentTitle = $derived(
+        series?.name ??
+        video?.displayName ??
+        video?.seriesTitle ??
+        video?.name ??
+        ''
+    );
+
+    const imageAlt = $derived(
+        series?.mainImage?.[isIrish ? 'altTextGa' : 'altTextEn'] ??
+        video?.image?.[isIrish ? 'altTextGa' : 'altTextEn'] ??
+        contentTitle
     );
 </script>
 
-{#if series && review}
+{#if (series || video) && review}
     <section class="staff-review" style={`--rail-bg: ${rail.backgroundColor}; --rail-text: ${rail.textColor};`}>
         <div class="intro" style={`background:${rail.backgroundColor}; color:${rail.textColor};`}>
             <div class="rating" role="img" aria-label={`${review.rating} out of 5 stars`}>
@@ -47,12 +79,7 @@
         </div>
 
         <a class="content-card" href={href}>
-            <img
-                src={image}
-                alt={isIrish
-                    ? series.mainImage?.altTextGa ?? series.name
-                    : series.mainImage?.altTextEn ?? series.name}
-            />
+            <img src={image} alt={imageAlt} />
 
             <div class="play-box">
                 <svg

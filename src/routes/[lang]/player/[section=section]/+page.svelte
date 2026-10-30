@@ -3,6 +3,7 @@
     import CardCarousel from '$lib/components/rails/CardCarousel.svelte'
     import Marketing from '$lib/components/rails/Marketing.svelte';
     import DoubleContent from '$lib/components/rails/DoubleContent.svelte';
+    import SingleContent from '$lib/components/rails/SingleContent.svelte';
     import { withBase } from '$lib/utils/paths';
     import { genres } from '$lib/config/playerNav';
     import Seo from '$lib/components/seo/Seo.svelte';
@@ -91,7 +92,7 @@
     }
 
     //console.log("Section Data", JSON.stringify(data, null, 2));
-    console.log('GENRE RAILS API:', data.rails);
+    //console.log('GENRE RAILS API:', data.rails);
 </script>
 
 {#if isDiscover}
@@ -145,6 +146,8 @@
         <DoubleContent {rail} {isIrish} />
     {:else if rail.type === 'MARKETING'}
         <Marketing {rail} {isIrish} />
+    {:else if rail.type === 'SINGLE_CONTENT'}
+        <SingleContent {rail} {isIrish} />
     {/if}
 {/each}
 
