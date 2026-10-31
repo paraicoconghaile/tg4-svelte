@@ -9,6 +9,7 @@
     import LiveCarousel from '$lib/components/rails/LiveCarousel.svelte';
     import LuckyDipCarousel from '$lib/components/rails/LuckyDipCarousel.svelte';
     import StaffReview from '$lib/components/rails/StaffReview.svelte';
+    import Footer from '$lib/components/layout/Footer.svelte';
 
     let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
@@ -45,6 +46,8 @@
         <StaffReview {rail} {isIrish} />
     {/if}
 {/each}
+
+<Footer lang={data.lang} />
 
 <!-- {data.isLoggedIn ? 'Logged in' : 'Not logged in'} -->
 
