@@ -19,12 +19,12 @@
             .replaceAll('_', '-') ?? 'middle-right'
     );
 
-    $effect(() => {
+    /* $effect(() => {
         console.log('=== DOUBLE CONTENT GLYPH DEBUG ===');
         console.log('Background glyph:', rail.backgroundGlyph);
         console.log('Glyph URL:', glyphUrl);
         console.log('Glyph position:', glyphPosition);
-    });
+    }); */
 </script>
 
 <section class="double-content">

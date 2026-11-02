@@ -1,9 +1,15 @@
 import { env } from '$env/dynamic/private';
+
 const API_KEY = env.TG4_API_KEY;
 const NEW_API_KEY = env.TG4_NEW_API_KEY;
 
+const RAILS_CACHE_TTL = 60_000;
+const RAILS_RETRY_DELAY = 30_000;
+const RAILS_TIMEOUT = 5_000;
+
 let cachedRails: any = null;
 let cacheExpires = 0;
+let retryAfter = 0;
 let pendingRails: Promise<any> | null = null;
 
 export type Tg4Territory = {
@@ -134,19 +140,24 @@ export async function getSeries(slug: string) {
 export async function getRails() {
     const now = Date.now();
 
-    // Return fresh cached data
+    // Return valid cached rails while fresh
     if (cachedRails && now < cacheExpires) {
         return structuredClone(cachedRails);
     }
 
-    // Only allow one API request at a time per server instance
+    // During an API outage, avoid repeated retries
+    if (now < retryAfter) {
+        return structuredClone(cachedRails ?? { rails: [] });
+    }
+
+    // Share one API request between simultaneous callers
     if (!pendingRails) {
         pendingRails = (async () => {
             const url = 'https://api.tg4dev.com/api/rails/home?api_key=d3b8f0c1-2e4a-4f5b-9c6d-7e8f9a0b1c2d';
 
             try {
                 const response = await fetch(url, {
-                    signal: AbortSignal.timeout(5000)
+                    signal: AbortSignal.timeout(RAILS_TIMEOUT)
                 });
 
                 if (!response.ok) {
@@ -159,29 +170,34 @@ export async function getRails() {
                     throw new Error('Invalid Rails API response');
                 }
 
+                // Cache only successful, valid API responses
                 cachedRails = data;
-                cacheExpires = Date.now() + 60_000;
+                cacheExpires = Date.now() + RAILS_CACHE_TTL;
+                retryAfter = 0;
 
                 return data;
 
             } catch (error) {
                 console.error('Rails API failed:', error);
 
-                // Return last known good data, even if expired
+                retryAfter = Date.now() + RAILS_RETRY_DELAY;
+
                 if (cachedRails) {
-                    console.warn('Serving stale Rails cache');
+                    console.warn('Serving last-known-good Rails data');
                     return cachedRails;
                 }
 
-                // No cached data available
-                throw error;
+                console.warn('No Rails cache available — serving empty rails');
+
+                // Cold-start fallback; never store as valid cache
+                return { rails: [] };
             }
         })().finally(() => {
             pendingRails = null;
         });
     }
 
-    // Always return an independent copy
+    // Return an independent copy for every request
     return structuredClone(await pendingRails);
 }
 
