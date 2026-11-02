@@ -5,9 +5,9 @@ import { genres, getGenreByKey } from '$lib/config/playerNav';
 
 export async function load({ params, setHeaders }) {
     setHeaders({
-        'cache-control': 'public, max-age=0, s-maxage=60'
+        'cache-control': 'public, max-age=0, s-maxage=300'
     });
-    
+
     const categoryMap: Record<string, string> = {
         faisneis: 'faisneis',
         documentaries: 'faisneis',

@@ -208,6 +208,17 @@
 }
 
 @media (max-width: 600px) {
+    .intro h2 {
+        font-size: 1.5rem;
+        line-height: 1.2;
+    }
+
+    .intro p {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.25;
+    }
+
     .play-box {
         width: 34px;
         height: 34px;
@@ -224,9 +235,13 @@
         grid-row: 1;
     }
 
+    .intro p.review-text {
+        display: none;
+    }
+
     .content-card {
         grid-row: 2;
-        min-height: 250px;
+        max-height: 250px;
     }
 }
 </style>
