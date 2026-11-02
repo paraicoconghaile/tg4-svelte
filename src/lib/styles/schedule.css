@@ -168,7 +168,25 @@ hr {
     margin: 0;
 }
 
+/* Tablets: show 6 dates */
+@media (max-width: 1000px) {
+    .date {
+        flex-basis: calc((100% - 32px) / 6);
+    }
+}
+
+/* Small tablets: show 5 dates */
+@media (max-width: 700px) {
+    .date {
+        flex-basis: calc((100% - 24px) / 5);
+    }
+}
+
 @media (max-width: 600px) {
+    .date {
+        flex-basis: calc((100% - 24px) / 4);
+    }
+
     .schedule-row {
         grid-template-columns: 70px 1fr;
         gap: 15px;
@@ -180,5 +198,11 @@ hr {
 
     .schedule-content h2 {
         font-size: 1.15rem;
+    }
+}
+
+@media (max-width: 500px) {
+    .date {
+        flex-basis: calc((100% - 16px) / 3);
     }
 }

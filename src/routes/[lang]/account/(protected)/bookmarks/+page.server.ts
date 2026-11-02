@@ -6,8 +6,6 @@ const PAGE_SIZE = 20;
 export const load: PageServerLoad = async ({ cookies, url }) => {
     const peachSid = cookies.get('identity.provider.sid');
 
-    console.log('BOOKMARKS SERVER - Peach SID present:', !!peachSid);
-    
     const requestedPage = Number(url.searchParams.get('page') ?? 1);
     const page = Number.isInteger(requestedPage) && requestedPage > 0
         ? requestedPage
