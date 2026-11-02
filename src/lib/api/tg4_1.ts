@@ -2,6 +2,10 @@ import { env } from '$env/dynamic/private';
 const API_KEY = env.TG4_API_KEY;
 const NEW_API_KEY = env.TG4_NEW_API_KEY;
 
+let cachedRails: any = null;
+let cacheExpires = 0;
+let pendingRails: Promise<any> | null = null;
+
 export type Tg4Territory = {
     region: string | null;
     countryCode: string | null;
@@ -128,28 +132,57 @@ export async function getSeries(slug: string) {
 }
 
 export async function getRails() {
-    const url = `https://api.tg4dev.com/api/rails/home?api_key=d3b8f0c1-2e4a-4f5b-9c6d-7e8f9a0b1c2d`;
+    const now = Date.now();
 
-    const response = await fetch(url);
-
-    /* console.log('TG4 region:', response.headers.get('x-tg4-region'));
-    console.log('TG4 country:', response.headers.get('x-tg4-country-code'));
-    console.log('TG4 city:', response.headers.get('x-tg4-city')); */
-
-    if (!response.ok) {
-        const body = await response.text();
-
-        console.error('TG4 API ERROR');
-        console.error('URL:', url);
-        console.error('Status:', response.status);
-        console.error('Response:', body);
-
-        throw new Error(
-            `API Error: ${response.status}`
-        );
+    // Return fresh cached data
+    if (cachedRails && now < cacheExpires) {
+        return structuredClone(cachedRails);
     }
 
-    return response.json();
+    // Only allow one API request at a time per server instance
+    if (!pendingRails) {
+        pendingRails = (async () => {
+            const url = 'https://api.tg4dev.com/api/rails/home?api_key=d3b8f0c1-2e4a-4f5b-9c6d-7e8f9a0b1c2d';
+
+            try {
+                const response = await fetch(url, {
+                    signal: AbortSignal.timeout(5000)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Rails API Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (!data || !Array.isArray(data.rails)) {
+                    throw new Error('Invalid Rails API response');
+                }
+
+                cachedRails = data;
+                cacheExpires = Date.now() + 60_000;
+
+                return data;
+
+            } catch (error) {
+                console.error('Rails API failed:', error);
+
+                // Return last known good data, even if expired
+                if (cachedRails) {
+                    console.warn('Serving stale Rails cache');
+                    return cachedRails;
+                }
+
+                // No cached data available
+                throw error;
+            }
+        })().finally(() => {
+            pendingRails = null;
+        });
+    }
+
+    // Always return an independent copy
+    return structuredClone(await pendingRails);
 }
 
 export async function getCurrentEPG() {
