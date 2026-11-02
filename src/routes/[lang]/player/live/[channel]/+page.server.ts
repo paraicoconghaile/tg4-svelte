@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { getCurrentEPG } from '$lib/api/tg4_1';
 
-export async function load({ params }) {
+export async function load({ params, setHeaders }) {
     setHeaders({
         'cache-control': 'public, max-age=0, s-maxage=60'
     });
