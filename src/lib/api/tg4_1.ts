@@ -47,6 +47,82 @@ async function fetchTg4Api<T>(
     return { data, territory };
 }
 
+
+const apiCache = new Map<string, {
+    data: any;
+    expires: number;
+    retryAfter: number;
+}>();
+
+const pendingRequests = new Map<string, Promise<any>>();
+
+async function getCachedApiData(
+    key: string,
+    url: string,
+    ttl: number
+) {
+    const now = Date.now();
+    const cached = apiCache.get(key);
+
+    if (cached && now < cached.expires) {
+        return structuredClone(cached.data);
+    }
+
+    if (cached && now < cached.retryAfter) {
+        return structuredClone(cached.data);
+    }
+
+    let pending = pendingRequests.get(key);
+
+    if (!pending) {
+        pending = (async () => {
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': API_KEY
+                    },
+                    signal: AbortSignal.timeout(5000)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                apiCache.set(key, {
+                    data,
+                    expires: Date.now() + ttl,
+                    retryAfter: 0
+                });
+
+                return data;
+            } catch (error) {
+                console.error(`API request failed: ${key}`, error);
+
+                if (cached) {
+                    apiCache.set(key, {
+                        ...cached,
+                        retryAfter: Date.now() + 30_000
+                    });
+
+                    console.warn(`Serving stale cache: ${key}`);
+                    return cached.data;
+                }
+
+                throw error;
+            }
+        })().finally(() => {
+            pendingRequests.delete(key);
+        });
+
+        pendingRequests.set(key, pending);
+    }
+
+    return structuredClone(await pending);
+}
+
 export async function getGenre(
     genre: string,
     skip = 0,
@@ -69,27 +145,18 @@ export async function getGenre(
     return response.json();
 }
 
-export async function getSeriesVideos(seriesTitle: string, seasonNumber: number) {
-    const url = `https://api.tg4dev.com/api/series/${seriesTitle}/${seasonNumber}`;
+export async function getSeriesVideos(
+    seriesTitle: string,
+    seasonNumber: number
+) {
+    const url =
+        `https://api.tg4dev.com/api/series/${encodeURIComponent(seriesTitle)}/${seasonNumber}`;
 
-    const response = await fetch(url,
-        {
-            headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': API_KEY
-            }
-        }
+    return getCachedApiData(
+        `episodes:${seriesTitle}:${seasonNumber}`,
+        url,
+        2 * 60_000
     );
-
-    const text = await response.text();
-
-    /* console.log('getSeriesVideos status:', response.status, getSeriesVideos response:', text); */
-
-    if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`);
-    }
-
-    return JSON.parse(text);
 }
 
 export async function getVideo(videoId: string) {
@@ -120,21 +187,15 @@ export async function getVideoWithTerritory(videoId: string) {
     });
 }
 
+
 export async function getSeries(slug: string) {
-    const url = `https://api.tg4dev.com/api/series/${slug}`;
+    const url = `https://api.tg4dev.com/api/series/${encodeURIComponent(slug)}`;
 
-    const response = await fetch(url, {
-        headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': API_KEY
-        }
-    });
-
-    if (!response.ok) {
-        throw new Error("Series not found");
-    }
-
-    return response.json();
+    return getCachedApiData(
+        `series:${slug}`,
+        url,
+        5 * 60_000
+    );
 }
 
 export async function getRails() {
@@ -250,7 +311,6 @@ export async function getContinueWatching(peachSid: string) {
     const response = await fetch(url, {
         headers: {
             'Content-Type': 'application/json',
-            //'X-Peach-Authorization': peachSid
             'X-Peach-Authorization': `sessionToken ${peachSid}`
         }
     });
