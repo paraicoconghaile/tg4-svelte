@@ -3,7 +3,11 @@ import { getGenre, getCategoryRails, getDiscoverRails } from '$lib/api/tg4_1';
 import { slugify } from '$lib/utils/slugify';
 import { genres, getGenreByKey } from '$lib/config/playerNav';
 
-export async function load({ params }) {
+export async function load({ params, setHeaders }) {
+    setHeaders({
+        'cache-control': 'public, max-age=0, s-maxage=60'
+    });
+    
     const categoryMap: Record<string, string> = {
         faisneis: 'faisneis',
         documentaries: 'faisneis',
