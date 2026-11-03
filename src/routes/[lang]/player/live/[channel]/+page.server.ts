@@ -1,26 +1,23 @@
 import { error } from '@sveltejs/kit';
-import { getCurrentEPG } from '$lib/api/tg4_1';
+
+const validChannels = new Set([
+    'TG4',
+    'TG4PLUSONE',
+    'CULA4',
+    'ONDEMAND'
+]);
 
 export async function load({ params, setHeaders }) {
-    setHeaders({
-        'cache-control': 'public, max-age=0, s-maxage=60'
-    });
-    
-    const data = await getCurrentEPG();
-
-    const stream = data.streams?.find(
-        (stream: any) =>
-            stream.stream === params.channel
-    );
-
-    if (!stream) {
+    if (!validChannels.has(params.channel)) {
         throw error(404, 'Live channel not found');
     }
 
+    setHeaders({
+        'cache-control': 'public, max-age=0, s-maxage=900'
+    });
+
     return {
         lang: params.lang,
-        channel: params.channel,
-        stream,
-        liveStreams: data.streams
+        channel: params.channel
     };
 }

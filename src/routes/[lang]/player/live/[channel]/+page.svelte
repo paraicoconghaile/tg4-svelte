@@ -1,9 +1,49 @@
 <script lang="ts">
     import { tick } from 'svelte';
-    import { onDestroy } from 'svelte';
+    import { onMount, onDestroy } from 'svelte';
+    import { withBase } from '$lib/utils/paths';
     import LiveCarousel from '$lib/components/rails/LiveCarousel.svelte';
 
     let { data } = $props();
+
+    let stream = $state<any>(null);
+    let liveStreams = $state<any[]>([]);
+
+    async function refreshEPG() {
+        try {
+            const response = await fetch(withBase('/api/epg'));
+
+            if (!response.ok) {
+                throw new Error(`EPG request failed: ${response.status}`);
+            }
+
+            const epg = await response.json();
+
+            const selectedStream = epg.streams?.find(
+                (item: any) => item.stream === data.channel
+            );
+
+            if (selectedStream) {
+                stream = selectedStream;
+            }
+
+            if (Array.isArray(epg.streams)) {
+                liveStreams = epg.streams;
+            }
+
+        } catch (error) {
+            console.error('Failed to refresh live EPG:', error);
+        }
+    }
+
+    onMount(() => {
+        refreshEPG();
+
+        const interval = setInterval(refreshEPG, 60_000);
+
+        return () => clearInterval(interval);
+    });
+
     let videoElement: HTMLElement | null = null;
     let player: any = null;
     let brightcovePromise: Promise<void> | null = null;
@@ -500,9 +540,10 @@
         video.setAttribute('data-account', '1555966122001');
         video.setAttribute('data-player', 'D0RgRVjpd');
         video.setAttribute('data-embed', 'default');
-        video.setAttribute('data-video-id', data.stream.streamId);
-        if (data.stream.liveToken) {
-            video.setAttribute('data-live-playback-token', data.stream.liveToken);
+        video.setAttribute('data-video-id', stream.streamId);
+
+        if (stream.liveToken) {
+            video.setAttribute('data-live-playback-token', stream.liveToken);
         } else {
             video.removeAttribute('data-live-playback-token');
         }
@@ -690,7 +731,7 @@
                     return;
                 }
 
-                const offsetSeconds = data.stream.offsetSeconds ?? 3600;
+                const offsetSeconds = stream.offsetSeconds ?? 3600;
                 const targetTime = liveCurrentTime - offsetSeconds;
 
                 if (
@@ -724,10 +765,24 @@
     let lastStreamKey = '';
 
     $effect(() => {
-        const streamId = data.stream?.streamId;
         const channel = data.channel;
 
-        if (!streamId || !channel) {
+        const selectedStream = liveStreams.find(
+            (item: any) => item.stream === channel
+        );
+
+        if (!selectedStream?.streamId) {
+            return;
+        }
+
+        stream = selectedStream;
+    });
+
+    $effect(() => {
+        const channel = data.channel;
+        const streamId = stream?.streamId;
+
+        if (!channel || !streamId) {
             return;
         }
 
@@ -740,13 +795,6 @@
         lastStreamKey = streamKey;
 
         initialisePlayer();
-
-        /* console.log('LIVE STREAM DATA:', {
-            channel: data.channel,
-            streamId: data.stream?.streamId,
-            liveToken: data.stream?.liveToken,
-            stream: data.stream
-        }); */
     });
 
     onDestroy(() => {
@@ -778,7 +826,7 @@
     <LiveCarousel
         rail={{
             type: 'LIVE',
-            items: data.liveStreams.map((stream: any) => ({
+            items: liveStreams.map((stream: any) => ({
                 type: 'LIVE_STREAM',
                 stream
             }))
@@ -788,17 +836,19 @@
     />
 
     <div class="player-container">
-        {#key data.channel + '-' + data.stream.streamId}
-            <video-js
-                bind:this={videoElement}
-                id="tg4-live-player"
-                class="video-js vjs-big-play-centered"
-                controls
-                preload="auto"
-                autoplay
-                playsinline
-            ></video-js>
-        {/key}
+        {#if stream?.streamId}
+            {#key data.channel + '-' + stream.streamId}
+                <video-js
+                    bind:this={videoElement}
+                    id="tg4-live-player"
+                    class="video-js vjs-big-play-centered"
+                    controls
+                    preload="auto"
+                    autoplay
+                    playsinline
+                ></video-js>
+            {/key}
+        {/if}
     </div>
 
     <section class="episodes">
