@@ -27,7 +27,9 @@ export async function loadSeries(slug: string, lang: string) {
         seasonNumber
     );
 
-    //console.log("Raw Episodes:", rawEpisodes);
+    if (!rawEpisodes) {
+        error(404, 'Season not found');
+    }
 
     const episodes = rawEpisodes?.videos?.map((ep) => ({
         title: ep.displayTitle,
@@ -63,6 +65,10 @@ export async function loadSeason(
         seriesSlug,
         seasonNumber
     );
+
+    if (!rawEpisodes) {
+        error(404, 'Season not found');
+    }
 
     const episodes = rawEpisodes?.videos?.map((ep) => ({
         title: ep.displayTitle,

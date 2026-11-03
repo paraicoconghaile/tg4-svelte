@@ -43,13 +43,13 @@ export async function load({ params, setHeaders }) {
     const currentGenre = getGenreByKey(params.section);
 
     if (!currentGenre) {
-        throw new Error(`Unknown category: ${params.section}`);
+        error(404, `Category not found: ${params.section}`);
     }
 
     const genre = categoryMap[params.section];
 
     if (!genre) {
-        throw new Error(`Unknown category: ${params.section}`);
+        error(404, `Category not found: ${params.section}`);
     }
 
     // Get the existing series/programme data

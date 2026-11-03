@@ -59,7 +59,8 @@ const pendingRequests = new Map<string, Promise<any>>();
 async function getCachedApiData(
     key: string,
     url: string,
-    ttl: number
+    ttl: number,
+    notFoundOn400 = false
 ) {
     const now = Date.now();
     const cached = apiCache.get(key);
@@ -86,6 +87,10 @@ async function getCachedApiData(
                 });
 
                 if (!response.ok) {
+                    if (notFoundOn400 && [400, 404].includes(response.status)) {
+                        return null;
+                    }
+
                     throw new Error(`API Error: ${response.status}`);
                 }
 
@@ -155,7 +160,8 @@ export async function getSeriesVideos(
     return getCachedApiData(
         `episodes:${seriesTitle}:${seasonNumber}`,
         url,
-        2 * 60_000
+        2 * 60_000,
+        true
     );
 }
 
@@ -194,7 +200,8 @@ export async function getSeries(slug: string) {
     return getCachedApiData(
         `series:${slug}`,
         url,
-        5 * 60_000
+        5 * 60_000,
+        true
     );
 }
 
