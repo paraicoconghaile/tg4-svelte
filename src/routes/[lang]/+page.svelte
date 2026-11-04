@@ -10,9 +10,40 @@
     import LuckyDipCarousel from '$lib/components/rails/LuckyDipCarousel.svelte';
     import StaffReview from '$lib/components/rails/StaffReview.svelte';
     import Footer from '$lib/components/layout/Footer.svelte';
+    import { onMount } from 'svelte';
+    import { withBase } from '$lib/utils/paths';
 
     let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
+
+    let rails = $state(data.rails.rails);
+
+    onMount(async () => {
+        try {
+            const hasPeachSession = document.cookie.split(';').some(
+                cookie => cookie.trim().startsWith('identity.provider.sid=')
+            );
+
+            if (!hasPeachSession) return;
+
+            const response = await fetch(withBase('/api/user/continue-watching'), {
+                credentials: 'include',
+                cache: 'no-store'
+            });
+
+            if (!response.ok) return;
+
+            const items = await response.json();
+
+            rails = rails.map((rail) =>
+                rail.type === 'CONTINUE_WATCHING'
+                    ? { ...rail, items }
+                    : rail
+            );
+        } catch (error) {
+            console.error('Failed to load Continue Watching:', error);
+        }
+    });
 
     //console.log('RAILS API:', data.rails);
 </script>
@@ -21,7 +52,7 @@
     <title>{isIrish ? 'TG4 | Teilifís Gaeilge' : 'TG4 | Irish Language Television'}</title>
 </svelte:head>
 
-{#each data.rails.rails as rail}
+{#each rails as rail}
     {#if rail.type === 'CAROUSEL'}
         <HeroCarousel {rail} {isIrish} />
     {:else if rail.type === 'HORIZONTAL' && rail.showItemsAsBoxset === false}
