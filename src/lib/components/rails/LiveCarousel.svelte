@@ -3,7 +3,6 @@
     import type { EmblaCarouselType } from 'embla-carousel';
     import irelandFlag from '$lib/assets/icons/irl_icon.svg';
     import { onMount } from 'svelte';
-    import { invalidateAll } from '$app/navigation';
     import { withBase } from '$lib/utils/paths';
     import { railGlyphs } from '$lib/utils/railGlyphs';
 
@@ -87,55 +86,38 @@
         );
     }
 
-    function scheduleNextShow(stream: any) {
-        const endTime = new Date(
-            stream.currentShow.endTime
-        ).getTime();
+    async function refreshEPG() {
+        try {
+            const response = await fetch(withBase('/api/epg'));
 
-        const delay = endTime - Date.now();
+            if (!response.ok) {
+                throw new Error(`EPG request failed: ${response.status}`);
+            }
 
-        setTimeout(async () => {
-            //console.log('Refreshing live data');
-            await invalidateAll();
-        }, Math.max(delay, 0));
+            const epg = await response.json();
+
+            if (!Array.isArray(epg.streams)) return;
+
+            streams = rail.items.map((item: any) => {
+                const originalStream = item.stream;
+
+                return epg.streams.find(
+                    (updated: any) => updated.stream === originalStream.stream
+                ) ?? originalStream;
+            });
+
+            progressKey++;
+        } catch (error) {
+            console.error('Failed to refresh Live rail EPG:', error);
+        }
     }
 
     onMount(() => {
-        streams
-            .filter(
-                (stream: any) =>
-                    stream.state === 'ONAIR' &&
-                    stream.currentShow
-            )
-            .forEach((stream: any) => {
-                scheduleNextShow(stream);
-        });
+        void refreshEPG();
 
-        async function handleVisibilityChange() {
-            //console.log('Visibility:', document.visibilityState);
+        const interval = setInterval(refreshEPG, 60_000);
 
-            if (document.visibilityState === 'visible') {
-                //console.log('Refreshing live data');
-
-                await invalidateAll();
-                progressKey++;
-
-                //console.log('Rail after refresh:', rail);
-                //console.log('Streams after refresh:', streams);
-            }
-        }
-
-        document.addEventListener(
-            'visibilitychange',
-            handleVisibilityChange
-        );
-
-        return () => {
-            document.removeEventListener(
-                'visibilitychange',
-                handleVisibilityChange
-            );
-        };
+        return () => clearInterval(interval);
     });
 </script>
 
@@ -209,14 +191,12 @@
                                 <img src={stream.logoUrl} alt={stream.stream} />
 
                                 {#if show?.startTime && show?.endTime}
-                                    {#key `${show.startTime}-${progressKey}`}
-                                        <div class="progress-track">
-                                            <div
-                                                class="progress-bar"
-                                                style={`width: 100%; animation-duration: ${new Date(show.endTime).getTime() - new Date(show.startTime).getTime()}ms; animation-delay: -${Date.now() - new Date(show.startTime).getTime()}ms;`}
-                                            ></div>
-                                        </div>
-                                    {/key}
+                                    <div class="progress-track">
+                                        <div
+                                            class="progress-bar"
+                                            style:width={`${getProgress(show)}%`}
+                                        ></div>
+                                    </div>
                                 {/if}
                             </div>
 
@@ -422,22 +402,9 @@
 }
 
 .progress-bar {
-    width: 100%;
     height: 100%;
     background: var(--tg4-pink);
-    transform-origin: left;
-    animation-name: live-progress;
-    animation-timing-function: linear;
-    animation-fill-mode: both;
-}
-
-@keyframes live-progress {
-    from {
-        transform: scaleX(0);
-    }
-    to {
-        transform: scaleX(1);
-    }
+    transition: width 1s linear;
 }
 
 .programme {
