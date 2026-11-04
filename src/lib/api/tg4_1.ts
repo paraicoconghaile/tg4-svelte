@@ -1,4 +1,5 @@
 import { env } from '$env/dynamic/private';
+import { error } from '@sveltejs/kit';
 
 const API_KEY = env.TG4_API_KEY;
 const NEW_API_KEY = env.TG4_NEW_API_KEY;
@@ -38,6 +39,10 @@ async function fetchTg4Api<T>(
     const response = await fetch(url, init);
 
     if (!response.ok) {
+        if (response.status === 404) {
+            throw error(404, 'Video not found');
+        }
+
         throw new Error(`TG4 API Error: ${response.status}`);
     }
 
@@ -46,7 +51,6 @@ async function fetchTg4Api<T>(
 
     return { data, territory };
 }
-
 
 const apiCache = new Map<string, {
     data: any;
