@@ -1,4 +1,4 @@
-import { json } from '@sveltejs/kit';
+import { json, isHttpError } from '@sveltejs/kit';
 import { loadSeason } from '$lib/player/loadSeries';
 
 export async function GET({ url }) {
@@ -23,6 +23,13 @@ export async function GET({ url }) {
         return json(season);
 
     } catch (err) {
+        if (isHttpError(err)) {
+            return json(
+                { error: err.body.message },
+                { status: err.status }
+            );
+        }
+
         console.error('Season API error:', err);
 
         return json(

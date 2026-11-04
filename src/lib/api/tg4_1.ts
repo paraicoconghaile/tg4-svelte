@@ -24,6 +24,16 @@ export type Tg4ApiResponse<T> = {
     territory: Tg4Territory;
 };
 
+export class Tg4ApiError extends Error {
+    constructor(
+        public status: number,
+        message = `TG4 API Error: ${status}`
+    ) {
+        super(message);
+        this.name = 'Tg4ApiError';
+    }
+}
+
 function getTg4Territory(response: Response): Tg4Territory {
     return {
         region: response.headers.get('x-tg4-region'),

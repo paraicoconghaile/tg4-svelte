@@ -31,8 +31,11 @@ export async function load({ params }) {
     } catch (err) {
         if (
             err instanceof Error &&
-            (err.message === 'TG4 API Error: 400' ||
-             err.message === 'TG4 API Error: 404')
+            (
+                err.message === 'TG4 API Error: 400' ||
+                err.message === 'TG4 API Error: 404' ||
+                err.message === 'TG4 API Error: 410'
+            )
         ) {
             error(404, 'Video Not Found');
         }

@@ -1,8 +1,39 @@
 import { error } from '@sveltejs/kit';
-import { getSeries, getSeriesVideos } from '$lib/api/tg4_1';
+import { getSeries, getSeriesVideos, Tg4ApiError } from '$lib/api/tg4_1';
+
+async function getSeriesVideosOr404(
+    slug: string,
+    seasonNumber: number
+) {
+    try {
+        return await getSeriesVideos(slug, seasonNumber);
+    } catch (err) {
+        if (
+            err instanceof Tg4ApiError &&
+            [400, 404, 410].includes(err.status)
+        ) {
+            error(404, 'Season not found');
+        }
+
+        throw err;
+    }
+}
 
 export async function loadSeries(slug: string, lang: string) {
-    const series = await getSeries(slug);
+    let series;
+
+    try {
+        series = await getSeries(slug);
+    } catch (err) {
+        if (
+            err instanceof Tg4ApiError &&
+            [400, 404, 410].includes(err.status)
+        ) {
+            error(404, 'Series not found');
+        }
+
+        throw err;
+    }
 
     if (!series) {
         throw error(404, 'Series not found');
@@ -22,7 +53,12 @@ export async function loadSeries(slug: string, lang: string) {
     const seasonNumber = latestSeason.number;
     //console.log("Loading latest season:", seasonNumber);
 
-    const rawEpisodes = await getSeriesVideos(
+    /* const rawEpisodes = await getSeriesVideos(
+        series.series.slug,
+        seasonNumber
+    ); */
+
+    const rawEpisodes = await getSeriesVideosOr404(
         series.series.slug,
         seasonNumber
     );
@@ -61,7 +97,12 @@ export async function loadSeason(
     seasonNumber: number,
     lang: string
 ) {
-    const rawEpisodes = await getSeriesVideos(
+    /* const rawEpisodes = await getSeriesVideos(
+        seriesSlug,
+        seasonNumber
+    ); */
+
+    const rawEpisodes = await getSeriesVideosOr404(
         seriesSlug,
         seasonNumber
     );

@@ -24,11 +24,27 @@ export async function load({ params }) {
 
     //const rawVideo = await getVideo(params.episode);
 
-    const result = await getVideoWithTerritory(params.episode);
+    let result;
+
+    try {
+        result = await getVideoWithTerritory(params.episode);
+    } catch (err) {
+        if (
+            err instanceof Error &&
+            (
+                err.message === 'TG4 API Error: 400' ||
+                err.message === 'TG4 API Error: 404' ||
+                err.message === 'TG4 API Error: 410'
+            )
+        ) {
+            error(404, 'Video Not Found');
+        }
+
+        throw err;
+    }
+
     const rawVideo = result.data;
     const territory = result.territory;
-
-    //console.log("RAW VIDEO", rawVideo);
 
     if (!rawVideo) {
         throw error(404, 'Video not found');
@@ -66,7 +82,7 @@ export async function load({ params }) {
         })
         .slice(0, 4)
         .map((ep) => ({
-            title: ep.displayName,
+            title: ep.displayTitle,
             episodeID: ep.vid,
             episodeNumber: ep.episodeNumber,
             seriesNumber: ep.seasonNumber,
