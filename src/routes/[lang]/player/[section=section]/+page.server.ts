@@ -5,7 +5,7 @@ import { genres, getGenreByKey } from '$lib/config/playerNav';
 
 export async function load({ params, setHeaders }) {
     setHeaders({
-        'cache-control': 'public, max-age=0, s-maxage=300'
+        'cache-control': 'public, max-age=0, s-maxage=900'
     });
 
     const categoryMap: Record<string, string> = {
