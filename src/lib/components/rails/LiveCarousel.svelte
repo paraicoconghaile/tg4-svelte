@@ -51,9 +51,7 @@
             .replaceAll('_', '-')
     );
 
-    let streams = $state(
-        rail.items.map((item: any) => item.stream)
-    );
+    let streams = $state(rail.items.map((item: any) => item.stream));
 
     let progressKey = $state(0);
 
@@ -404,7 +402,7 @@
 .progress-bar {
     height: 100%;
     background: var(--tg4-pink);
-    transition: width 1s linear;
+    transition: none;
 }
 
 .programme {
