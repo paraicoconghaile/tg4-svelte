@@ -49,8 +49,8 @@ async function fetchTg4Api<T>(
     const response = await fetch(url, init);
 
     if (!response.ok) {
-        if (response.status === 404) {
-            throw error(404, 'Video not found');
+        if ([400, 404, 410].includes(response.status)) {
+            throw error(404, 'Content not found');
         }
 
         throw new Error(`TG4 API Error: ${response.status}`);
@@ -101,7 +101,7 @@ async function getCachedApiData(
                 });
 
                 if (!response.ok) {
-                    if (notFoundOn400 && [400, 404].includes(response.status)) {
+                    if (notFoundOn400 && [400, 404, 410].includes(response.status)) {
                         return null;
                     }
 
