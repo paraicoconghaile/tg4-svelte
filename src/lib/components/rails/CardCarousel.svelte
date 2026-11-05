@@ -147,16 +147,24 @@
                     <div class="embla__slide">
                         {#if isSeries}
                             <a href={withBase(`/${isIrish ? 'ga' : 'en'}/player/${content.slug}`)}>
-                                <img src={image || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg'} alt={name}
-                                    onerror={(event) => {
-                                        const img = event.currentTarget;
+                                <div class="image-wrapper">
+                                    <img
+                                        src={image || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg'}
+                                        alt={name}
+                                        onerror={(event) => {
+                                            const img = event.currentTarget;
 
-                                        if (!img.dataset.fallback) {
-                                            img.dataset.fallback = 'true';
-                                            img.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';
-                                        }
-                                    }}
-                                />
+                                            if (!img.dataset.fallback) {
+                                                img.dataset.fallback = 'true';
+                                                img.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';
+                                            }
+                                        }}
+                                    />
+
+                                    {#if content.badge}
+                                        <span class="card-badge">{content.badge}</span>
+                                    {/if}
+                                </div>
                                 <h3>{content.name}</h3>
                                 {#if showCategoryOnSeries && content.rawCategory}
                                     <p class="series-category">
@@ -168,6 +176,10 @@
                             <a href={withBase(`/${isIrish ? 'ga' : 'en'}/player/${content.vid}`)}>
                                 <div class="image-wrapper">
                                     <img src={image} alt={name} />
+
+                                    {#if content.badge}
+                                        <span class="card-badge">{content.badge}</span>
+                                    {/if}
 
                                     {#if content.playbackProgress !== undefined && content.playbackProgress !== null}
                                         <div class="playback-progress">
@@ -365,6 +377,21 @@
 
 .image-wrapper {
     position: relative;
+}
+
+.card-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 6px 12px;
+    background-color: #fff;
+    color: #2B2A2A;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-transform: uppercase;
+    z-index: 2;
+    pointer-events: none;
 }
 
 .playback-progress {

@@ -18,6 +18,9 @@ export const GET: RequestHandler = async ({ cookies, setHeaders }) => {
         return json(continueWatching);
     } catch (error) {
         console.error('Continue Watching API error:', error);
-        return json([], { status: 502 });
+        return json(
+            { error: 'Continue Watching temporarily unavailable' },
+            { status: 502 }
+        );
     }
 };
