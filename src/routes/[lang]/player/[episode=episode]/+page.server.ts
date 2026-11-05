@@ -28,6 +28,8 @@ export async function load({ params }) {
 
     try {
         result = await getVideoWithTerritory(params.episode);
+
+        //console.log('VIDEO API RESPONSE:', JSON.stringify(result.data, null, 2));
     } catch (err) {
         if (
             err instanceof Error &&
@@ -50,11 +52,17 @@ export async function load({ params }) {
         throw error(404, 'Video not found');
     }
 
+    if (!rawVideo.video?.providerId) {
+        throw error(404, 'Video Not Found');
+    }
+
+    //console.log('VIDEO DATA:', JSON.stringify(rawVideo, null, 2));
+
     const video = {
         videoId: rawVideo.video.providerId,
         title: rawVideo.video.customFields?.title ?? rawVideo.title,
         seriesTitle: rawVideo.video.customFields.seriestitle,
-        seriesNumber: rawVideo.video.customFields.series,
+        seriesNumber: rawVideo.video.customFields?.series ?? rawVideo.video.seasonNumber,
         episodeNumber: rawVideo.video.customFields.episode,
         description: params.lang === 'ga' ? rawVideo.video.descriptionGa : rawVideo.video.descriptionEn,
         poster: rawVideo.video.image.xLarge,
@@ -65,13 +73,21 @@ export async function load({ params }) {
         categories: rawVideo.categories,
         subtitles: rawVideo.video.subtitles,
         contentRating: rawVideo.video.contentRating,
-        slug: rawVideo.series.slug
+        slug: rawVideo.series?.slug ?? null
     };
 
-    const rawEpisodes = await getSeriesVideos(
+    /* const rawEpisodes = await getSeriesVideos(
         video.slug,
         Number(video.seriesNumber)
-    );
+    ); */
+
+    const rawEpisodes =
+        video.slug && video.seriesNumber != null
+        ? await getSeriesVideos(
+            video.slug,
+            Number(video.seriesNumber)
+        )
+        : null;
 
     const otherEpisodes = (rawEpisodes?.videos ?? [])
         .filter((ep) => {
