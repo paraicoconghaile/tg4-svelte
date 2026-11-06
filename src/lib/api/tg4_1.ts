@@ -191,7 +191,7 @@ export async function getVideo(videoId: string) {
         }
     );
 
-    console.log('Video territory:', result.territory);
+    //console.log('Video territory:', result.territory);
 
     return result.data;
 }

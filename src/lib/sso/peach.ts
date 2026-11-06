@@ -44,7 +44,7 @@ export function loadPeachUser(): Promise<any> {
 
                 window._pu = pu;
 
-                console.log('Peach User initialised');
+                //console.log('Peach User initialised');
 
                 resolve(pu);
             } catch (error) {

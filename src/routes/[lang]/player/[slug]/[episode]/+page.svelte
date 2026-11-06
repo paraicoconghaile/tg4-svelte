@@ -85,7 +85,7 @@
                         positionToSave
                     );
 
-                    console.log('History position saved:', positionToSave);
+                    //console.log('History position saved:', positionToSave);
                     lastHistoryUpdate = positionToSave;
                 }
             } finally {

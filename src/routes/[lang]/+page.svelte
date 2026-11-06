@@ -45,7 +45,7 @@
         }
     });
 
-    console.log('RAILS API:', data.rails);
+    //console.log('RAILS API:', data.rails);
 </script>
 
 <svelte:head>
