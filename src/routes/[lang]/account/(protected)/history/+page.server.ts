@@ -3,7 +3,6 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies }) => {
     const peachSid = cookies.get('identity.provider.sid');
-    //const peachSid = 'a18ac0ab-f2af-4fdc-b880-7f51d6599823';
 
     if (!peachSid) {
         return {

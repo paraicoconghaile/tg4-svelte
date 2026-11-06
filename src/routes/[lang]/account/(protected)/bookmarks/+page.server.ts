@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({ cookies, url }) => {
         const skip = (page - 1) * PAGE_SIZE;
         const result = await getBookmarks(peachSid, skip, PAGE_SIZE);
 
-        console.log('Bookmarks result:', JSON.stringify(result, null, 2));
+        //console.log('Bookmarks result:', JSON.stringify(result, null, 2));
 
         const bookmarks = Array.isArray(result)
             ? result
