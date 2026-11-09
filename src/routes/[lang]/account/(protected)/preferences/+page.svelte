@@ -60,7 +60,8 @@
                 loading: 'Loading...',
                 savebutton: 'Save',
                 preferenceSaved: 'Preferences Saved',
-                toggleOptions: 'Yes/No'
+                toggleOptionY: 'Yes',
+                toggleOptionN: 'No'
             }
         },
         ga: {
@@ -88,7 +89,8 @@
                 loading: 'Ag lódáil...',
                 savebutton: 'Sabháil',
                 preferenceSaved: 'Sainrogha Phearsanta Athruithe',
-                toggleOptions: 'Tá/Níl'
+                toggleOptionY 'Tá',
+                toggleOptionN: 'Níl'
             }
         }
     };
@@ -176,8 +178,9 @@
                                 type="checkbox"
                                 bind:checked={ads}
                             />
+                            <span class="toggle-label">{messages.labels.toggleOptionN}</span>
                             <span class="toggle-switch"></span>
-                            <span class="toggle-label">{messages.labels.toggleOptions}</span>
+                            <span class="toggle-label">{messages.labels.toggleOptionY}</span>
                         </label>
                     </div>
                 </div>
@@ -191,8 +194,9 @@
                                 type="checkbox"
                                 bind:checked={subtitles}
                             />
+                            <span class="toggle-label">{messages.labels.toggleOptionN}</span>
                             <span class="toggle-switch"></span>
-                            <span class="toggle-label">{messages.labels.toggleOptions}</span>
+                            <span class="toggle-label">{messages.labels.toggleOptionY}</span>
                         </label>
                     </div>
                 </div>
@@ -206,8 +210,9 @@
                                 type="checkbox"
                                 bind:checked={promos}
                             />
+                            <span class="toggle-label">{messages.labels.toggleOptionN}</span>
                             <span class="toggle-switch"></span>
-                            <span class="toggle-label">{messages.labels.toggleOptions}</span>
+                            <span class="toggle-label">{messages.labels.toggleOptionY}</span>
                         </label>
                     </div>
                 </div>
@@ -244,8 +249,9 @@
                                 type="checkbox"
                                 bind:checked={credits}
                             />
+                            <span class="toggle-label">{messages.labels.toggleOptionN}</span>
                             <span class="toggle-switch"></span>
-                            <span class="toggle-label">{messages.labels.toggleOptions}</span>
+                            <span class="toggle-label">{messages.labels.toggleOptionY}</span>
                         </label>
                     </div>
                 </div>
@@ -259,8 +265,9 @@
                                 type="checkbox"
                                 bind:checked={nextEpisode}
                             />
+                            <span class="toggle-label">{messages.labels.toggleOptionN}</span>
                             <span class="toggle-switch"></span>
-                            <span class="toggle-label">{messages.labels.toggleOptions}</span>
+                            <span class="toggle-label">{messages.labels.toggleOptionY}</span>
                         </label>
                     </div>
                 </div>
@@ -274,8 +281,9 @@
                                 type="checkbox"
                                 bind:checked={accessibilityView}
                             />
+                            <span class="toggle-label">{messages.labels.toggleOptionN}</span>
                             <span class="toggle-switch"></span>
-                            <span class="toggle-label">{messages.labels.toggleOptions}</span>
+                            <span class="toggle-label">{messages.labels.toggleOptionY}</span>
                         </label>
                     </div>
                 </div>
