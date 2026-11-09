@@ -89,7 +89,7 @@
                 loading: 'Ag lódáil...',
                 savebutton: 'Sabháil',
                 preferenceSaved: 'Sainrogha Phearsanta Athruithe',
-                toggleOptionY 'Tá',
+                toggleOptionY: 'Tá',
                 toggleOptionN: 'Níl'
             }
         }
