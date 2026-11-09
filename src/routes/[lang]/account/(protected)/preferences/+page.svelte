@@ -393,15 +393,15 @@
     transition: transform 0.2s ease;
 }
 
-.toggle-checkbox:checked + .toggle-switch {
+.toggle-checkbox:checked ~ .toggle-switch {
     background-color: var(--link-colour);
 }
 
-.toggle-checkbox:checked + .toggle-switch::after {
+.toggle-checkbox:checked ~ .toggle-switch::after {
     transform: translateX(20px);
 }
 
-.toggle-checkbox:focus-visible + .toggle-switch {
+.toggle-checkbox:focus-visible ~ .toggle-switch {
     outline: 2px solid var(--link-colour);
     outline-offset: 2px;
 }
