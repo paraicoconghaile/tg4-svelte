@@ -132,7 +132,7 @@
 
                                     <div class="sport-image">
                                         <img
-                                            src={`https://res.cloudinary.com/tg4/image/upload/w_262,h_147,g_faces,c_fill,f_auto,q_auto/${imageCode}.jpg`}
+                                            src={`https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/${imageCode}.jpg`}
                                             alt={item.title}
                                             onerror={(event) => {
                                                 event.currentTarget.src =
@@ -215,7 +215,7 @@
 }
 
 .sport-image {
-    max-width: 500px;
+    max-width: 700px;
 }
 
 .sport-image img {
@@ -252,5 +252,5 @@
 </style>
 
 <!-- <pre>
-    {JSON.stringify(initialSchedule, null, 2)}
+    {JSON.stringify(schedule, null, 2)}
 </pre> -->
