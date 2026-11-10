@@ -14,7 +14,7 @@
     import { withBase } from '$lib/utils/paths';
     import Seo from '$lib/components/seo/Seo.svelte';
     import StructuredData from '$lib/components/seo/StructuredData.svelte';
-    import { getWebsiteSchema } from '$lib/components/seo/schemas/Website';
+    import { getWebsiteSchema } from '$lib/components/seo/schemas/website';
 
     let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
