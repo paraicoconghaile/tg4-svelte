@@ -72,18 +72,7 @@
     const description = $derived(data.lang === 'ga' ? data.series.series.descGa : data.series.series.descEn);
 
     function getImageUrl(ep: any) {
-        if (ep?.prodCode) {
-            return `https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto:eco/${ep.prodCode}.jpg`;
-        }
-
-        if (ep?.seriesCode) {
-            return `https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto:eco/${ep.seriesCode}.jpg`;
-        }
-
-        return (
-            ep.poster ||
-            'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg'
-        );
+        return ep?.image || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';
     }
 
     const subtitleLanguages: Record<string, Record<string, string>> = {

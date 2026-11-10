@@ -63,7 +63,8 @@ export async function load({ params }) {
         seriesNumber: rawVideo.video.customFields?.series ?? rawVideo.video.seasonNumber,
         episodeNumber: rawVideo.video.customFields.episode,
         description: params.lang === 'ga' ? rawVideo.video.descriptionGa : rawVideo.video.descriptionEn,
-        poster: rawVideo.video.image.xLarge,
+        image: rawVideo.video.image?.large || rawVideo.video.image?.original || rawVideo.video.image?.xLarge || rawVideo.video.poster || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg',
+        poster: rawVideo.video.image.large,
         prodCode: rawVideo.video.customFields.p_prodcode,
         seriesCode: rawVideo.video.customFields.s_prodcode,
         duration: rawVideo.video.duration,
@@ -74,18 +75,12 @@ export async function load({ params }) {
         slug: rawVideo.series?.slug ?? null
     };
 
-    /* const rawEpisodes = await getSeriesVideos(
-        video.slug,
-        Number(video.seriesNumber)
-    ); */
-
     const rawEpisodes =
         video.slug && video.seriesNumber != null
-        ? await getSeriesVideos(
-            video.slug,
-            Number(video.seriesNumber)
-        )
+        ? await getSeriesVideos(video.slug, Number(video.seriesNumber))
         : null;
+
+    //console.log('RAW EPISODES:', JSON.stringify(rawEpisodes, null, 2));
 
     const otherEpisodes = (rawEpisodes?.videos ?? [])
         .filter((ep) => {
@@ -102,11 +97,10 @@ export async function load({ params }) {
             seriesNumber: ep.seasonNumber,
             prodCode: ep.pCode,
             seriesCode: ep.customFields?.s_prodcode,
-            description:
-                params.lang === 'ga'
-                    ? ep.descriptionGa
-                    : ep.descriptionEn,
-            duration: ep.duration
+            description: params.lang === 'ga' ? ep.descriptionGa : ep.descriptionEn,
+            duration: ep.duration,
+            image: ep.image?.large || ep.image?.original || ep.image?.xLarge || ep.poster || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg',
+            poster: ep.poster
         }));
 
     return {

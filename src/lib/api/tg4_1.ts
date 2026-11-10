@@ -42,10 +42,7 @@ function getTg4Territory(response: Response): Tg4Territory {
     };
 }
 
-async function fetchTg4Api<T>(
-    url: string,
-    init?: RequestInit
-): Promise<Tg4ApiResponse<T>> {
+async function fetchTg4Api<T>(url: string, init?: RequestInit): Promise<Tg4ApiResponse<T>> {
     const response = await fetch(url, init);
 
     if (!response.ok) {
@@ -70,12 +67,7 @@ const apiCache = new Map<string, {
 
 const pendingRequests = new Map<string, Promise<any>>();
 
-async function getCachedApiData(
-    key: string,
-    url: string,
-    ttl: number,
-    notFoundOn400 = false
-) {
+async function getCachedApiData(key: string, url: string, ttl: number, notFoundOn400 = false) {
     const now = Date.now();
     const cached = apiCache.get(key);
 
@@ -142,11 +134,7 @@ async function getCachedApiData(
     return structuredClone(await pending);
 }
 
-export async function getGenre(
-    genre: string,
-    skip = 0,
-    limit = 24
-) {
+export async function getGenre(genre: string, skip = 0, limit = 24) {
     const response = await fetch(
         `https://api.tg4dev.com/api/series?skip=${skip}&limit=${limit}&category=${genre}&sites=TG4`,
         {
@@ -164,10 +152,7 @@ export async function getGenre(
     return response.json();
 }
 
-export async function getSeriesVideos(
-    seriesTitle: string,
-    seasonNumber: number
-) {
+export async function getSeriesVideos(seriesTitle: string, seasonNumber: number) {
     const url =
         `https://api.tg4dev.com/api/series/${encodeURIComponent(seriesTitle)}/${seasonNumber}`;
 
@@ -354,11 +339,7 @@ export async function getContinueWatching(peachSid: string) {
     return response.json();
 }
 
-export async function getBookmarks(
-    peachSid: string,
-    skip = 0,
-    limit = 20
-) {
+export async function getBookmarks(peachSid: string, skip = 0, limit = 20) {
     const url = new URL('https://api.tg4dev.com/api/user/bookmarks');
 
     url.searchParams.set('skip', String(skip));

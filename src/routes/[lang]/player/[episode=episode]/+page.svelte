@@ -230,16 +230,12 @@
         player.off('pause');
     });
 
+    function getOtherImageUrl(data: any) {
+        return data?.image || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';
+    }
+
     function getImageUrl(data: any) {
-        /* if (data.video?.prodCode) {
-            return `https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto:eco/${data.video.prodCode}.jpg`;
-        }
-
-        if (data.video?.seriesCode) {
-            return `https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto:eco/${data.video.seriesCode}.jpg`;
-        } */
-
-        return (data.video.poster || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg');
+        return data.video?.image || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';
     }
 
     const irishMonths: Record<number, string> = {
@@ -305,11 +301,7 @@
 <section class="episode-page">
     {#if !playing}
         <div class="poster">
-            <img src={getImageUrl(data)} alt={data.video.seriesTitle} onerror={(e) => {
-                    e.currentTarget.src =
-                        'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';
-                }}
-            />
+            <img src={getImageUrl(data)} alt={data.video.seriesTitle} onerror={(e) => {e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';}} />
 
             <button type="button" class="play-button" onclick={startPlayer} aria-label="Play video">
                 <svg viewBox="18 0 38 56" width="30" height="38" aria-hidden="true" class="svelte-y23m4k"><path d="M55.9383 27.9696L46.9742 19.3235L35.2362 30.6515L18.6702 46.6389L27.6318 55.2875L55.9383 27.9696Z" fill="#FFFFFF" class="svelte-y23m4k"></path><path d="M46.9354 36.6571L55.8945 28.0061L44.1565 16.6781L27.5905 0.690705L18.6289 9.33929L46.9354 36.6571Z" fill="#FFFFFF" class="svelte-y23m4k"></path></svg>
@@ -427,12 +419,7 @@
             <div class="episode-grid">
                 {#each data.otherEpisodes as ep}
                     <a class="episode-card" href={withBase(`/${data.lang}/player/${data.video.slug}/${ep.episodeID}`)}>
-                        <img
-                            src={ep.prodCode
-                                ? `https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto:eco/${ep.prodCode}.jpg`
-                                : 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg'}
-                            alt={ep.title}
-                        />
+                        <img src={getOtherImageUrl(ep)} alt={ep.title} onerror={(e) => {e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';}} />
 
                         <h3>{ep.title}</h3>
 

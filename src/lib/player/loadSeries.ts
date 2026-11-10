@@ -1,10 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { getSeries, getSeriesVideos, Tg4ApiError } from '$lib/api/tg4_1';
 
-async function getSeriesVideosOr404(
-    slug: string,
-    seasonNumber: number
-) {
+async function getSeriesVideosOr404(slug: string, seasonNumber: number) {
     try {
         return await getSeriesVideos(slug, seasonNumber);
     } catch (err) {
@@ -53,15 +50,7 @@ export async function loadSeries(slug: string, lang: string) {
     const seasonNumber = latestSeason.number;
     //console.log("Loading latest season:", seasonNumber);
 
-    /* const rawEpisodes = await getSeriesVideos(
-        series.series.slug,
-        seasonNumber
-    ); */
-
-    const rawEpisodes = await getSeriesVideosOr404(
-        series.series.slug,
-        seasonNumber
-    );
+    const rawEpisodes = await getSeriesVideosOr404(series.series.slug, seasonNumber);
 
     if (!rawEpisodes) {
         error(404, 'Season not found');
@@ -77,6 +66,12 @@ export async function loadSeries(slug: string, lang: string) {
         contentRating: ep.contentRating,
         prodCode: ep.pCode,
         seriesCode: ep.customFields.s_prodcode,
+        image:
+            ep.image?.original ||
+            ep.image?.large ||
+            ep.image?.xLarge ||
+            ep.poster ||
+            'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg',
         seriesDescription: lang === 'ga' ? ep.customFields.seriesdescg : ep.customFields.seriesdesce,
         episodeDescription: lang === 'ga' ? ep.descriptionGa : ep.descriptionEn
     })) ?? [];
@@ -92,20 +87,13 @@ export async function loadSeries(slug: string, lang: string) {
     };
 }
 
-export async function loadSeason(
-    seriesSlug: string,
-    seasonNumber: number,
-    lang: string
-) {
+export async function loadSeason(seriesSlug: string, seasonNumber: number, lang: string) {
     /* const rawEpisodes = await getSeriesVideos(
         seriesSlug,
         seasonNumber
     ); */
 
-    const rawEpisodes = await getSeriesVideosOr404(
-        seriesSlug,
-        seasonNumber
-    );
+    const rawEpisodes = await getSeriesVideosOr404(seriesSlug, seasonNumber);
 
     if (!rawEpisodes) {
         error(404, 'Season not found');

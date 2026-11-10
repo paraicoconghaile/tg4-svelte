@@ -394,11 +394,11 @@
                 player.currentTime()
             );
 
-            console.log('*** NIELSEN DVR REFERENCE ***', {
+            /* console.log('*** NIELSEN DVR REFERENCE ***', {
                 refDate: metadata.ref_date,
                 refUnixTime: nielsenRefUnixTime,
                 refPlayerTime: nielsenRefPlayerTime
-            });
+            }); */
         }
 
         nielsenData = {
