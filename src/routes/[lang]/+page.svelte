@@ -12,6 +12,9 @@
     import Footer from '$lib/components/layout/Footer.svelte';
     import { onMount } from 'svelte';
     import { withBase } from '$lib/utils/paths';
+    import Seo from '$lib/components/seo/Seo.svelte';
+    import StructuredData from '$lib/components/seo/StructuredData.svelte';
+    import { getWebsiteSchema } from '$lib/components/seo/schemas/Website';
 
     let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
@@ -48,9 +51,18 @@
     //console.log('RAILS API:', data.rails);
 </script>
 
-<svelte:head>
-    <title>{isIrish ? 'TG4 | Teilifís Gaeilge' : 'TG4 | Irish Language Television'}</title>
-</svelte:head>
+<Seo 
+    title={isIrish ? 'TG4 | Teilifís Gaeilge' : 'TG4 | Irish Language Television'}
+    description={isIrish
+        ? 'Féach ar chláir TG4, sraitheanna, cláir faisnéise, spórt agus siamsaíocht ar líne ar Sheinnteoir TG4.'
+        : 'Watch TG4 programmes, series, documentaries, sport and entertainment online on the TG4 Player.'
+    }
+    canonicalUrl={`https://www.tg4.ie/${data.lang}`}
+    lang={data.lang}
+    alternateGaUrl="https://www.tg4.ie/ga"
+    alternateEnUrl="https://www.tg4.ie/en"
+/>
+<StructuredData schema={getWebsiteSchema(data.lang)} />
 
 {#each rails as rail}
     {#if rail.type === 'CAROUSEL'}

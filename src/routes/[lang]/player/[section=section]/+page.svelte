@@ -6,12 +6,15 @@
     import SingleContent from '$lib/components/rails/SingleContent.svelte';
     import { withBase } from '$lib/utils/paths';
     import { genres } from '$lib/config/playerNav';
+    import { getAlternateUrls } from '$lib/utils/seo';
     import Seo from '$lib/components/seo/Seo.svelte';
-    import seoFallbackImage from '$lib/assets/images/TG4_2024_corcra_teal_1-1920x1080-1.jpg';
+    import StructuredData from '$lib/components/seo/StructuredData.svelte';
+    import { getCategorySchema } from '$lib/components/seo/schemas/category';
+
+    const seoFallbackImage = 'https://www.tg4.ie/images/TG4_2024.jpg';
 
   	let { data } = $props();
     let isIrish = $derived(data.lang === 'ga');
-
     let isDiscover = $derived(data.section === 'discover' || data.section === 'aimsigh');
 
     let series = $state(data.series ?? []);
@@ -23,6 +26,26 @@
     const limit = 24;
 
     let currentPage = $state(`${data.lang}/${data.section}`);
+
+    let alternateUrls = $derived(getAlternateUrls(`/${data.lang}/player/${data.section}`));
+
+    let categorySchema = $derived(
+        getCategorySchema({
+            lang: data.lang,
+            section: data.section,
+            title: isDiscover
+                ? (isIrish ? 'Aimsigh' : 'Discover')
+                : (isIrish ? data.labelGa : data.labelEn),
+            description: isDiscover
+                ? (isIrish
+                    ? 'Aimsigh cláir ar an TG4 Player.'
+                    : 'Discover programmes on the TG4 Player.')
+                : (isIrish
+                    ? `${data.labelGa} ar an TG4 Player.`
+                    : `${data.labelEn} on the TG4 Player.`),
+            discoverSlug: isIrish ? 'aimsigh' : 'discover'
+        })
+    );
 
     $effect(() => {
         const page = `${data.lang}/${data.section}`;
@@ -105,6 +128,8 @@
         canonicalUrl={`https://www.tg4.ie/${data.lang}/player/${data.section}/`}
         imageUrl={seoFallbackImage}
         lang={data.lang}
+        alternateGaUrl={alternateUrls?.alternateGaUrl}
+        alternateEnUrl={alternateUrls?.alternateEnUrl}
     />
 {:else}
     <Seo
@@ -115,8 +140,12 @@
         canonicalUrl={`https://www.tg4.ie/${data.lang}/player/${data.section}/`}
         imageUrl={seoFallbackImage}
         lang={data.lang}
+        alternateGaUrl={alternateUrls?.alternateGaUrl}
+        alternateEnUrl={alternateUrls?.alternateEnUrl}
     />
 {/if}
+
+<StructuredData schema={categorySchema} />
 
 {#if isDiscover}
     <section class="discover-page">

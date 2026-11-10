@@ -4,13 +4,17 @@
         description,
         canonicalUrl,
         imageUrl,
-        lang = 'en'
+        lang = 'en',
+        alternateGaUrl,
+        alternateEnUrl
     }: {
         title: string;
         description: string;
         canonicalUrl: string;
         imageUrl?: string;
         lang?: string;
+        alternateGaUrl?: string;
+        alternateEnUrl?: string;
     } = $props();
 
     const locale = $derived(lang === 'ga' ? 'ga_IE' : 'en_IE');
@@ -18,6 +22,11 @@
 
 <svelte:head>
     <title>{title}</title>
+
+    {#if alternateGaUrl && alternateEnUrl}
+        <link rel="alternate" hreflang="ga-IE" href={alternateGaUrl} />
+        <link rel="alternate" hreflang="en-IE" href={alternateEnUrl} />
+    {/if}
 
     <meta name="description" content={description} />
 
