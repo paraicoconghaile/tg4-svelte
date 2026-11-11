@@ -1,10 +1,10 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { page } from '$app/state';
+    import { getAccountPath } from '$lib/utils/accountRoutes';
     import { loadPeachUser } from '$lib/sso/peach';
     import Eye from '$lib/components/icons/Eye.svelte';
     import EyeOff from '$lib/components/icons/EyeOff.svelte';
-    import { getAccountPath } from '$lib/utils/accountRoutes';
 
     let email = $state('');
     let password = $state('');

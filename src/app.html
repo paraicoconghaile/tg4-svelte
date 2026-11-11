@@ -5,6 +5,91 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="text-scale" content="scale" />
         <link rel="icon" type="image/x-icon" href="%sveltekit.assets%/TG4+favicon.svg?v=10" />
+
+        <!-- Cookiebot Consent Management -->
+		<script
+		    id="Cookiebot"
+		    src="https://consent.cookiebot.com/uc.js"
+		    data-cbid="2d8f3fdb-5d3b-4571-924b-a31490834677"
+		    data-culture="en"
+		    data-blockingmode="auto"
+		    type="text/javascript"
+		    async
+		></script>
+        
+		<!-- Google Analytics 4 -->
+		<script data-cookieconsent="ignore">
+		    window.dataLayer = window.dataLayer || [];
+
+		    function gtag() {
+		        window.dataLayer.push(arguments);
+		    }
+
+		    let analyticsLoaded = false;
+
+		    function loadGoogleAnalytics() {
+		        if (analyticsLoaded) return;
+		        analyticsLoaded = true;
+
+		        gtag('js', new Date());
+
+		        // SvelteKit handles page views separately.
+		        gtag('config', 'G-MJ34VNCPXL', {
+		            send_page_view: false
+		        });
+
+		        const script = document.createElement('script');
+		        script.async = true;
+		        script.setAttribute('data-cookieconsent', 'ignore');
+		        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-MJ34VNCPXL';
+
+		        document.head.appendChild(script);
+		    }
+
+		    function updateAnalyticsConsent() {
+		        const statisticsConsent =
+		            window.Cookiebot?.consent?.statistics === true;
+
+		        gtag('consent', 'update', {
+		            analytics_storage: statisticsConsent ? 'granted' : 'denied',
+		            ad_storage: 'denied',
+		            ad_user_data: 'denied',
+		            ad_personalization: 'denied'
+		        });
+
+		        if (statisticsConsent) {
+		            loadGoogleAnalytics();
+		        }
+		    }
+
+		    // Default to no tracking.
+		    gtag('consent', 'default', {
+		        analytics_storage: 'denied',
+		        ad_storage: 'denied',
+		        ad_user_data: 'denied',
+		        ad_personalization: 'denied'
+		    });
+
+		    window.addEventListener(
+		        'CookiebotOnConsentReady',
+		        updateAnalyticsConsent
+		    );
+
+		    window.addEventListener(
+		        'CookiebotOnAccept',
+		        updateAnalyticsConsent
+		    );
+
+		    window.addEventListener(
+		        'CookiebotOnDecline',
+		        updateAnalyticsConsent
+		    );
+
+		    if (window.Cookiebot?.consent) {
+		        updateAnalyticsConsent();
+		    }
+		</script>
+
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">
