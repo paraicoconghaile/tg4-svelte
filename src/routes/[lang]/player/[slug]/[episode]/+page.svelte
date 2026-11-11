@@ -28,6 +28,102 @@
     let activePlayer: any = null;
     let currentVideoId = $state(data.video.videoId);
 
+    let npawPromise: Promise<void> | null = null;
+
+    function loadNpaw(): Promise<void> {
+        if ((window as any).youbora?.adapters?.BrightcoveVideojs) {
+            return Promise.resolve();
+        }
+
+        if (npawPromise) {
+            return npawPromise;
+        }
+
+        npawPromise = new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+
+            script.src = 'https://qa-smartplugin.youbora.com/catalog/v6/js/adapters/videojs-brightcove/last-build/dist/sp.min.js';
+
+            script.onload = () => {
+                console.log('VOD NPAW script loaded');
+                resolve();
+            };
+
+            script.onerror = () => {
+                npawPromise = null;
+                reject(new Error('Failed to load VOD NPAW'));
+            };
+
+            document.head.appendChild(script);
+        });
+
+        return npawPromise;
+    }
+
+    let npawPlugin: any = null;
+
+    async function initialiseNpaw(player: any) {
+        try {
+            await loadNpaw();
+
+            if (player.isDisposed?.()) return;
+
+            const youbora = (window as any).youbora;
+
+            if (!youbora?.adapters?.BrightcoveVideojs) {
+                console.error('NPAW Youbora adapter not available');
+                return;
+            }
+
+            npawPlugin?.fireStop?.();
+            npawPlugin?.removeAdapter?.();
+
+            npawPlugin = new youbora.Plugin({
+                accountCode: 'tg4prod',
+                username: 'TG4 Website',
+                'content.channel': 'TG4',
+                'content.isLive': false
+            });
+
+            npawPlugin.setAdapter(
+                new youbora.adapters.BrightcoveVideojs(player)
+            );
+
+            console.log('*** VOD NPAW INITIALISED ***');
+
+        } catch (error) {
+            console.error('VOD NPAW initialisation failed:', error);
+        }
+    }
+    
+    function updateNpawMetadata(player: any, video: any) {
+        if (!npawPlugin) {
+            console.warn('VOD NPAW plugin not available');
+            return;
+        }
+
+        const referenceId = video.referenceId;
+
+        npawPlugin.setOptions({
+            'content.id': referenceId,
+            'content.title': video.seriesTitle,
+            'content.episodeTitle': video.title,
+            'content.season': video.seriesNumber,
+            'content.program': video.episodeNumber,
+            'content.genre': video.categories?.[0]?.displayEn ?? '',
+            'content.customDimension.1': video.seriesCode,
+            'content.customDimension.2': video.prodCode
+        });
+
+        console.log('*** VOD NPAW METADATA UPDATED ***', {
+            referenceId,
+            seriesTitle: video.seriesTitle,
+            episodeTitle: video.title,
+            seriesCode: video.seriesCode,
+            prodCode: video.prodCode
+        });
+    }
+
     $effect(() => {
         const nextVideoId = data.video.videoId;
 
@@ -174,6 +270,16 @@
             player.ready(async () => {
                 historyVideoId = data.video.videoId;
 
+                // Initialise VOD analytics
+                await initialiseNpaw(player);
+
+                if (player.isDisposed?.()) return;
+
+                if (npawPlugin) {
+                    updateNpawMetadata(player, data.video);
+                    console.log('NPAW configured content ID:', npawPlugin.getOption('content.id'));
+                }
+
                 await checkHistoryAuthentication();
 
                 if (startAt > 0) {
@@ -181,6 +287,14 @@
                         player.currentTime(startAt);
                     });
                 }
+
+                /* const brightcoveVideo = player.mediainfo;
+
+                console.log('Brightcove VOD metadata:', {
+                    id: brightcoveVideo?.id,
+                    referenceId: brightcoveVideo?.referenceId,
+                    customFields: brightcoveVideo?.customFields
+                }); */
 
                 // Save playback position every 10 seconds
                 player.on('timeupdate', () => {

@@ -58,6 +58,7 @@ export async function load({ params }) {
 
     const video = {
         videoId: rawVideo.video.providerId,
+        referenceId: rawVideo.video.referenceId,
         title: rawVideo.video.customFields?.title ?? rawVideo.title,
         seriesTitle: rawVideo.video.customFields.seriestitle,
         seriesNumber: rawVideo.video.customFields?.series ?? rawVideo.video.seasonNumber,
