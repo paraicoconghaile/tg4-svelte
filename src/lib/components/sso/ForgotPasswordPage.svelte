@@ -1,10 +1,10 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { page } from '$app/state';
+    import { getAccountPath } from '$lib/utils/accountRoutes';
     import { loadPeachUser } from '$lib/sso/peach';
     import Eye from '$lib/components/icons/Eye.svelte';
     import EyeOff from '$lib/components/icons/EyeOff.svelte';
-    import { getAccountPath } from '$lib/utils/accountRoutes';
 
     let email = $state('');
     let submitting = $state(false);
@@ -47,6 +47,21 @@
     };
 
     const messages = $derived(resetMessages[page.params.lang === 'ga' ? 'ga' : 'en']);
+
+    onMount(async () => {
+        try {
+            const pu = await loadPeachUser();
+            const authorized = await pu.isAuthorized();
+
+            if (authorized === true) {
+                window.location.replace(
+                    getAccountPath(page.params.lang, 'account')
+                );
+            }
+        } catch {
+            // Not authenticated — allow access to Forgot Password
+        }
+    });
 
     async function forgotPassword() {
         error = '';

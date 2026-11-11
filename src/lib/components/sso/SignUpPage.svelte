@@ -1,9 +1,11 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
     import { page } from '$app/state';
+    import { getAccountPath } from '$lib/utils/accountRoutes';
+    import { loadPeachUser } from '$lib/sso/peach';
+    import { withBase } from '$lib/utils/paths';
     import Eye from '$lib/components/icons/Eye.svelte';
     import EyeOff from '$lib/components/icons/EyeOff.svelte';
-    import { withBase } from '$lib/utils/paths';
-    import { getAccountPath } from '$lib/utils/accountRoutes';
 
     let email = $state('');
     let password = $state('');
@@ -64,6 +66,21 @@
     };
 
     const messages = $derived(regMessages[page.params.lang === 'ga' ? 'ga' : 'en']);
+
+    onMount(async () => {
+        try {
+            const pu = await loadPeachUser();
+            const authorized = await pu.isAuthorized();
+
+            if (authorized === true) {
+                window.location.replace(
+                    getAccountPath(page.params.lang, 'account')
+                );
+            }
+        } catch {
+            // Not authenticated — allow access to Sign Up
+        }
+    });
 
     async function register() {
         error = '';
