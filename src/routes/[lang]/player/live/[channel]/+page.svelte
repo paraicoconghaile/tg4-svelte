@@ -38,9 +38,7 @@
 
     onMount(() => {
         refreshEPG();
-
         const interval = setInterval(refreshEPG, 60_000);
-
         return () => clearInterval(interval);
     });
 
@@ -54,7 +52,6 @@
 
     let currentProgramme = $state<LiveProgramme | null>(null);
     let currentProgrammeKey = $state('');
-
     let npawPromise: Promise<void> | null = null;
 
     let nSdkInstance: any = null;
@@ -64,7 +61,6 @@
 
     let nielsenRefUnixTime: number | null = null;
     let nielsenRefPlayerTime: number | null = null;
-
     let nielsenPlayheadTimer: ReturnType<typeof setInterval> | null = null;
     let lastNielsenPlayhead: number | null = null;
 
@@ -79,12 +75,10 @@
 
         npawPromise = new Promise((resolve, reject) => {
             const script = document.createElement('script');
-
-            script.src =
-                'https://qa-smartplugin.youbora.com/catalog/v6/js/adapters/videojs-brightcove/last-build/dist/sp.min.js';
+            script.src = 'https://smartplugin.youbora.com/v6/js/adapters/videojs-brightcove/6.8.4/sp.min.js';
 
             script.onload = () => {
-                //console.log('NPAW script loaded');
+                console.log('NPAW script loaded');
                 resolve();
             };
 
@@ -110,7 +104,6 @@
 
         brightcovePromise = new Promise((resolve, reject) => {
             const script = document.createElement('script');
-
             script.src = 'https://players.brightcove.net/1555966122001/D0RgRVjpd_default/index.min.js';
 
             script.onload = () => resolve();
@@ -153,20 +146,13 @@
             /* TG4 ID3
             The JSON itself is UTF-16LE */
 
-            if (
-                bytes.length >= 5 &&
-                bytes[1] === 0xff &&
-                bytes[2] === 0xfe
-            ) {
-                decoded = new TextDecoder('utf-16le')
-                    .decode(bytes.slice(3));
+            if (bytes.length >= 5 && bytes[1] === 0xff && bytes[2] === 0xfe) {
+                decoded = new TextDecoder('utf-16le').decode(bytes.slice(3));
             } else {
                 decoded = new TextDecoder().decode(bytes);
             }
 
-            decoded = decoded
-                .replace(/\0+$/, '')
-                .trim();
+            decoded = decoded.replace(/\0+$/, '').trim();
 
             if (!decoded) {
                 return null;
@@ -177,9 +163,7 @@
             const metadata: LiveProgramme = {};
 
             for (const [key, value] of Object.entries(parsed)) {
-                metadata[key] = decodeHtmlEntities(
-                    String(value ?? '')
-                );
+                metadata[key] = decodeHtmlEntities(String(value ?? ''));
             }
 
             return metadata;
@@ -219,7 +203,7 @@
             const isNewProgramme = programmeKey !== currentProgrammeKey;
 
             if (isNewProgramme) {
-                /* console.log('*** NEW TG4 PROGRAMME ***');
+                /* */ console.log('*** NEW TG4 PROGRAMME ***');
 
                 console.log({
                     programmeKey,
@@ -229,7 +213,7 @@
                     title: metadata.prog_title,
                     episodeNumber: metadata.episode_number,
                     seriesNumber: metadata.series_number
-                }); */
+                });
 
                 currentProgrammeKey = programmeKey;
 
@@ -242,7 +226,7 @@
                 updateNielsenMetadata(metadata);
                 updateNpawMetadata(metadata);
             } else {
-                //console.log('TG4 programme metadata update:', programmeKey);
+                console.log('TG4 programme metadata update:', programmeKey);
             }
         }
     }
@@ -253,41 +237,37 @@
         for (let i = 0; i < textTracks.length; i++) {
             const track = textTracks[i];
 
-            /* console.log('TRACK', i, {
+            /* */ console.log('TRACK', i, {
                 kind: track.kind,
                 label: track.label,
                 language: track.language,
                 mode: track.mode,
                 cues: track.cues?.length
-            }); */
+            });
 
-            if (
-                track.kind === 'metadata' &&
-                track.label === 'Timed Metadata'
-            ) {
-                //console.log('*** FOUND TG4 TIMED METADATA TRACK ***');
+            if (track.kind === 'metadata' && track.label === 'Timed Metadata') {
+                console.log('*** FOUND TG4 TIMED METADATA TRACK ***');
 
                 track.mode = 'hidden';
 
                 track.addEventListener('cuechange', () => {
-                    //console.log('*** TG4 ID3 CUE CHANGE ***');
+                    console.log('*** TG4 ID3 CUE CHANGE ***');
                     processMetadataTrack(track);
                 });
 
                 processMetadataTrack(track);
-
                 return;
             }
         }
 
-        //console.log('Timed Metadata track not found');
+        console.log('Timed Metadata track not found');
     }
 
     function clearProgrammeMetadata() {
         currentProgramme = null;
         currentProgrammeKey = '';
 
-        //console.log('*** CLEARED TG4 PROGRAMME METADATA ***');
+        console.log('*** CLEARED TG4 PROGRAMME METADATA ***');
     }
 
     async function initialiseNpaw() {
@@ -312,7 +292,7 @@
                 new youbora.adapters.BrightcoveVideojs(player)
             );
 
-            //console.log('*** NPAW INITIALISED ***');
+            console.log('*** NPAW INITIALISED ***');
 
         } catch (error) {
             console.error('NPAW initialisation failed:', error);
@@ -338,7 +318,7 @@
             'content.customDimension.2': metadata.pcode
         });
 
-        /* console.log('*** NPAW METADATA UPDATED ***', {
+        /* */ console.log('*** NPAW METADATA UPDATED ***', {
             id: metadata.pcode,
             title: metadata.series_title,
             episodeTitle: metadata.title,
@@ -347,7 +327,7 @@
             genre: metadata.genre,
             scode: metadata.scode,
             pcode: metadata.pcode
-        }); */
+        });
     }
 
     function updateNielsenMetadata(metadata: LiveProgramme) {
@@ -361,18 +341,13 @@
             const previousPlayhead = getNielsenPlayhead();
 
             if (previousPlayhead !== null) {
-                //console.log('*** NIELSEN STOP ***', previousPlayhead);
+                console.log('*** NIELSEN STOP ***', previousPlayhead);
 
-                nSdkInstance.ggPM(
-                    'stop',
-                    previousPlayhead
-                );
+                nSdkInstance.ggPM('stop', previousPlayhead);
             }
         }
 
-        const length = metadata.full_dur_frames
-            ? Math.round(metadata.full_dur_frames / 25)
-            : 0;
+        const length = metadata.full_dur_frames ? Math.round(metadata.full_dur_frames / 25) : 0;
 
         const airdate = metadata.start_date_time
             ? metadata.start_date_time
@@ -384,21 +359,17 @@
         /* Establish the DVR reference for this programme. ref_date is the real-world time represented by the current Brightcove DVR position. */
 
         if (metadata.ref_date) {
-            nielsenRefUnixTime = Math.floor(
-                Date.parse(
-                    metadata.ref_date.split('.')[0] + 'Z'
-                ) / 1000
-            );
+            nielsenRefUnixTime = Math.floor(Date.parse(metadata.ref_date.split('.')[0] + 'Z') / 1000);
 
             nielsenRefPlayerTime = Math.round(
                 player.currentTime()
             );
 
-            /* console.log('*** NIELSEN DVR REFERENCE ***', {
+            /* */ console.log('*** NIELSEN DVR REFERENCE ***', {
                 refDate: metadata.ref_date,
                 refUnixTime: nielsenRefUnixTime,
                 refPlayerTime: nielsenRefPlayerTime
-            }); */
+            });
         }
 
         nielsenData = {
@@ -415,7 +386,7 @@
             segC: 'TG4 Player'
         };
 
-        //console.log('*** NIELSEN METADATA UPDATED ***', nielsenData);
+        console.log('*** NIELSEN METADATA UPDATED ***', nielsenData);
 
         nSdkInstance.ggPM('loadMetadata', nielsenData);
 
@@ -425,11 +396,7 @@
     }
 
     function getNielsenPlayhead(): number | null {
-        if (
-            nielsenRefUnixTime === null ||
-            nielsenRefPlayerTime === null ||
-            !player
-        ) {
+        if (nielsenRefUnixTime === null || nielsenRefPlayerTime === null || !player) {
             return null;
         }
 
@@ -437,10 +404,7 @@
             player.currentTime()
         );
 
-        return Math.floor(
-            nielsenRefUnixTime +
-            (currentPlayerTime - nielsenRefPlayerTime)
-        );
+        return Math.floor(nielsenRefUnixTime + (currentPlayerTime - nielsenRefPlayerTime));
     }
 
     function startNielsenPlayhead() {
@@ -448,9 +412,7 @@
             return;
         }
 
-        nielsenPlayheadTimer = setInterval(() => {
-            sendNielsenPlayhead();
-        }, 1000);
+        nielsenPlayheadTimer = setInterval(() => {sendNielsenPlayhead();}, 1000);
     }
 
     function sendNielsenPlayhead() {
@@ -474,10 +436,7 @@
 
         lastNielsenPlayhead = playhead;
 
-        nSdkInstance.ggPM(
-            'setPlayheadPosition',
-            playhead
-        );
+        nSdkInstance.ggPM('setPlayheadPosition', playhead);
     }
 
     function stopNielsenPlayhead() {
@@ -501,14 +460,14 @@
         nielsenEnded = true;
         nielsenLoaded = false;
 
-        //console.log('*** NIELSEN END ***', playhead);
+        console.log('*** NIELSEN END ***', playhead);
     }
 
     async function initialisePlayer() {
         const thisInit = ++initId;
 
         if (player) {
-            //console.log('Disposing previous Brightcove player:', data.channel);
+            console.log('Disposing previous Brightcove player:', data.channel);
 
             endNielsen();
 
@@ -558,7 +517,7 @@
             return;
         }
 
-        //console.log('Initialising Brightcove:', data.channel);
+        console.log('Initialising Brightcove:', data.channel);
 
         // Nielsen SDK - Static Queue
         if (!nSdkInstance) {
@@ -622,37 +581,30 @@
                 return;
             }
             
-            /* console.log('Brightcove player ready:', data.channel);
-            console.log('ALL TEXT TRACKS:', player.textTracks()); */
+            /* */ console.log('Brightcove player ready:', data.channel);
+            console.log('ALL TEXT TRACKS:', player.textTracks());
 
             clearProgrammeMetadata();
-
             initialiseNpaw();
-
             attachId3Track();
-
             startNielsenPlayhead();
 
             player.on('seeking', () => {
-                //console.log('*** DVR SEEKING — CLEARING PROGRAMME METADATA ***');
-
+                console.log('*** DVR SEEKING — CLEARING PROGRAMME METADATA ***');
                 currentProgramme = null;
                 currentProgrammeKey = '';
             });
 
             player.on('loadedmetadata', () => {
-                //console.log('Live stream loadedmetadata');
-
+                console.log('Live stream loadedmetadata');
                 attachId3Track();
-
                 const textTracks = player.textTracks();
-
-                //console.log('Text tracks:', textTracks);
+                console.log('Text tracks:', textTracks);
 
                 for (let i = 0; i < textTracks.length; i++) {
                     const track = textTracks[i];
 
-                    /* console.log('Text track:', {
+                    /* */ console.log('Text track:', {
                         index: i,
                         kind: track.kind,
                         label: track.label,
@@ -666,7 +618,7 @@
                             label: track.label,
                             activeCues: track.activeCues
                         });
-                    }); */
+                    });
                 }
             });
 
@@ -681,18 +633,15 @@
                     return;
                 }
 
-                nSdkInstance.ggPM(
-                    'setPlayheadPosition',
-                    playhead
-                );
+                nSdkInstance.ggPM('setPlayheadPosition', playhead);
             }); */
 
             player.on('metadata', (event: any) => {
-                //console.log('ID3 metadata event:', event);
+                console.log('ID3 metadata event:', event);
             });
 
             player.on('cuechange', (event: any) => {
-                //console.log('Cue change:', event);
+                console.log('Cue change:', event);
             });
 
             if (data.channel !== 'TG4PLUSONE') {
@@ -711,19 +660,16 @@
                 const seekableStart = liveTracker.seekableStart();
                 const seekableEnd = liveTracker.seekableEnd();
 
-                /* console.log(
+                /* */ console.log(
                     'LiveTracker values:',
                     {
                         liveCurrentTime,
                         seekableStart,
                         seekableEnd
                     }
-                ); */
+                );
 
-                if (
-                    liveCurrentTime === 0 ||
-                    seekableEnd === 0
-                ) {
+                if (liveCurrentTime === 0 || seekableEnd === 0) {
                     setTimeout(checkLiveTracker, 500);
                     return;
                 }
@@ -731,10 +677,7 @@
                 const offsetSeconds = stream.offsetSeconds ?? 3600;
                 const targetTime = liveCurrentTime - offsetSeconds;
 
-                if (
-                    targetTime < seekableStart ||
-                    targetTime > seekableEnd
-                ) {
+                if (targetTime < seekableStart || targetTime > seekableEnd) {
                     console.error ('TG4+1 target is outside seekable range');
                     return;
                 }
@@ -742,8 +685,7 @@
                 console.log('TG4+1 waiting for player to start before seeking:', targetTime);
 
                 const seekToOffset = () => {
-                    //console.log('Seeking TG4+1 to:', targetTime);
-
+                    console.log('Seeking TG4+1 to:', targetTime);
                     player.currentTime(targetTime);
                 };
 

@@ -42,7 +42,7 @@
         npawPromise = new Promise((resolve, reject) => {
             const script = document.createElement('script');
 
-            script.src = 'https://qa-smartplugin.youbora.com/catalog/v6/js/adapters/videojs-brightcove/last-build/dist/sp.min.js';
+            script.src = 'https://smartplugin.youbora.com/v6/js/adapters/videojs-brightcove/6.8.4/sp.min.js';
 
             script.onload = () => {
                 console.log('VOD NPAW script loaded');
