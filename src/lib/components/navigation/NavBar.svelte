@@ -5,6 +5,7 @@
     import { getGenreByKey } from '$lib/config/playerNav';
     import { loadPeachUser } from '$lib/sso/peach';
     import { onMount } from 'svelte';
+    import { getAccountPath, type AccountPage } from '$lib/utils/accountRoutes';
 
     const isIrish = $derived(stripBase(page.url.pathname) === '/ga' || stripBase(page.url.pathname).startsWith('/ga/'));
 
@@ -17,6 +18,44 @@
     const switchLanguage = $derived.by(() => {
         const currentPath = stripBase(page.url.pathname);
         const targetLang = isIrish ? 'en' : 'ga';
+
+        // Translate SSO account URLs
+        const accountMatch = currentPath.match(
+            /^\/(en|ga)\/(account|cuntas)\/([^/]+)\/?$/
+        );
+
+        if (accountMatch) {
+            const [, , , section] = accountMatch;
+
+            const accountPages: Record<string, AccountPage> = {
+                account: 'account',
+                cuntas: 'account',
+                profile: 'profile',
+                proifil: 'profile',
+                preferences: 'preferences',
+                sainroghanna: 'preferences',
+                bookmarks: 'bookmarks',
+                leabharmharcanna: 'bookmarks',
+                history: 'history',
+                'stair-feachana': 'history',
+                login: 'login',
+                'logail-isteach': 'login',
+                'sign-up': 'signup',
+                claraigh: 'signup',
+                'forgot-password': 'forgotPassword',
+                'pasfhocal-dearmadta': 'forgotPassword',
+                'delete-account': 'deleteAccount',
+                'scrios-cuntas': 'deleteAccount'
+            };
+
+            const accountPage = accountPages[section];
+
+            if (accountPage) {
+                return getAccountPath(targetLang, accountPage)
+                    + page.url.search
+                    + page.url.hash;
+            }
+        }
 
         const categoryMatch = currentPath.match(
             /^\/(en|ga)\/player\/([^/]+)(\/.*)?$/
@@ -103,7 +142,7 @@
 
         <a href={switchLanguage} class="language-switch" onclick={closeMobileMenu}>{isIrish ? 'ENG' : 'GAE'}</a>
 
-        <a href={withBase(isLoggedIn ? (isIrish ? '/ga/account/account' : '/en/account/account') : (isIrish ? '/ga/account/login' : '/en/account/login'))} aria-label={isLoggedIn ? 'My Account' : 'Log in'}>
+        <a href={getAccountPath(isIrish ? 'ga' : 'en', isLoggedIn ? 'account' : 'login')} aria-label={isLoggedIn ? 'My Account' : 'Log in'}>
             {#if isLoggedIn && userInitials}
                 <span class="account-avatar">{userInitials}</span>
             {:else}
@@ -157,7 +196,7 @@
     <div class="nav-right">
         <a href={switchLanguage} class="language-switch">{isIrish ? 'English' : 'Gaeilge'}</a>
 
-        <a href={withBase(isLoggedIn ? (isIrish ? '/ga/account/account' : '/en/account/account') : (isIrish ? '/ga/account/login' : '/en/account/login'))} aria-label={isLoggedIn ? 'My Account' : 'Log in'}>
+        <a href={getAccountPath(isIrish ? 'ga' : 'en', isLoggedIn ? 'account' : 'login')} aria-label={isLoggedIn ? 'My Account' : 'Log in'}>
             {#if isLoggedIn && userInitials}
                 <span class="account-avatar">{userInitials}</span>
             {:else}
