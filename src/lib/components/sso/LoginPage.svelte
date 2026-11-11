@@ -60,14 +60,12 @@
 
             // Already logged in?
             try {
-                await pu.isAuthorized();
-                //console.log('LOGIN: ALREADY LOGGED IN');
+                const authorized = await pu.isAuthorized();
 
-                // If this succeeds, they're already logged in
-                //window.location.href = withBase(`/${page.params.lang}/account/account/`);
-                window.location.href = getAccountPath(page.params.lang, 'account');
-                return;
-
+                if (authorized === true) {
+                    window.location.href = getAccountPath(page.params.lang, 'account');
+                    return;
+                }
             } catch {
                 // Not logged in - that's fine
             }

@@ -3,7 +3,7 @@
     import { page } from '$app/state';
     import { goto } from '$app/navigation';
     import { requireAuthentication } from '$lib/sso/auth';
-    import { withBase } from '$lib/utils/paths';
+    import { getAccountPath } from '$lib/utils/accountRoutes';
     import { isProfileComplete } from '$lib/sso/profile-complete';
 
     let { children } = $props();
@@ -85,7 +85,9 @@
                     console.error('Logout error:', err);
                 }
 
-                await goto(withBase(`/${page.params.lang}/account/login`));
+                await goto(getAccountPath(page.params.lang, 'login'), {
+                    replaceState: true
+                });
                 return;
             }
 
@@ -146,7 +148,7 @@
         try {
             await pu?.logout();
         } finally {
-            window.location.href = withBase(`/${page.params.lang}/account/login`);
+            window.location.href = getAccountPath(page.params.lang, 'login');
         }
     }
 </script>
@@ -167,25 +169,24 @@
     <section class="account-page">
         <section class="episodes">
             <section class="account">
-                <div class="account-layout" class:bookmarks-layout={page.url.pathname.endsWith('/bookmarks') || page.url.pathname.endsWith('/history')}>
+                <div class="account-layout" class:bookmarks-layout={page.url.pathname === getAccountPath(page.params.lang, 'bookmarks') || page.url.pathname === getAccountPath(page.params.lang, 'history')}>
                     <nav class="account-main-nav" aria-label="Account navigation">
-                        <a href={withBase(`/${page.params.lang}/account/account`)} class:active={page.url.pathname.endsWith('/account/account')}>{messages.labels.account}</a>
+                        <a href={getAccountPath(page.params.lang, 'account')} class:active={page.url.pathname === getAccountPath(page.params.lang, 'account')}>{messages.labels.account}</a>
 
                         {#if isVerified}
-                            <a href={withBase(`/${page.params.lang}/account/profile`)} class:active={page.url.pathname.endsWith('/account/profile')}>{messages.labels.profile}</a>
+                            <a href={getAccountPath(page.params.lang, 'profile')} class:active={page.url.pathname === getAccountPath(page.params.lang, 'profile')}>{messages.labels.profile}</a>
                         {:else}
                             <span class="disabled">{messages.labels.profile}</span>
                         {/if}
 
                         {#if profileComplete}
-                            <a href={withBase(`/${page.params.lang}/account/preferences`)} class:active={page.url.pathname.endsWith('/account/preferences')}>{messages.labels.preferences}</a>
+                            <a href={getAccountPath(page.params.lang, 'preferences')} class:active={page.url.pathname === getAccountPath(page.params.lang, 'preferences')}>{messages.labels.preferences}</a>
+
+                            <a href={getAccountPath(page.params.lang, 'bookmarks')} class:active={page.url.pathname === getAccountPath(page.params.lang, 'bookmarks')}>{messages.labels.bookmarks}</a>
+
+                            <a href={getAccountPath(page.params.lang, 'history')} class:active={page.url.pathname === getAccountPath(page.params.lang, 'history')}>{messages.labels.history}</a>
                         {:else}
                             <span class="disabled" title={messages.labels.completeProfileFirst}>{messages.labels.preferences}</span>
-                        {/if}
-
-                        {#if profileComplete}
-                            <a href={withBase(`/${page.params.lang}/account/bookmarks`)} class:active={page.url.pathname.endsWith('/account/bookmarks')}>{messages.labels.bookmarks}</a>
-                            <a href={withBase(`/${page.params.lang}/account/history`)} class:active={page.url.pathname.endsWith('/account/history')}>{messages.labels.history}</a>
                         {/if}
                     </nav>
 
@@ -193,10 +194,7 @@
                         {@render children()}
                     </div>
 
-                    <nav
-                        class="account-secondary-nav"
-                        aria-label="Account actions"
-                    >
+                    <nav class="account-secondary-nav" aria-label="Account actions">
                         {#if profile?.profile?.verified === false}
                             <div class="verification-section">
                                 <p>{messages.labels.verifyEmail}</p>
@@ -222,14 +220,7 @@
                             </div>
                         {/if}
 
-                        <a
-                            href={withBase(`/${page.params.lang}/account/delete-account`)}
-                            class:active={page.url.pathname.endsWith('/account/delete-account')}
-                            class="delete-account-link"
-                        >
-                            {messages.labels.deleteAccount}
-                        </a>
-
+                        <a href={getAccountPath(page.params.lang, 'deleteAccount')} class:active={page.url.pathname === getAccountPath(page.params.lang, 'deleteAccount')} class="delete-account-link">{messages.labels.deleteAccount}</a>
                         
                         <button type="button" class="logout-link" onclick={logout}>
                             {messages.labels.logout}

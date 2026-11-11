@@ -1,203 +1,292 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+    import { getContext, onMount } from 'svelte';
     import { page } from '$app/state';
-    import { loadPeachUser } from '$lib/sso/peach';
     import Eye from '$lib/components/icons/Eye.svelte';
     import EyeOff from '$lib/components/icons/EyeOff.svelte';
-    import { withBase } from '$lib/utils/paths';
 
-    let email = $state('');
-    let password = $state('');
+    // Email
+    let newEmail = $state('');
+    let emailPassword = $state('');
+    let emailMessage = $state('');
+    let updatingEmail = $state(false);
 
-    let checkingAuth = $state(true);
-    let loggingIn = $state(false);
-    let error = $state('');
+    // Password
+    let currentPassword = $state('');
+    let newPassword = $state('');
+    let passwordMessage = $state('');
+    let updatingPassword = $state(false);
 
-    let pu = $state<any>(null);
+    let showEmailPassword = $state(false);
+    let showCurrentPassword = $state(false);
+    let showNewPassword = $state(false);
 
-    let showPassword = $state(false);
-
-    const loginMessages = {
+    const accountMessages = {
         en: {
             labels: {
+                account: 'Edit account details',
                 email: 'Email address',
-                password: 'Password',
-                loading: 'Loading...',
-                login: 'Login',
-                loggingIn: 'Logging in...',
-                forgotPassword: 'Forgot your password?',
-                needAccount: 'Need an account?',
-                register: 'Signup',
-                enterEmail: 'Please enter your email address and password.',
-                invalidDetails: 'Invalid email address or password.',
-                errorLogin: 'Unable to initialise login.'
+                updateEmail: 'Update Email',
+                updatePassword: 'Update Password',
+                currentPassword: 'Current password',
+                newPassword: 'New password',
+                updating: 'Updating...'
+            },
+            password: {
+                required: 'Please enter your current and new password.',
+                changed: 'Password Changed!',
+                incorrect: 'Current Password is incorrect.',
+                weak: 'New Password is not strong enough.',
+                error: 'Unable to update password.'
+            },
+            email: {
+                required: 'Please enter an email address.',
+                passwordRequired: 'Please enter your current password.',
+                changed: 'Email Changed!',
+                verification: 'Email with verification link sent to new email address.',
+                taken: 'New Email already taken.',
+                incorrect: 'Current Password is incorrect.',
+                tooMany: 'Too many requests. Please try later.',
+                error: 'Unable to update email address.'
             }
         },
         ga: {
             labels: {
+                account: 'Athraigh do chuntas',
                 email: 'Seoladh ríomhphoist',
-                password: 'Pasfhocal',
-                loading: 'Ag lódáil...',
-                login: 'Logáil isteach',
-                loggingIn: 'Ag logáil isteach...',
-                forgotPassword: 'Pasfhocal dearmadta?',
-                needAccount: 'Cuntas uait?',
-                register: 'Cláraigh',
-                enterEmail: 'Cur isteach do seoladh rphost agus pasfhocal.',
-                invalidDetails: 'Invalid email address or password.',
-                errorLogin: 'Unable to initialise login.'
+                updateEmail: 'Athraigh Ríomhphost',
+                updatePassword: 'Athraigh Pasfhocal',
+                currentPassword: 'Pasfhocal reatha',
+                newPassword: 'Pasfhocal nua',
+                updating: 'Ag uasdhátú...'
+            },
+            password: {
+                required: 'Cuir isteach do phasfhocal reatha agus do phasfhocal nua, le do thoil.',
+                changed: 'Athraíodh an pasfhocal!',
+                incorrect: 'Tá an pasfhocal reatha mícheart.',
+                weak: 'Níl an pasfhocal nua sách láidir.',
+                error: 'Níorbh fhéidir an pasfhocal a athrú.'
+            },
+            email: {
+                required: 'Cuir isteach seoladh ríomhphoist, le do thoil.',
+                passwordRequired: 'Cuir isteach do phasfhocal reatha, le do thoil.',
+                changed: 'Athraíodh an seoladh ríomhphoist!',
+                verification: 'Seoladh ríomhphost le nasc fíoraithe chuig an seoladh ríomhphoist nua.',
+                taken: 'Tá an seoladh ríomhphoist nua in úsáid cheana féin.',
+                incorrect: 'Tá an pasfhocal reatha mícheart.',
+                tooMany: 'An iomarca iarratas. Bain triail eile as ar ball.',
+                error: 'Níorbh fhéidir an seoladh ríomhphoist a athrú.'
             }
         }
     };
 
-    const messages = $derived(loginMessages[page.params.lang === 'ga' ? 'ga' : 'en']);
+    const messages = $derived(
+        accountMessages[page.params.lang === 'ga' ? 'ga' : 'en']
+    );
 
-    onMount(async () => {
-        //console.log('LOGIN MOUNT', page.url.pathname);
-        try {
-            pu = await loadPeachUser();
-            //console.log('LOGIN PEACH LOADED');
+    const account = getContext<{
+        pu: any;
+        profile: any;
+    }>('tg4-account');
 
-            // Already logged in?
-            try {
-                await pu.isAuthorized();
-                //console.log('LOGIN: ALREADY LOGGED IN');
-
-                // If this succeeds, they're already logged in
-                window.location.href = withBase(`/${page.params.lang}/account/account/`);
-                return;
-
-            } catch {
-                // Not logged in - that's fine
-            }
-        } catch (err) {
-            console.error('Peach User error:', err);
-            error = messages.labels.errorLogin;
-        } finally {
-            checkingAuth = false;
-        }
+    onMount(() => {
+        newEmail = account.profile?.profile?.contactEmail ?? '';
     });
 
-    async function login() {
-        error = '';
+    async function changeEmail() {
+        emailMessage = '';
 
-        if (!email || !password) {
-            error = messages.labels.enterEmail;
+        if (!newEmail.trim()) {
+            emailMessage = messages.email.required;
             return;
         }
 
-        loggingIn = true;
+        if (!emailPassword) {
+            emailMessage = messages.email.passwordRequired;
+            return;
+        }
+
+        updatingEmail = true;
 
         try {
-            const response = await pu.login(email, password);
+            const response = await account.pu.changeEmail(newEmail.trim(), emailPassword);
 
-            //console.log('LOGIN RESPONSE:', response);
-
-            if (response.status !== 204) {
-                error = messages.labels.invalidDetails;
-                loggingIn = false;
-                return;
+            switch (response) {
+                case 200:
+                    emailMessage = messages.email.changed;
+                    emailPassword = '';
+                    break;
+                case 204:
+                    emailMessage = messages.email.verification;
+                    emailPassword = '';
+                    break;
+                case 400:
+                    emailMessage = messages.email.taken;
+                    break;
+                case 401:
+                    emailMessage = messages.email.incorrect;
+                    break;
+                case 429:
+                    emailMessage = messages.email.tooMany;
+                    break;
+                default:
+                    emailMessage = messages.email.error;
             }
-
-            //console.log('LOGIN SUCCESS');
-
-            try {
-                const profile = await pu.getCombinedSessionAndPreferenceProfile();
-
-                //console.log('PROFILE:', profile);
-            } catch (err) {
-                console.error('PROFILE ERROR:', err);
-            }
-
-            loggingIn = false;
-
-            window.location.href = withBase(`/${page.params.lang}/account/account/`);
-
         } catch (err) {
-            console.error('Login error:', err);
-            error = messages.labels.invalidDetails;
-            loggingIn = false;
+            console.error('Change email error:', err);
+            emailMessage = messages.email.error;
+        } finally {
+            updatingEmail = false;
+        }
+    }
+
+    async function changePassword() {
+        passwordMessage = '';
+
+        if (!currentPassword || !newPassword) {
+            passwordMessage = messages.password.required;
+            return;
+        }
+
+        updatingPassword = true;
+
+        try {
+            const response = await account.pu.updatePassword(
+                account.profile.profile.contactEmail,
+                newPassword,
+                currentPassword
+            );
+
+            switch (response) {
+                case 200:
+                case 204:
+                    passwordMessage = messages.password.changed;
+                    currentPassword = '';
+                    newPassword = '';
+                    break;
+                case 401:
+                    passwordMessage = messages.password.incorrect;
+                    break;
+                case 500:
+                    passwordMessage = messages.password.weak;
+                    break;
+                default:
+                    passwordMessage = messages.password.error;
+            }
+        } catch (err) {
+            console.error('Change password error:', err);
+            passwordMessage = messages.password.error;
+        } finally {
+            updatingPassword = false;
         }
     }
 </script>
 
-<div class="account-page">
-    {#if checkingAuth}
-        <p>{messages.labels.loading}</p>
-    {:else}
-        <p class="frmTitle">{messages.labels.login}</p>
+<div class="account-page-content">
+    <p class="frmTitle">{messages.labels.account}</p>
 
-        <form onsubmit={(event) => { event.preventDefault(); login(); }}>
+    <!-- EMAIL -->
+    <div class="account-section">
+        <form onsubmit={(event) => { event.preventDefault(); changeEmail(); }}>
             <div class="form-field">
-                <label for="loginEmail">{messages.labels.email}</label>
-                <input id="loginEmail" type="email" bind:value={email} autocomplete="email" />
+                <label for="email">{messages.labels.email}</label>
+                <input id="email" type="email" bind:value={newEmail} />
             </div>
+
             <div class="form-field">
-                <label for="loginPassword">{messages.labels.password}</label>
+                <label for="email-password">
+                    {messages.labels.currentPassword}
+                </label>
+
                 <div class="password-input">
-                    <input id="loginPassword" type={showPassword ? 'text' : 'password'} bind:value={password} autocomplete="current-password" />
-                    <button type="button" class="password-toggle" onclick={() => showPassword = !showPassword} aria-label={showPassword ? 'Hide password' : 'Show password'}>
-                    {#if showPassword}
-                        <EyeOff />
-                    {:else}
-                        <Eye />
-                    {/if}
+                    <input id="email-password" type={showEmailPassword ? 'text' : 'password'} bind:value={emailPassword} />
+
+                    <button type="button" class="password-toggle" onclick={() => showEmailPassword = !showEmailPassword} aria-label={showEmailPassword ? 'Hide password' : 'Show password'}>
+                        {#if showEmailPassword}
+                            <EyeOff />
+                        {:else}
+                            <Eye />
+                        {/if}
                     </button>
                 </div>
             </div>
+
             <div class="form-field">
-                <button type="submit" disabled={loggingIn}>{loggingIn ? messages.labels.loggingIn : messages.labels.login}</button>
-            </div>
-            <div class="form-field">
-                {#if error}
-                    <p class="error">{error}</p>
-                {/if}
+                <button type="submit" disabled={updatingEmail}>
+                    {updatingEmail ? messages.labels.updating : messages.labels.updateEmail}
+                </button>
             </div>
         </form>
 
-        <div class="account-links">
-            <a href={withBase(`/${page.params.lang}/account/forgot-password`)}>{messages.labels.forgotPassword}</a> | 
-                {messages.labels.needAccount}, <a href={withBase(`/${page.params.lang}/account/sign-up`)}>{messages.labels.register}</a>
-        </div>
-    {/if}
+        {#if emailMessage}
+            <p class="notification">{emailMessage}</p>
+        {/if}
+    </div>
+
+    <!-- PASSWORD -->
+    <div class="account-section">
+        <form onsubmit={(event) => { event.preventDefault(); changePassword(); }}>
+            <div class="form-field">
+                <label for="current-password">
+                    {messages.labels.currentPassword}
+                </label>
+
+                <div class="password-input">
+                    <input id="current-password" type={showCurrentPassword ? 'text' : 'password'} bind:value={currentPassword} />
+
+                    <button type="button" class="password-toggle" onclick={() => showCurrentPassword = !showCurrentPassword} aria-label={showCurrentPassword ? 'Hide password' : 'Show password'}>
+                        {#if showCurrentPassword}
+                            <EyeOff />
+                        {:else}
+                            <Eye />
+                        {/if}
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="new-password">
+                    {messages.labels.newPassword}
+                </label>
+
+                <div class="password-input">
+                    <input id="new-password" type={showNewPassword ? 'text' : 'password'} bind:value={newPassword} />
+
+                    <button type="button" class="password-toggle" onclick={() => showNewPassword = !showNewPassword} aria-label={showNewPassword ? 'Hide password' : 'Show password'}>
+                        {#if showNewPassword}
+                            <EyeOff />
+                        {:else}
+                            <Eye />
+                        {/if}
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <button type="submit" disabled={updatingPassword}>
+                    {updatingPassword ? messages.labels.updating : messages.labels.updatePassword}
+                </button>
+            </div>
+        </form>
+
+        {#if passwordMessage}
+            <p class="notification">{passwordMessage}</p>
+        {/if}
+    </div>
 </div>
 
 <style>
-.account-page {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: var(--genre-background);
+.account-section {
+    margin-bottom: 40px;
+}
+
+.account-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .form-field {
-    margin-bottom: 20px;
-}
-
-label {
-    display: block;
-    margin-bottom: 6px;
-}
-
-input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px;
-}
-
-.error {
-    display: block;
-    padding: 10px 20px;
-    background: var(--tg4-grey-2);
-    color: red;
-    border-radius: 0px;
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease;
-}
-
-.form-field {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .form-field input {
@@ -226,22 +315,14 @@ input {
     cursor: pointer;
 }
 
-.account-links {
-    margin-top: 1.5rem;
-    text-align: center;
-}
-
-.account-links > a {
-    display: inline-block;
-    margin-bottom: 1rem;
-}
-
-.account-links a {
-    text-decoration: underline;
-    text-underline-offset: 3px;
-}
-
-.account-links a:hover {
-    opacity: 1;
+.notification {
+    display: block;
+    padding: 10px 20px;
+    background: var(--tg4-grey-2);
+    color: white;
+    border-radius: 0px;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
 }
 </style>

@@ -102,6 +102,23 @@
     async function checkUserSession() {
         try {
             const pu = await loadPeachUser();
+
+            let authorized = false;
+
+            try {
+                authorized = (await pu.isAuthorized()) === true;
+            } catch {
+                authorized = false;
+            }
+
+            //console.log('NAVBAR AUTHORIZED:', authorized);
+
+            if (!authorized) {
+                isLoggedIn = false;
+                userInitials = '';
+                return;
+            }
+
             const result = await pu.getCombinedSessionAndPreferenceProfile();
 
             if (result?.profile?.verified === true) {
