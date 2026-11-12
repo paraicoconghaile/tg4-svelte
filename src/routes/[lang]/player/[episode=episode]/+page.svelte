@@ -228,6 +228,15 @@
 
         player.off('timeupdate');
         player.off('pause');
+
+        player.pause();
+        player.dispose();
+
+        activePlayer = null;
+
+        npawPlugin?.fireStop?.();
+        npawPlugin?.removeAdapter?.();
+        npawPlugin = null;
     });
 
     function getOtherImageUrl(data: any) {
