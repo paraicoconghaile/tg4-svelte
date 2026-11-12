@@ -24,9 +24,105 @@
     let historyAuthenticated = false;
     let pendingHistoryPosition: number | null = null;
     let historyVideoId: string | number | null = null;
-    
+
     let activePlayer: any = null;
     let currentVideoId = $state(data.video.videoId);
+
+    let npawPromise: Promise<void> | null = null;
+
+    function loadNpaw(): Promise<void> {
+        if ((window as any).youbora?.adapters?.BrightcoveVideojs) {
+            return Promise.resolve();
+        }
+
+        if (npawPromise) {
+            return npawPromise;
+        }
+
+        npawPromise = new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+
+            script.src = 'https://smartplugin.youbora.com/v6/js/adapters/videojs-brightcove/6.8.4/sp.min.js';
+
+            script.onload = () => {
+                console.log('VOD NPAW script loaded');
+                resolve();
+            };
+
+            script.onerror = () => {
+                npawPromise = null;
+                reject(new Error('Failed to load VOD NPAW'));
+            };
+
+            document.head.appendChild(script);
+        });
+
+        return npawPromise;
+    }
+
+    let npawPlugin: any = null;
+
+    async function initialiseNpaw(player: any) {
+        try {
+            await loadNpaw();
+
+            if (player.isDisposed?.()) return;
+
+            const youbora = (window as any).youbora;
+
+            if (!youbora?.adapters?.BrightcoveVideojs) {
+                console.error('NPAW Youbora adapter not available');
+                return;
+            }
+
+            npawPlugin?.fireStop?.();
+            npawPlugin?.removeAdapter?.();
+
+            npawPlugin = new youbora.Plugin({
+                accountCode: 'tg4prod',
+                username: 'TG4 Website',
+                'content.channel': 'TG4',
+                'content.isLive': false
+            });
+
+            npawPlugin.setAdapter(
+                new youbora.adapters.BrightcoveVideojs(player)
+            );
+
+            console.log('*** VOD NPAW INITIALISED ***');
+
+        } catch (error) {
+            console.error('VOD NPAW initialisation failed:', error);
+        }
+    }
+    
+    function updateNpawMetadata(player: any, video: any) {
+        if (!npawPlugin) {
+            console.warn('VOD NPAW plugin not available');
+            return;
+        }
+
+        const referenceId = video.referenceId;
+
+        npawPlugin.setOptions({
+            'content.id': referenceId,
+            'content.title': video.seriesTitle,
+            'content.episodeTitle': video.title,
+            'content.season': video.seriesNumber,
+            'content.program': video.episodeNumber,
+            'content.genre': video.categories?.[0]?.displayEn ?? '',
+            'content.customDimension.1': video.seriesCode,
+            'content.customDimension.2': video.prodCode
+        });
+
+        console.log('*** VOD NPAW METADATA UPDATED ***', {
+            referenceId,
+            seriesTitle: video.seriesTitle,
+            episodeTitle: video.title,
+            seriesCode: video.seriesCode,
+            prodCode: video.prodCode
+        });
+    }
 
     $effect(() => {
         const nextVideoId = data.video.videoId;
@@ -54,7 +150,7 @@
     const startAt = $derived(
         Math.max(0, Number(page.url.searchParams.get('startAt')) || 0)
     );
-    
+
     async function savePlaybackPosition(player: any) {
         if (!historyAuthenticated || historyVideoId == null) return;
 
@@ -108,7 +204,7 @@
             console.error('History authentication check failed:', error);
         }
     }
-
+    
     async function shouldShowAds(): Promise<boolean> {
         // Ads are only available to viewers in Ireland
         if (data.territory?.countryCode !== 'IE') {
@@ -174,6 +270,15 @@
             player.ready(async () => {
                 historyVideoId = data.video.videoId;
 
+                // Initialise VOD analytics
+                await initialiseNpaw(player);
+
+                if (player.isDisposed?.()) return;
+
+                if (npawPlugin) {
+                    updateNpawMetadata(player, data.video);
+                }
+
                 await checkHistoryAuthentication();
 
                 if (startAt > 0) {
@@ -181,6 +286,14 @@
                         player.currentTime(startAt);
                     });
                 }
+
+                /* const brightcoveVideo = player.mediainfo;
+
+                console.log('Brightcove VOD metadata:', {
+                    id: brightcoveVideo?.id,
+                    referenceId: brightcoveVideo?.referenceId,
+                    customFields: brightcoveVideo?.customFields
+                }); */
 
                 // Save playback position every 10 seconds
                 player.on('timeupdate', () => {
@@ -432,11 +545,7 @@
 
                         <h3>{ep.title}</h3>
 
-                        <p>
-                            {data.lang === 'ga'
-                                ? `Sraith ${ep.seriesNumber}, Eipeasóid ${ep.episodeNumber}`
-                                : `Series ${ep.seriesNumber}, Episode ${ep.episodeNumber}`}
-                        </p>
+                        <p>{data.lang === 'ga' ? `Sraith ${ep.seriesNumber}, Eipeasóid ${ep.episodeNumber}` : `Series ${ep.seriesNumber}, Episode ${ep.episodeNumber}`}</p>
                     </a>
                 {/each}
             </div>
@@ -513,17 +622,6 @@
 @media (max-width: 800px) {
     .episode-grid {
         grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 700px) {
-    .video-info {
-        flex-direction: column;
-    }
-
-    .bookmark {
-        align-self: flex-start;
-        margin-top: 15px;
     }
 }
 

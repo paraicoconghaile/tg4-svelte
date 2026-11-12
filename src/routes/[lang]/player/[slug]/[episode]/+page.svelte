@@ -277,7 +277,6 @@
 
                 if (npawPlugin) {
                     updateNpawMetadata(player, data.video);
-                    console.log('NPAW configured content ID:', npawPlugin.getOption('content.id'));
                 }
 
                 await checkHistoryAuthentication();
