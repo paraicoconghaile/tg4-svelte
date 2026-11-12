@@ -60,6 +60,7 @@ export async function load({ params }) {
 
     const video = {
         videoId: rawVideo.video.providerId,
+        referenceId: rawVideo.video.referenceId,
         title: rawVideo.video.customFields?.title ?? rawVideo.title,
         seriesTitle: rawVideo.video.customFields.seriestitle,
         seriesNumber: rawVideo.video.customFields?.series ?? rawVideo.video.seasonNumber,
@@ -79,10 +80,7 @@ export async function load({ params }) {
 
     const rawEpisodes =
         video.slug && video.seriesNumber != null
-        ? await getSeriesVideos(
-            video.slug,
-            Number(video.seriesNumber)
-        )
+        ? await getSeriesVideos(video.slug, Number(video.seriesNumber))
         : null;
 
     //console.log('RAW EPISODES:', JSON.stringify(rawEpisodes, null, 2));
