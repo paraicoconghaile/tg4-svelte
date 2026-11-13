@@ -203,7 +203,7 @@
             const isNewProgramme = programmeKey !== currentProgrammeKey;
 
             if (isNewProgramme) {
-                /* */ console.log('*** NEW TG4 PROGRAMME ***');
+                /* console.log('*** NEW TG4 PROGRAMME ***');
 
                 console.log({
                     programmeKey,
@@ -213,7 +213,7 @@
                     title: metadata.prog_title,
                     episodeNumber: metadata.episode_number,
                     seriesNumber: metadata.series_number
-                });
+                }); */
 
                 currentProgrammeKey = programmeKey;
 
@@ -237,21 +237,21 @@
         for (let i = 0; i < textTracks.length; i++) {
             const track = textTracks[i];
 
-            /* */ console.log('TRACK', i, {
+            /* console.log('TRACK', i, {
                 kind: track.kind,
                 label: track.label,
                 language: track.language,
                 mode: track.mode,
                 cues: track.cues?.length
-            });
+            }); */
 
             if (track.kind === 'metadata' && track.label === 'Timed Metadata') {
-                console.log('*** FOUND TG4 TIMED METADATA TRACK ***');
+                //console.log('*** FOUND TG4 TIMED METADATA TRACK ***');
 
                 track.mode = 'hidden';
 
                 track.addEventListener('cuechange', () => {
-                    console.log('*** TG4 ID3 CUE CHANGE ***');
+                    //console.log('*** TG4 ID3 CUE CHANGE ***');
                     processMetadataTrack(track);
                 });
 
@@ -260,14 +260,14 @@
             }
         }
 
-        console.log('Timed Metadata track not found');
+        //console.log('Timed Metadata track not found');
     }
 
     function clearProgrammeMetadata() {
         currentProgramme = null;
         currentProgrammeKey = '';
 
-        console.log('*** CLEARED TG4 PROGRAMME METADATA ***');
+        //console.log('*** CLEARED TG4 PROGRAMME METADATA ***');
     }
 
     async function initialiseNpaw() {
@@ -318,7 +318,7 @@
             'content.customDimension.2': metadata.pcode
         });
 
-        /* */ console.log('*** NPAW METADATA UPDATED ***', {
+        /* console.log('*** NPAW METADATA UPDATED ***', {
             id: metadata.pcode,
             title: metadata.series_title,
             episodeTitle: metadata.title,
@@ -327,7 +327,7 @@
             genre: metadata.genre,
             scode: metadata.scode,
             pcode: metadata.pcode
-        });
+        }); */
     }
 
     function updateNielsenMetadata(metadata: LiveProgramme) {
@@ -341,7 +341,7 @@
             const previousPlayhead = getNielsenPlayhead();
 
             if (previousPlayhead !== null) {
-                console.log('*** NIELSEN STOP ***', previousPlayhead);
+                //console.log('*** NIELSEN STOP ***', previousPlayhead);
 
                 nSdkInstance.ggPM('stop', previousPlayhead);
             }
@@ -365,11 +365,11 @@
                 player.currentTime()
             );
 
-            /* */ console.log('*** NIELSEN DVR REFERENCE ***', {
+            /* console.log('*** NIELSEN DVR REFERENCE ***', {
                 refDate: metadata.ref_date,
                 refUnixTime: nielsenRefUnixTime,
                 refPlayerTime: nielsenRefPlayerTime
-            });
+            }); */
         }
 
         nielsenData = {
@@ -386,7 +386,7 @@
             segC: 'TG4 Player'
         };
 
-        console.log('*** NIELSEN METADATA UPDATED ***', nielsenData);
+        //console.log('*** NIELSEN METADATA UPDATED ***', nielsenData);
 
         nSdkInstance.ggPM('loadMetadata', nielsenData);
 
@@ -460,14 +460,14 @@
         nielsenEnded = true;
         nielsenLoaded = false;
 
-        console.log('*** NIELSEN END ***', playhead);
+        //console.log('*** NIELSEN END ***', playhead);
     }
 
     async function initialisePlayer() {
         const thisInit = ++initId;
 
         if (player) {
-            console.log('Disposing previous Brightcove player:', data.channel);
+            //console.log('Disposing previous Brightcove player:', data.channel);
 
             endNielsen();
 
@@ -517,7 +517,7 @@
             return;
         }
 
-        console.log('Initialising Brightcove:', data.channel);
+        //console.log('Initialising Brightcove:', data.channel);
 
         // Nielsen SDK - Static Queue
         if (!nSdkInstance) {
@@ -581,8 +581,8 @@
                 return;
             }
             
-            /* */ console.log('Brightcove player ready:', data.channel);
-            console.log('ALL TEXT TRACKS:', player.textTracks());
+            /* console.log('Brightcove player ready:', data.channel);
+            console.log('ALL TEXT TRACKS:', player.textTracks()); */
 
             clearProgrammeMetadata();
             initialiseNpaw();
@@ -590,34 +590,34 @@
             startNielsenPlayhead();
 
             player.on('seeking', () => {
-                console.log('*** DVR SEEKING — CLEARING PROGRAMME METADATA ***');
+                //console.log('*** DVR SEEKING — CLEARING PROGRAMME METADATA ***');
                 currentProgramme = null;
                 currentProgrammeKey = '';
             });
 
             player.on('loadedmetadata', () => {
-                console.log('Live stream loadedmetadata');
+                //console.log('Live stream loadedmetadata');
                 attachId3Track();
                 const textTracks = player.textTracks();
-                console.log('Text tracks:', textTracks);
+                //console.log('Text tracks:', textTracks);
 
                 for (let i = 0; i < textTracks.length; i++) {
                     const track = textTracks[i];
 
-                    /* */ console.log('Text track:', {
+                    /* console.log('Text track:', {
                         index: i,
                         kind: track.kind,
                         label: track.label,
                         language: track.language,
                         mode: track.mode
-                    });
+                    }); */
 
                     track.addEventListener('cuechange', () => {
-                        console.log('Cue change:', {
+                        /* console.log('Cue change:', {
                             kind: track.kind,
                             label: track.label,
                             activeCues: track.activeCues
-                        });
+                        }); */
                     });
                 }
             });
@@ -641,7 +641,7 @@
             });
 
             player.on('cuechange', (event: any) => {
-                console.log('Cue change:', event);
+                //console.log('Cue change:', event);
             });
 
             if (data.channel !== 'TG4PLUSONE') {
@@ -660,14 +660,14 @@
                 const seekableStart = liveTracker.seekableStart();
                 const seekableEnd = liveTracker.seekableEnd();
 
-                /* */ console.log(
+                /* console.log(
                     'LiveTracker values:',
                     {
                         liveCurrentTime,
                         seekableStart,
                         seekableEnd
                     }
-                );
+                ); */
 
                 if (liveCurrentTime === 0 || seekableEnd === 0) {
                     setTimeout(checkLiveTracker, 500);
@@ -682,10 +682,10 @@
                     return;
                 }
 
-                console.log('TG4+1 waiting for player to start before seeking:', targetTime);
+                //console.log('TG4+1 waiting for player to start before seeking:', targetTime);
 
                 const seekToOffset = () => {
-                    console.log('Seeking TG4+1 to:', targetTime);
+                    //console.log('Seeking TG4+1 to:', targetTime);
                     player.currentTime(targetTime);
                 };
 
@@ -744,7 +744,7 @@
         endNielsen();
 
         if (player) {
-            console.log('Disposing Brightcove player');
+            //console.log('Disposing Brightcove player');
 
             try {
                 player.dispose();

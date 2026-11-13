@@ -46,7 +46,7 @@
             script.src = 'https://smartplugin.youbora.com/v6/js/adapters/videojs-brightcove/6.8.4/sp.min.js';
 
             script.onload = () => {
-                console.log('VOD NPAW script loaded');
+                //console.log('VOD NPAW script loaded');
                 resolve();
             };
 
@@ -127,7 +127,7 @@
         nielsenEnded = false;
         lastNielsenPlayhead = null;
 
-        console.log('*** VOD NIELSEN CONTENT LOADED ***', metadata);
+        //console.log('*** VOD NIELSEN CONTENT LOADED ***', metadata);
     }
 
     async function initialiseNpaw(player: any) {
@@ -183,13 +183,13 @@
             'content.customDimension.2': video.prodCode
         });
 
-        console.log('*** VOD NPAW METADATA UPDATED ***', {
+        /* console.log('*** VOD NPAW METADATA UPDATED ***', {
             referenceId,
             seriesTitle: video.seriesTitle,
             episodeTitle: video.title,
             seriesCode: video.seriesCode,
             prodCode: video.prodCode
-        });
+        }); */
     }
 
     $effect(() => {
@@ -338,17 +338,17 @@
             player.ready(async () => {
                 if (player.isDisposed?.()) return;
 
-                console.log('*** BRIGHTCOVE ADS DEBUG ***', {
+                /* console.log('*** BRIGHTCOVE ADS DEBUG ***', {
                     playerID,
                     ads: !!player.ads,
                     ssai: typeof player.ssai,
                     ima3: !!player.ima3,
                     currentTime: player.currentTime(),
                     duration: player.duration()
-                });
+                }); */
 
                 // Temporary debugging for Nielsen advertisement tracking
-                const adEvents = [
+                /* const adEvents = [
                     'ads-ad-started',
                     'ads-ad-ended',
                     'ads-adbreak-started',
@@ -367,18 +367,18 @@
                             inAdMode: player.ads?.isInAdMode?.() ?? false
                         });
                     });
-                }
+                } */
 
                 player.on('ads-ad-ended', () => {
                     setTimeout(() => {
                         if (player.isDisposed?.()) return;
 
-                        console.log('*** SSAI STATE AFTER AD ***', {
+                        /* console.log('*** SSAI STATE AFTER AD ***', {
                             currentTime: player.currentTime(),
                             inAdMode: player.ads?.isInAdMode?.(),
                             paused: player.paused(),
                             ended: player.ended()
-                        });
+                        }); */
                     }, 500);
                 });
 
@@ -420,12 +420,12 @@
                     const inAdMode = player.ads?.isInAdMode?.() ?? false;
 
                     if (inAdMode !== lastAdMode) {
-                        console.log('*** BRIGHTCOVE MODE CHANGED ***', {
+                        /* console.log('*** BRIGHTCOVE MODE CHANGED ***', {
                             from: lastAdMode,
                             to: inAdMode,
                             currentTime: player.currentTime(),
                             ended: player.ended()
-                        });
+                        }); */
 
                         lastAdMode = inAdMode;
                     }
@@ -445,7 +445,7 @@
                         nSdkInstance.ggPM('setPlayheadPosition', playbackPosition);
                         lastNielsenPlayhead = playbackPosition;
 
-                        console.log('*** VOD NIELSEN PLAYHEAD ***', playbackPosition);
+                        //console.log('*** VOD NIELSEN PLAYHEAD ***', playbackPosition);
                     }
 
                     if (
@@ -460,7 +460,7 @@
                 player.on('waiting', () => {
                     const videoElement = player.el()?.querySelector('video');
 
-                    console.log('*** BRIGHTCOVE WAITING ***', {
+                    /* console.log('*** BRIGHTCOVE WAITING ***', {
                         currentTime: player.currentTime(),
                         duration: player.duration(),
                         remaining: player.duration() - player.currentTime(),
@@ -471,7 +471,7 @@
                         nativeDuration: videoElement?.duration,
                         nativeEnded: videoElement?.ended,
                         nativeReadyState: videoElement?.readyState
-                    });
+                    }); */
 
                     const duration = player.duration();
                     const currentTime = player.currentTime();
@@ -509,18 +509,18 @@
                 });
 
                 player.on('error', () => {
-                    console.log('*** BRIGHTCOVE PLAYER ERROR ***', {
+                    /* console.log('*** BRIGHTCOVE PLAYER ERROR ***', {
                         error: player.error(),
                         currentTime: player.currentTime(),
                         duration: player.duration(),
                         paused: player.paused(),
                         ended: player.ended(),
                         inAdMode: player.ads?.isInAdMode?.() ?? false
-                    });
+                    }); */
 
                     const ssai = player.ssai?.();
 
-                    console.log('*** BRIGHTCOVE PLAYER ERROR ***', {
+                    /* console.log('*** BRIGHTCOVE PLAYER ERROR ***', {
                         error: player.error(),
                         currentTime: player.currentTime(),
                         duration: player.duration(),
@@ -530,7 +530,7 @@
                         ssaiState: ssai?.state,
                         ssaiAdPlaying: ssai?.adPlaying,
                         remaining: player.duration() - player.currentTime()
-                    });
+                    }); */
                 });
 
                 // Save immediately when playback pauses
@@ -552,26 +552,26 @@
                         nielsenEnded = true;
                         nielsenLoaded = false;
 
-                        console.log('*** VOD NIELSEN ENDED ***');
+                        //console.log('*** VOD NIELSEN ENDED ***');
                     }
 
                     void savePlaybackPosition(player);
 
-                    console.log('*** VOD PLAYBACK COMPLETED ***', {
+                    /* console.log('*** VOD PLAYBACK COMPLETED ***', {
                         currentTime: player.currentTime(),
                         duration: player.duration(),
                         inAdMode: player.ads?.isInAdMode?.() ?? false
-                    });
+                    }); */
                 }
 
                 player.on('ended', () => {
                     //void savePlaybackPosition(player);
 
-                    console.log('*** BRIGHTCOVE ENDED ***', {
+                    /* console.log('*** BRIGHTCOVE ENDED ***', {
                         currentTime: player.currentTime(),
                         duration: player.duration(),
                         inAdMode: player.ads?.isInAdMode?.() ?? false
-                    });
+                    }); */
 
                     completePlayback();
                 });
@@ -709,7 +709,7 @@
     <section class="episodes">
         <section class="video-info">
             <div class="video-details">
-                <h1>{data.video.seriesTitle}.+.+.***</h1>
+                <h1>{data.video.seriesTitle}</h1>
 
                 <h2>
                     {data.lang === 'ga' ? 'Seasúr' : 'Season'}
