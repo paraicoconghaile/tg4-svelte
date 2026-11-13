@@ -226,7 +226,7 @@
                 updateNielsenMetadata(metadata);
                 updateNpawMetadata(metadata);
             } else {
-                console.log('TG4 programme metadata update:', programmeKey);
+                //console.log('TG4 programme metadata update:', programmeKey);
             }
         }
     }
@@ -292,7 +292,7 @@
                 new youbora.adapters.BrightcoveVideojs(player)
             );
 
-            console.log('*** NPAW INITIALISED ***');
+            //console.log('*** NPAW INITIALISED ***');
 
         } catch (error) {
             console.error('NPAW initialisation failed:', error);
