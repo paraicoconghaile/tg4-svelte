@@ -24,6 +24,39 @@ export type Tg4ApiResponse<T> = {
     territory: Tg4Territory;
 };
 
+export type Tg4VideoResponse = {
+    title?: string;
+    categories?: unknown[];
+    series?: {
+        slug?: string;
+    };
+    video: {
+        providerId: string;
+        referenceId?: string;
+        customFields?: {
+            title?: string;
+            seriestitle?: string;
+            series?: string | number;
+            episode?: string | number;
+            p_prodcode?: string;
+            s_prodcode?: string;
+        };
+        seasonNumber?: number;
+        descriptionGa?: string;
+        descriptionEn?: string;
+        image?: {
+            large?: string;
+            original?: string;
+            xLarge?: string;
+        };
+        poster?: string;
+        duration?: number;
+        airDate?: string;
+        subtitles?: unknown;
+        contentRating?: string;
+    };
+};
+
 export class Tg4ApiError extends Error {
     constructor(
         public status: number,
@@ -184,14 +217,13 @@ export async function getVideo(videoId: string) {
 export async function getVideoWithTerritory(videoId: string) {
     const url = `https://api.tg4dev.com/api/videos/${videoId}`;
 
-    return fetchTg4Api(url, {
+    return fetchTg4Api<Tg4VideoResponse>(url, {
         headers: {
             'Content-Type': 'application/json',
             'x-api-key': API_KEY
         }
     });
 }
-
 
 export async function getSeries(slug: string) {
     const url = `https://api.tg4dev.com/api/series/${encodeURIComponent(slug)}`;
