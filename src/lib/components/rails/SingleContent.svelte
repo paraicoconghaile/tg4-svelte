@@ -10,34 +10,33 @@
     console.log(JSON.stringify(rail, null, 2));
     console.log('================================'); */
 
-    const item = rail.items?.[0];
+    let item = $derived(rail.items?.[0]);
 
-    let image = '';
-    let link = '#';
-    let displayTitle = '';
+    let image = $derived(
+        item?.type === 'VIDEO'
+            ? item.video?.image?.xLarge
+                ?? item.video?.image?.large
+                ?? item.video?.poster
+                ?? ''
+            : item?.series?.mainImage?.xLarge
+                ?? item?.series?.mainImage?.large
+                ?? item?.series?.poster
+                ?? ''
+    );
 
-    if (item?.type === 'VIDEO' && item.video) {
-        const video = item.video;
+    let link = $derived(
+        item?.type === 'VIDEO'
+            ? `/${isIrish ? 'ga' : 'en'}/player/${item.video?.vid}`
+            : item?.type === 'SERIES'
+                ? `/${isIrish ? 'ga' : 'en'}/player/${item.series?.slug}`
+                : '#'
+    );
 
-        image = video.image?.xLarge
-            ?? video.image?.large
-            ?? video.poster
-            ?? '';
-
-        link = `/${isIrish ? 'ga' : 'en'}/player/${video.vid}`;
-        displayTitle = video.displayTitle ?? '';
-
-    } else if (item?.type === 'SERIES' && item.series) {
-        const series = item.series;
-
-        image = series.mainImage?.xLarge
-            ?? series.mainImage?.large
-            ?? series.poster
-            ?? '';
-
-        link = `/${isIrish ? 'ga' : 'en'}/player/${series.slug}`;
-        displayTitle = series.name ?? '';
-    }
+    let displayTitle = $derived(
+        item?.type === 'VIDEO'
+            ? item.video?.displayTitle ?? ''
+            : item?.series?.name ?? ''
+    );
 </script>
 
 <section class="single-content">

@@ -31,6 +31,152 @@
 
     let npawPromise: Promise<void> | null = null;
 
+    let peachPromise: Promise<void> | null = null;
+    let peachCollector: any = null;
+
+    function loadPeach(): Promise<void> {
+        if ((window as any).PeachCollector) {
+            return Promise.resolve();
+        }
+
+        if (peachPromise) {
+            return peachPromise;
+        }
+
+        peachPromise = new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+
+            script.src = 'https://peach-static.ebu.io/peach-collector.min.js';
+            script.async = true;
+
+            script.onload = () => {
+                console.log('*** EBU PEACH SDK LOADED ***');
+                resolve();
+            };
+
+            script.onerror = () => {
+                peachPromise = null;
+                reject(new Error('Failed to load EBU PEACH Collector'));
+            };
+
+            document.head.appendChild(script);
+        });
+
+        return peachPromise;
+    }
+
+    async function initialisePeach() {
+        try {
+            await loadPeach();
+
+            if (peachCollector) return;
+
+            const PeachCollector = (window as any).PeachCollector;
+
+            if (!PeachCollector) {
+                console.error('EBU PEACH Collector not available');
+                return;
+            }
+
+            peachCollector = new PeachCollector(window);
+            peachCollector.enableTracking();
+
+            peachCollector.init(
+                [
+                    {
+                        sitekey: 'ietg400000000041',
+                        payload_func: (payload: any) => {
+                            payload.client.country_code = data.territory?.countryCode || '';
+                            payload.client.city_name = data.territory?.city || '';
+                            payload.client.device.screen_size = `${window.screen.availWidth}x${window.screen.availHeight}`;
+                            return payload;
+                        }
+                    }
+                ],
+                'TG4 Website'
+            );
+
+            peachCollector.sendPageViewEvent();
+
+            console.log('*** EBU PEACH INITIALISED ***');
+
+        } catch (error) {
+            console.error('EBU PEACH initialisation failed:', error);
+        }
+    }
+
+    function initialisePeachMedia(player: any, video: any) {
+        if (!peachCollector || player.isDisposed?.()) return;
+
+        const videoElement = player.el()?.querySelector('video');
+
+        if (!videoElement) {
+            console.error('EBU PEACH video element not found');
+            return;
+        }
+
+        const component = peachCollector.EventContextComponent(
+            'player',
+            'TG4 Player',
+            ''
+        );
+
+        const context = peachCollector.mediaContext(
+            video.referenceId,
+            'video',
+            null,
+            document.referrer,
+            null,
+            component
+        );
+
+        context.setCustomField('source', 'TG4 Vod');
+        context.setCustomField('referrer', 'TG4');
+
+        const metadata = peachCollector.EventMetadata(
+            'video',
+            'ondemand',
+            video.prodCode,
+            video.seriesCode,
+            Number(video.duration) || 0
+        );
+
+        metadata.setCustomField('show title', video.seriesTitle || '');
+        metadata.setCustomField('genre', video.categories?.[0]?.displayEn || '');
+        metadata.setCustomField('episode title', video.title || '');
+        metadata.setCustomField('episode date', video.airDate || '');
+
+        console.log('*** EBU PEACH MEDIA METADATA READY ***', {
+            referenceId: video.referenceId,
+            seriesTitle: video.seriesTitle,
+            episodeTitle: video.title,
+            seriesCode: video.seriesCode,
+            prodCode: video.prodCode,
+            duration: video.duration
+        });
+
+        const extendedEventConfig = {
+            media_heartbeat: {
+                heartbeat_interval: 30
+            },
+            media_seek: true,
+            media_play: true,
+            media_pause: true,
+            media_stop: true
+        };
+
+        peachCollector.trackMediaEvents(
+            videoElement,
+            video.referenceId,
+            context,
+            null,
+            metadata,
+            extendedEventConfig
+        );
+
+        console.log('*** EBU PEACH MEDIA TRACKING INITIALISED ***');
+    }
+
     function loadNpaw(): Promise<void> {
         if ((window as any).youbora?.adapters?.BrightcoveVideojs) {
             return Promise.resolve();
@@ -384,8 +530,15 @@
 
                 historyVideoId = data.video.videoId;
 
+                // Initialise EBU PEACH Collector
+                await initialisePeach();
+
+                if (player.isDisposed?.()) return;
+
                 // Initialise Nielsen VOD
                 initialiseNielsen();
+
+                initialisePeachMedia(player, data.video);
 
                 // Load Nielsen metadata when content starts playing
                 player.one('playing', () => {

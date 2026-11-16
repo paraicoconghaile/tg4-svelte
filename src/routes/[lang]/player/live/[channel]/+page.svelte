@@ -222,7 +222,7 @@
             const isNewProgramme = programmeKey !== currentProgrammeKey;
 
             if (isNewProgramme) {
-                /* console.log('*** NEW TG4 PROGRAMME ***', {
+                /* */ console.log('*** NEW TG4 PROGRAMME ***', {
                     programmeKey,
                     scode: metadata.scode,
                     pcode: metadata.pcode,
@@ -230,7 +230,7 @@
                     title: metadata.prog_title,
                     episodeNumber: metadata.episode_number,
                     seriesNumber: metadata.series_number
-                }); */
+                });
 
                 currentProgrammeKey = programmeKey;
                 currentProgramme = metadata;
@@ -336,7 +336,7 @@
             'content.customDimension.2': metadata.pcode
         });
 
-        /* console.log('*** NPAW METADATA UPDATED ***', {
+        /* */ console.log('*** NPAW METADATA UPDATED ***', {
             id: metadata.pcode,
             title: metadata.series_title,
             episodeTitle: metadata.prog_title,
@@ -345,7 +345,7 @@
             genre: metadata.genre,
             scode: metadata.scode,
             pcode: metadata.pcode
-        }); */
+        });
     }
 
     function updateNielsenMetadata(metadata: LiveProgramme) {
@@ -398,7 +398,7 @@
             segC: 'TG4 Player'
         };
 
-        //console.log('*** NIELSEN METADATA UPDATED ***', nielsenData);
+        console.log('*** NIELSEN METADATA UPDATED ***', nielsenData);
 
         nSdkInstance.ggPM('loadMetadata', nielsenData);
 
