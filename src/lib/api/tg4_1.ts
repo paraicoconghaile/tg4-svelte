@@ -323,7 +323,10 @@ export async function getCurrentEPG() {
         );
     }
 
-    return response.json();
+    const territory = getTg4Territory(response);
+    const epg = await response.json();
+
+    return { epg, territory };
 }
 
 export async function getCategoryRails(category: string) {

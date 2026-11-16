@@ -9,6 +9,24 @@
     let stream = $state<any>(null);
     let liveStreams = $state<any[]>([]);
 
+    let territory = $state<{countryCode: string | null;} | null>(null);
+
+    async function loadTerritory() {
+        try {
+            const response = await fetch(withBase('/api/territory'));
+
+            if (!response.ok) {
+                throw new Error(`Territory request failed: ${response.status}`);
+            }
+
+            territory = await response.json();
+
+            //console.log('LIVE TERRITORY:', territory);
+        } catch (error) {
+            console.error('Failed to load territory:', error);
+        }
+    }
+
     async function refreshEPG() {
         try {
             const response = await fetch(withBase('/api/epg'));
@@ -37,6 +55,7 @@
     }
 
     onMount(() => {
+        loadTerritory();
         refreshEPG();
         const interval = setInterval(refreshEPG, 60_000);
         return () => clearInterval(interval);
@@ -78,7 +97,7 @@
             script.src = 'https://smartplugin.youbora.com/v6/js/adapters/videojs-brightcove/6.8.4/sp.min.js';
 
             script.onload = () => {
-                console.log('NPAW script loaded');
+                //console.log('NPAW script loaded');
                 resolve();
             };
 
@@ -203,9 +222,7 @@
             const isNewProgramme = programmeKey !== currentProgrammeKey;
 
             if (isNewProgramme) {
-                /* console.log('*** NEW TG4 PROGRAMME ***');
-
-                console.log({
+                /* console.log('*** NEW TG4 PROGRAMME ***', {
                     programmeKey,
                     scode: metadata.scode,
                     pcode: metadata.pcode,
@@ -216,6 +233,7 @@
                 }); */
 
                 currentProgrammeKey = programmeKey;
+                currentProgramme = metadata;
 
                 /*  Programme transition:
                 * 1. Nielsen STOP previous programme
@@ -310,7 +328,7 @@
         plugin.setOptions({
             'content.id': metadata.pcode,
             'content.title': metadata.series_title,
-            'content.episodeTitle': metadata.title,
+            'content.episodeTitle': metadata.prog_title,
             'content.season': metadata.series_number,
             'content.program': metadata.episode_number,
             'content.genre': metadata.genre,
@@ -321,7 +339,7 @@
         /* console.log('*** NPAW METADATA UPDATED ***', {
             id: metadata.pcode,
             title: metadata.series_title,
-            episodeTitle: metadata.title,
+            episodeTitle: metadata.prog_title,
             season: metadata.series_number,
             episode: metadata.episode_number,
             genre: metadata.genre,
@@ -349,12 +367,7 @@
 
         const length = metadata.full_dur_frames ? Math.round(metadata.full_dur_frames / 25) : 0;
 
-        const airdate = metadata.start_date_time
-            ? metadata.start_date_time
-                .split("-").join("")
-                .replace("T", " ")
-                .split(".")[0]
-            : '';
+        const airdate = metadata.start_date_time ? metadata.start_date_time.split("-").join("").replace("T", " ").split(".")[0] : '';
 
         /* Establish the DVR reference for this programme. ref_date is the real-world time represented by the current Brightcove DVR position. */
 
@@ -376,13 +389,12 @@
             type: 'content',
             assetid: metadata.pcode,
             program: metadata.series_title || '',
-            title: metadata.title || '',
+            title: metadata.prog_title || '',
             length: length,
             airdate: airdate,
             isfullepisode: 'y',
             adloadtype: '1',
-            /* segB: getCookie("GeoCountry") || '', */
-            segB: '',
+            segB: territory?.countryCode || '',
             segC: 'TG4 Player'
         };
 
@@ -568,10 +580,7 @@
                 }
             }(window, "NOLBUNDLE");
 
-            nSdkInstance = (window as any).NOLBUNDLE.nlsQ(
-                "PFB9C2DE1-27DD-4852-8460-20BEB7AF4C96",
-                "TG4 Beo"
-            );
+            nSdkInstance = (window as any).NOLBUNDLE.nlsQ("PFB9C2DE1-27DD-4852-8460-20BEB7AF4C96", "TG4 Beo");
         }
 
         player = bc(video);
@@ -622,22 +631,8 @@
                 }
             });
 
-            /* player.on('timeupdate', () => {
-                if (!nielsenLoaded || nielsenEnded) {
-                    return;
-                }
-
-                const playhead = getNielsenPlayhead();
-
-                if (playhead === null) {
-                    return;
-                }
-
-                nSdkInstance.ggPM('setPlayheadPosition', playhead);
-            }); */
-
             player.on('metadata', (event: any) => {
-                console.log('ID3 metadata event:', event);
+                //console.log('ID3 metadata event:', event);
             });
 
             player.on('cuechange', (event: any) => {
@@ -799,7 +794,7 @@
                     <h2>{currentProgramme.prog_title}</h2>
                 {/if}
 
-                <p>{currentProgramme.scode} / {currentProgramme.pcode}</p>
+                <!-- <p>{currentProgramme.scode} / {currentProgramme.pcode}</p> -->
 
                 <p>S{currentProgramme.series_number} E{currentProgramme.episode_number}</p>
             </div>
