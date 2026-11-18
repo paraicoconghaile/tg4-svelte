@@ -115,31 +115,13 @@
             return;
         }
 
-        const component = peachCollector.EventContextComponent(
-            'player',
-            'TG4 Player',
-            ''
-        );
-
-        const context = peachCollector.mediaContext(
-            video.referenceId,
-            'video',
-            null,
-            document.referrer,
-            null,
-            component
-        );
+        const component = peachCollector.EventContextComponent('player', 'TG4 Player', '');
+        const context = peachCollector.mediaContext(video.referenceId, 'video', null, document.referrer, null, component);
 
         context.setCustomField('source', 'TG4 Vod');
         context.setCustomField('referrer', 'TG4');
 
-        const metadata = peachCollector.EventMetadata(
-            'video',
-            'ondemand',
-            video.prodCode,
-            video.seriesCode,
-            Number(video.duration) || 0
-        );
+        const metadata = peachCollector.EventMetadata('video', 'ondemand', video.prodCode, video.seriesCode, Number(video.duration) || 0);
 
         metadata.setCustomField('show title', video.seriesTitle || '');
         metadata.setCustomField('genre', video.categories?.[0]?.displayEn || '');

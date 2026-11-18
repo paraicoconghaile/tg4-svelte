@@ -39,6 +39,7 @@
     display: grid;
     grid-template-columns: 1fr repeat(4, 177px);
     gap: 5px;
+    margin-bottom: 5px;
 }
 
 .intro, .category {

@@ -95,6 +95,7 @@
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
     gap: 5px;
+    margin-bottom: 5px;
 }
 
 /* Background glyph */
@@ -103,18 +104,14 @@
     inset: 0;
     z-index: 2;
     pointer-events: none;
-
     background-color: var(--glyph-color, transparent);
 
     -webkit-mask-image: var(--glyph-url);
     mask-image: var(--glyph-url);
-
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
-
     -webkit-mask-size: auto 100%;
     mask-size: auto 100%;
-
     -webkit-mask-position: right center;
     mask-position: right center;
 }
@@ -147,6 +144,16 @@
 .glyph-top-middle {
     -webkit-mask-position: center top;
     mask-position: center top;
+}
+
+.glyph-top-left {
+    -webkit-mask-position: left top;
+    mask-position: left top;
+}
+
+.glyph-top-right {
+    -webkit-mask-position: right top;
+    mask-position: right top;
 }
 
 .intro,

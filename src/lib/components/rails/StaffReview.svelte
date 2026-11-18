@@ -110,6 +110,7 @@
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 5px;
+    margin-bottom: 5px;
 }
 
 .intro {

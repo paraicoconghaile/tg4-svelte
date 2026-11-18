@@ -93,17 +93,9 @@
         console.log('Glyph position:', glyphPosition);
     }); */
 
-    let glyphUrl = $derived(
-        rail.backgroundGlyph
-            ? railGlyphs[rail.backgroundGlyph]
-            : undefined
-    );
+    let glyphUrl = $derived(rail.backgroundGlyph ? railGlyphs[rail.backgroundGlyph] : undefined);
 
-    let glyphPosition = $derived(
-        (rail.backgroundGlyphPosition ?? 'BOTTOM_MIDDLE')
-            .toLowerCase()
-            .replaceAll('_', '-')
-    );
+    let glyphPosition = $derived((rail.backgroundGlyphPosition ?? 'BOTTOM_MIDDLE').toLowerCase().replaceAll('_', '-'));
 
     /* console.log('========== CARD RAIL JSON ==========');
     console.log("Card Rail Data:", JSON.stringify(rail, null, 2));
@@ -229,6 +221,8 @@
     background-color: var(--rail-background, var(--tg4-grey-2));
     color: var(--rail-text, inherit);
     padding: 30px 0 20px;
+    margin-bottom: 5px;
+    overflow: hidden;
 }
 
 .rail-heading {
@@ -249,16 +243,16 @@
 
 .rail-glyph {
     position: absolute;
-    inset: 0;
+    inset: -2px;
     z-index: 0;
     pointer-events: none;
-
     background-color: var(--glyph-color, transparent);
 
     -webkit-mask-image: var(--glyph-url);
     mask-image: var(--glyph-url);
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
+
     -webkit-mask-size: auto 100%;
     mask-size: auto 100%;
 }
@@ -297,6 +291,16 @@
 .glyph-top-middle {
     -webkit-mask-position: center top;
     mask-position: center top;
+}
+
+.glyph-top-left {
+    -webkit-mask-position: left top;
+    mask-position: left top;
+}
+
+.glyph-top-right {
+    -webkit-mask-position: right top;
+    mask-position: right top;
 }
 
 .carousel-wrapper {

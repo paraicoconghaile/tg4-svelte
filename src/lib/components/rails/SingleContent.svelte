@@ -71,6 +71,7 @@
     overflow: hidden;
     border-radius: 0px;
     background: var(--tg4-grey-2);
+    margin-bottom: 5px;
 }
 
 .single-content img {
@@ -78,7 +79,6 @@
     height: 100%;
     object-fit: cover;
     object-position: center top;
-    margin: 10px 0
 }
 
 .single-content::before {

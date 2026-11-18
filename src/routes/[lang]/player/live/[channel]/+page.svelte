@@ -83,6 +83,237 @@
     let nielsenPlayheadTimer: ReturnType<typeof setInterval> | null = null;
     let lastNielsenPlayhead: number | null = null;
 
+    let peachPromise: Promise<void> | null = null;
+    let peachCollector: any = null;
+
+    let currentPeachProgramme: {
+        key: string;
+        materialId: string;
+        context: any;
+        metadata: any;
+        started: boolean;
+        paused: boolean;
+    } | null = null;
+
+    let peachHeartbeatTimer: ReturnType<typeof setInterval> | null = null;
+
+    function loadPeach(): Promise<void> {
+        if ((window as any).PeachCollector) {
+            return Promise.resolve();
+        }
+
+        if (peachPromise) {
+            return peachPromise;
+        }
+
+        peachPromise = new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+
+            script.src = 'https://peach-static.ebu.io/peach-collector.min.js';
+            script.async = true;
+
+            script.onload = () => {
+                console.log('*** LIVE PEACH SDK LOADED ***');
+                resolve();
+            };
+
+            script.onerror = () => {
+                peachPromise = null;
+                reject(new Error('Failed to load Live PEACH Collector'));
+            };
+
+            document.head.appendChild(script);
+        });
+
+        return peachPromise;
+    }
+
+    async function initialisePeach() {
+        try {
+            await loadPeach();
+
+            if (peachCollector) return;
+
+            const PeachCollector = (window as any).PeachCollector;
+
+            if (!PeachCollector) {
+                console.error('Live PEACH Collector not available');
+                return;
+            }
+
+            peachCollector = new PeachCollector(window);
+            peachCollector.enableTracking();
+
+            (window as any)._pc = peachCollector;
+
+            peachCollector.init(
+                [
+                    {
+                        sitekey: 'ietg400000000041',
+                        payload_func: (payload: any) => {
+                            payload.client.device.screen_size =
+                                `${window.screen.availWidth}x${window.screen.availHeight}`;
+
+                            payload.client.country_code =
+                                territory?.countryCode || '';
+
+                            return payload;
+                        }
+                    }
+                ],
+                'TG4 Website'
+            );
+
+            peachCollector.sendPageViewEvent();
+
+            console.log('*** LIVE PEACH INITIALISED ***');
+
+        } catch (error) {
+            console.error('Live PEACH initialisation failed:', error);
+        }
+    }
+
+    function buildPeachLiveMetadata(metadata: any) {
+        if (!peachCollector) return null;
+
+        const component = peachCollector.EventContextComponent('player', 'TG4 Player', '');
+        const context = peachCollector.mediaContext(null, 'video', null, document.referrer, null, component);
+
+        context.setCustomField('source', 'TG4 Live');
+        context.setCustomField('referrer', 'TG4');
+
+        const duration = Math.round(Number(metadata.full_dur_frames || 0) / 25);
+        const peachMetadata = peachCollector.EventMetadata('video', 'live', metadata.pcode, metadata.scode, duration);
+
+        const availability = metadata.ioi === 'True' && metadata.ww === 'False' ? 'Ireland Only' : metadata.ioi === 'True' && metadata.ww === 'True' ? 'Worldwide' : '';
+
+        const episodeTitle = metadata.prog_title && metadata.prog_title !== 'NONE' ? metadata.prog_title : metadata.series_title || '';
+
+        peachMetadata.setCustomField('show title', metadata.series_title || '');
+        peachMetadata.setCustomField('genre', metadata.genre || '');
+        peachMetadata.setCustomField('available', availability);
+        peachMetadata.setCustomField('episode title', episodeTitle);
+        peachMetadata.setCustomField('episode date', metadata.start_date_time || '');
+        peachMetadata.setCustomField('live event', metadata.isLive ?? '');
+
+        return { context, peachMetadata };
+    }
+
+    function stopPeachProgramme() {
+        if (!peachCollector || !currentPeachProgramme) return;
+
+        const previous = currentPeachProgramme;
+
+        if (!previous.started) {
+            currentPeachProgramme = null;
+            return;
+        }
+
+        try {
+            peachCollector.sendMediaStopEvent(
+                previous.materialId,
+                previous.context,
+                null,
+                previous.metadata
+            );
+
+            console.log('*** LIVE PEACH PROGRAMME STOPPED ***', {
+                key: previous.key,
+                materialId: previous.materialId
+            });
+
+        } catch (error) {
+            console.error('LIVE PEACH STOP failed:', error);
+        }
+
+        currentPeachProgramme = null;
+    }
+
+    function playPeachProgramme() {
+        console.log('*** PEACH PLAY DEBUG ***', {
+            collector: !!peachCollector,
+            programme: currentPeachProgramme?.key,
+            started: currentPeachProgramme?.started,
+            player: !!player,
+            paused: player?.paused?.(),
+            disposed: player?.isDisposed?.()
+        });
+
+        if (!peachCollector || !currentPeachProgramme) return;
+        if (currentPeachProgramme.started && !currentPeachProgramme.paused) return;
+        if (!player || player.isDisposed?.() || player.paused()) return;
+
+        const programme = currentPeachProgramme;
+
+        try {
+            peachCollector.sendMediaPlayEvent(
+                programme.materialId,
+                programme.context,
+                null,
+                programme.metadata
+            );
+
+            programme.started = true;
+            programme.paused = false;
+
+            console.log('*** LIVE PEACH PLAY ***', {
+                key: programme.key,
+                materialId: programme.materialId
+            });
+        } catch (error) {
+            console.error('LIVE PEACH PLAY failed:', error);
+        }
+    }
+
+    function pausePeachProgramme() {
+        if (!peachCollector || !currentPeachProgramme?.started) return;
+        if (currentPeachProgramme.paused) return;
+
+        const programme = currentPeachProgramme;
+
+        try {
+            peachCollector.sendMediaPauseEvent(
+                programme.materialId,
+                programme.context,
+                null,
+                programme.metadata
+            );
+
+            programme.paused = true;
+
+            console.log('*** LIVE PEACH PAUSE ***', {
+                key: programme.key,
+                materialId: programme.materialId
+            });
+
+        } catch (error) {
+            console.error('LIVE PEACH PAUSE failed:', error);
+        }
+    }
+
+    function startPeachHeartbeat() {
+        if (peachHeartbeatTimer) return;
+
+        peachHeartbeatTimer = setInterval(() => {
+            if (!peachCollector || !currentPeachProgramme?.started) return;
+            if (!player || player.isDisposed?.() || player.paused()) return;
+
+            const programme = currentPeachProgramme;
+
+            peachCollector.sendMediaHeartbeatEvent(
+                programme.materialId,
+                programme.context,
+                null,
+                programme.metadata
+            );
+
+            console.log('*** LIVE PEACH HEARTBEAT ***', {
+                key: programme.key,
+                materialId: programme.materialId
+            });
+        }, 60000);
+    }
+
     function loadNpaw(): Promise<void> {
         if ((window as any).youbora) {
             return Promise.resolve();
@@ -110,6 +341,30 @@
         });
 
         return npawPromise;
+    }
+
+    function seekPeachProgramme() {
+        if (!peachCollector || !currentPeachProgramme?.started) return;
+        if (!player || player.isDisposed?.()) return;
+
+        const programme = currentPeachProgramme;
+
+        try {
+            peachCollector.sendMediaSeekEvent(
+                programme.materialId,
+                programme.context,
+                null,
+                programme.metadata
+            );
+
+            console.log('*** LIVE PEACH SEEK ***', {
+                key: programme.key,
+                materialId: programme.materialId,
+                position: player.currentTime()
+            });
+        } catch (error) {
+            console.error('LIVE PEACH SEEK failed:', error);
+        }
     }
 
     function loadBrightcove(): Promise<void> {
@@ -240,6 +495,49 @@
                 * 2. Establish new DVR reference
                 * 3. Nielsen LOAD new programme
                 */
+
+                if (currentPeachProgramme?.key !== programmeKey) {
+                    stopPeachProgramme();
+                }
+
+                console.log('*** PEACH METADATA DEBUG ***', {
+                    programmeKey,
+                    collectorReady: !!peachCollector,
+                    isNewProgramme,
+                    currentPeachKey: currentPeachProgramme?.key
+                });
+
+                const peachData = buildPeachLiveMetadata(metadata);
+
+                if (peachData) {
+                    currentPeachProgramme = {
+                        key: programmeKey,
+                        materialId: metadata.material_id || metadata.pcode,
+                        context: peachData.context,
+                        metadata: peachData.peachMetadata,
+                        started: false,
+                        paused: false
+                    };
+
+                    playPeachProgramme();
+
+                    /* console.log('*** PEACH PROGRAMME STATE ***', {
+                        key: currentPeachProgramme?.key,
+                        materialId: currentPeachProgramme?.materialId,
+                        started: currentPeachProgramme?.started,
+                        paused: player?.paused?.()
+                    }); */
+
+                    console.log('*** PEACH AFTER PLAY ***', {
+                        key: currentPeachProgramme?.key,
+                        started: currentPeachProgramme?.started
+                    });
+
+                    console.log('*** LIVE PEACH PROGRAMME STORED ***', {
+                        key: currentPeachProgramme.key,
+                        materialId: currentPeachProgramme.materialId
+                    });
+                }
 
                 updateNielsenMetadata(metadata);
                 updateNpawMetadata(metadata);
@@ -593,15 +891,31 @@
             /* console.log('Brightcove player ready:', data.channel);
             console.log('ALL TEXT TRACKS:', player.textTracks()); */
 
+            void initialisePeach();
+
             clearProgrammeMetadata();
             initialiseNpaw();
             attachId3Track();
             startNielsenPlayhead();
 
+            player.on('playing', () => {
+                playPeachProgramme();
+            });
+
+            player.on('pause', () => {
+                pausePeachProgramme();
+            });
+
+            startPeachHeartbeat();
+
             player.on('seeking', () => {
                 //console.log('*** DVR SEEKING — CLEARING PROGRAMME METADATA ***');
                 currentProgramme = null;
                 currentProgrammeKey = '';
+            });
+
+            player.on('seeked', () => {
+                seekPeachProgramme();
             });
 
             player.on('loadedmetadata', () => {
@@ -735,6 +1049,14 @@
         destroyed = true;
         initId++;
 
+        if (peachHeartbeatTimer) {
+            clearInterval(peachHeartbeatTimer);
+            peachHeartbeatTimer = null;
+        }
+
+        // Stop PEACH tracking for the current programme
+        stopPeachProgramme();
+
         stopNielsenPlayhead();
         endNielsen();
 
@@ -796,7 +1118,14 @@
 
                 <!-- <p>{currentProgramme.scode} / {currentProgramme.pcode}</p> -->
 
-                <p>S{currentProgramme.series_number} E{currentProgramme.episode_number}</p>
+                <p>
+                    {#if currentProgramme.series_number}
+                        S{currentProgramme.series_number}
+                    {/if}
+                    {#if currentProgramme.episode_number}
+                        E{currentProgramme.episode_number}
+                    {/if}
+                </p>
             </div>
         {/if}
     </section>
