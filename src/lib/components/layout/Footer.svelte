@@ -105,7 +105,7 @@
                     { label: 'Vacancies', url: 'https://www.tg4.ie/en/corporate/vacancies/' },
                     { label: 'Tenders', url: 'https://www.tg4.ie/en/corporate/tairiscinti/' },
                     { label: 'Procurement', url: 'https://www.tg4.ie/en/corporate/procurement/' },
-                    { label: 'v', url: 'https://www.tg4.ie/en/corporate/sales/' },
+                    { label: 'Sales', url: 'https://www.tg4.ie/en/corporate/sales/' },
                     { label: 'Traenáil & Forbairt', url: 'https://www.tg4.ie/en/corporate/traenail-forbairt/' },
                     { label: 'Freedom of Information', url: 'https://www.tg4.ie/en/corporate/freedom-of-information/' }
                 ]
