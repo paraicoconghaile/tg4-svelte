@@ -4,6 +4,7 @@
     import { withBase } from '$lib/utils/paths';
     import { railGlyphs } from '$lib/utils/railGlyphs';
     import { categoryLabels } from '$lib/config/categoryLabels';
+    import { badgeLabels } from '$lib/config/badgeLabels';
 
     let emblaApi: EmblaCarouselType | undefined;
 
@@ -87,6 +88,20 @@
         return isIrish ? category.ga : category.en;
     }
 
+    function getBadgeLabel(badge: string | null | undefined) {
+        if (!badge) return '';
+
+        const normalizedBadge = badge.trim().toLowerCase();
+
+        const label = Object.entries(badgeLabels).find(
+            ([key]) => key.toLowerCase() === normalizedBadge
+        )?.[1];
+
+        if (!label) return badge;
+
+        return isIrish ? label.ga : label.en;
+    }
+
     /* $effect(() => {
         console.log('Rail glyph:', rail.backgroundGlyph);
         console.log('Glyph URL:', glyphUrl);
@@ -158,9 +173,10 @@
                                             }
                                         }}
                                     />
-
                                     {#if content.badge}
-                                        <span class="card-badge">{content.badge}</span>
+                                        <span class="card-badge">
+                                            {getBadgeLabel(content.badge)}
+                                        </span>
                                     {/if}
                                 </div>
                                 <h3>{content.name}</h3>
