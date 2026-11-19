@@ -6,7 +6,11 @@ export const load: PageServerLoad = async ({ params, setHeaders, fetch, request,
         'cache-control': 'public, max-age=0, s-maxage=900'
     });
 
-    console.log('*** TG4 CLIENT IP ***', request.headers.get('x-tg4-client-ip'));
+    console.log('*** TG4 REQUEST DEBUG ***', {
+        path: new URL(request.url).pathname,
+        clientIp: request.headers.get('x-tg4-client-ip'),
+        forwardedFor: request.headers.get('x-forwarded-for')
+    });
 
     /* setHeaders({
         'cache-control': 'no-store'
