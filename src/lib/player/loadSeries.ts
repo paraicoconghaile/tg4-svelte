@@ -105,8 +105,16 @@ export async function loadSeason(seriesSlug: string, seasonNumber: number, lang:
         episodeNumber: ep.episodeNumber,
         seriesNumber: ep.seasonNumber,
         duration: ep.duration,
+        geoRestricted: ep.geoRestricted,
+        contentRating: ep.contentRating,
         prodCode: ep.pCode,
         seriesCode: ep.customFields.s_prodcode,
+        image:
+            ep.image?.original ||
+            ep.image?.large ||
+            ep.image?.xLarge ||
+            ep.poster ||
+            'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg',
         seriesDescription: lang === 'ga' ? ep.customFields.seriesdescg : ep.customFields.seriesdesce,
         episodeDescription: lang === 'ga' ? ep.descriptionGa : ep.descriptionEn
     })) ?? [];
