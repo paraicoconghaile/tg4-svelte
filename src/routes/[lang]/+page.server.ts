@@ -15,7 +15,17 @@ export const load: PageServerLoad = async ({ params, setHeaders, fetch, request,
     console.log('*** SVELTEKIT CLIENT IP ***', getClientAddress());
 
     try {
-        const clientIp = getClientAddress();
+        const forwardedFor = request.headers.get('x-forwarded-for');
+
+        const clientIp = forwardedFor
+            ?.split(',')[0]
+            ?.trim();
+
+        console.log('*** EXTRACTED CLIENT IP ***', clientIp);
+
+        if (!clientIp) {
+            throw new Error('Client IP unavailable');
+        }
 
         const response = await fetch(
             'https://staging.api.tg4dev.com/api/region',
@@ -27,9 +37,14 @@ export const load: PageServerLoad = async ({ params, setHeaders, fetch, request,
             }
         );
 
+        if (!response.ok) {
+            throw new Error(`Region API returned ${response.status}`);
+        }
+
         const regionData = await response.json();
 
         console.log('*** SERVER REGION TEST ***', regionData);
+
     } catch (error) {
         console.error('Region API test failed:', error);
     }
