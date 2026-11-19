@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { getRails } from '$lib/api/tg4_1';
 
-export const load: PageServerLoad = async ({ params, setHeaders, fetch }) => {
+export const load: PageServerLoad = async ({ params, setHeaders, fetch, request }) => {
     /* setHeaders({
         'cache-control': 'public, max-age=0, s-maxage=900'
     }); */
@@ -9,6 +9,9 @@ export const load: PageServerLoad = async ({ params, setHeaders, fetch }) => {
     setHeaders({
         'cache-control': 'no-store'
     });
+
+    console.log('*** X-FORWARDED-FOR ***', request.headers.get('x-forwarded-for'));
+    console.log('*** CLOUDFRONT COUNTRY ***', request.headers.get('cloudfront-viewer-country'));
 
     try {
         const response = await fetch(
