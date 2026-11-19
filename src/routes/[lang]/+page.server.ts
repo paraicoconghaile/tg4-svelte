@@ -2,8 +2,12 @@ import type { PageServerLoad } from './$types';
 import { getRails } from '$lib/api/tg4_1';
 
 export const load: PageServerLoad = async ({ params, setHeaders, fetch, request, getClientAddress }) => {
-    setHeaders({
+    /* setHeaders({
         'cache-control': 'public, max-age=0, s-maxage=900'
+    }); */
+
+    setHeaders({
+        'cache-control': 'no-store'
     });
 
     console.log('*** TG4 REQUEST DEBUG ***', {
