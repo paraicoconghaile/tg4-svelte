@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { getRails } from '$lib/api/tg4_1';
 
-export const load: PageServerLoad = async ({ params, setHeaders, fetch, request }) => {
+export const load: PageServerLoad = async ({ params, setHeaders, fetch, request, getClientAddress }) => {
     /* setHeaders({
         'cache-control': 'public, max-age=0, s-maxage=900'
     }); */
@@ -12,11 +12,19 @@ export const load: PageServerLoad = async ({ params, setHeaders, fetch, request 
 
     console.log('*** X-FORWARDED-FOR ***', request.headers.get('x-forwarded-for'));
     console.log('*** CLOUDFRONT COUNTRY ***', request.headers.get('cloudfront-viewer-country'));
+    console.log('*** SVELTEKIT CLIENT IP ***', getClientAddress());
 
     try {
+        const clientIp = getClientAddress();
+
         const response = await fetch(
             'https://staging.api.tg4dev.com/api/region',
-            { cache: 'no-store' }
+            {
+                cache: 'no-store',
+                headers: {
+                    'X-TG4-IP': clientIp
+                }
+            }
         );
 
         const regionData = await response.json();
