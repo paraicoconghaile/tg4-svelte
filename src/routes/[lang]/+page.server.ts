@@ -2,11 +2,11 @@ import type { PageServerLoad } from './$types';
 import { getRails } from '$lib/api/tg4_1';
 
 export const load: PageServerLoad = async ({ params, setHeaders, fetch, request, getClientAddress }) => {
-    /* setHeaders({
-        'cache-control': 'public, max-age=0, s-maxage=900'
-    }); */
-
     setHeaders({
+        'cache-control': 'public, max-age=0, s-maxage=900'
+    });
+
+    /* setHeaders({
         'cache-control': 'no-store'
     });
 
@@ -14,10 +14,6 @@ export const load: PageServerLoad = async ({ params, setHeaders, fetch, request,
         path: new URL(request.url).pathname,
         clientIp: request.headers.get('x-tg4-client-ip'),
         forwardedFor: request.headers.get('x-forwarded-for')
-    });
-
-    /* setHeaders({
-        'cache-control': 'no-store'
     });
 
     console.log('*** X-FORWARDED-FOR ***', request.headers.get('x-forwarded-for'));
