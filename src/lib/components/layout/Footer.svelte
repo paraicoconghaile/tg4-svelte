@@ -200,13 +200,13 @@
 }
 
 @media (max-width: 500px) {
-    .tg4-footer {
-        padding: 35px 20px;
+    .footer-inner {
+        grid-template-columns: repeat(1fr, 1fr);
+        gap: 8px;
     }
 
-    .footer-inner {
-        grid-template-columns: 1fr;
-        gap: 30px;
+    .tg4-footer {
+        padding: 35px 20px;
     }
 }
 </style>
