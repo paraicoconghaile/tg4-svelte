@@ -14,7 +14,7 @@
                     { label: 'Gradam Ceoil TG4', url: 'https://www.tg4.ie/ga/brandai-eile/gradam-ceoil/gradaim-reatha/' },
                     { label: 'Nuacht', url: 'https://www.tg4.ie/ga/brandai-eile/nuacht/' },
                     { label: 'Aimsir TG4', url: 'https://www.tg4.ie/ga/brandai-eile/an-aimsir/' },
-                    { label: 'TG4 Foghlaim', url: 'https://foghlaim.tg4.ie', external: true }
+                    { label: 'Foghlaim TG4', url: 'https://foghlaim.tg4.ie', external: true }
                 ]
             },
             {
@@ -72,7 +72,7 @@
                     { label: 'Gradam Ceoil TG4', url: 'https://www.tg4.ie/en/other-brands/gradam-ceoil/current-awards/' },
                     { label: 'News', url: 'https://www.tg4.ie/en/other-brands/irish-news/' },
                     { label: 'Aimsir TG4', url: 'https://www.tg4.ie/en/other-brands/weather/' },
-                    { label: 'TG4 Foghlaim', url: 'https://foghlaim.tg4.ie', external: true }
+                    { label: 'Foghlaim TG4', url: 'https://foghlaim.tg4.ie', external: true }
                 ]
             },
             {
