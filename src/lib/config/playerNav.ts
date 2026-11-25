@@ -1,7 +1,7 @@
 export const genres = [
     {
         key: { ga: 'faisneis', en: 'documentaries' },
-        label: { ga: 'Fáisnéis', en: 'Documentaries' }
+        label: { ga: 'Faisnéis', en: 'Documentaries' }
     },
     {
         key: { ga: 'ceol', en: 'music' },

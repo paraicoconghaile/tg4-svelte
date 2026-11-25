@@ -1,16 +1,48 @@
 <script lang="ts">
     import { page } from '$app/state';
+
+    let isLiveError = $derived(
+        page.status === 500 &&
+        page.url.pathname.includes('/player/live/')
+    );
+
+    let isIrish = $derived(
+        page.url.pathname.startsWith('/ga/')
+    );
+
+    let fallbackUrl = $derived(
+        isIrish
+            ? 'https://dev.tg4.ie/ga/player/feach-beo/eile/'
+            : 'https://dev.tg4.ie/en/player/watch-live/other/'
+    );
 </script>
 
 <svelte:head>
     <title>{page.status} - Error</title>
 </svelte:head>
 
+
 <div class="error-page">
     <h1>{page.status}</h1>
-    <p>{page.error?.message ?? 'Something went wrong.'}</p>
-    <p><a href="/" class="language-switch">Home</a></p>
+
+    {#if isLiveError}
+        <p>
+            {isIrish ? 'Tá fadhb againn leis an sruth beo faoi láthair.' : 'We are experiencing problems with the live stream.'}
+        </p>
+
+        <p>
+            <a href={fallbackUrl} class="language-switch">
+                {isIrish ? 'Féach ar TG4 Beo' : 'Watch TG4 Live'}
+            </a>
+        </p>
+    {:else}
+        <p>{page.error?.message ?? 'Something went wrong.'}</p>
+        <p>
+            <a href="/" class="language-switch">Home</a>
+        </p>
+    {/if}
 </div>
+
 
 <style>
 .error-page {

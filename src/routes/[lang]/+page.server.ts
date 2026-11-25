@@ -1,14 +1,59 @@
 import type { PageServerLoad } from './$types';
 import { getRails } from '$lib/api/tg4_1';
 
-export const load: PageServerLoad = async ({ params, setHeaders }) => {
-    /* setHeaders({
-        'cache-control': 'public, max-age=0, s-maxage=900'
-    }); */
-
+export const load: PageServerLoad = async ({ params, setHeaders, fetch, request, getClientAddress }) => {
     setHeaders({
-        'cache-control': 'private, no-store, max-age=0'
+        'cache-control': 'public, max-age=0, s-maxage=900'
     });
+
+    /* setHeaders({
+        'cache-control': 'no-store'
+    });
+
+    console.log('*** TG4 REQUEST DEBUG ***', {
+        path: new URL(request.url).pathname,
+        clientIp: request.headers.get('x-tg4-client-ip'),
+        forwardedFor: request.headers.get('x-forwarded-for')
+    });
+
+    console.log('*** X-FORWARDED-FOR ***', request.headers.get('x-forwarded-for'));
+    console.log('*** CLOUDFRONT COUNTRY ***', request.headers.get('cloudfront-viewer-country'));
+    console.log('*** SVELTEKIT CLIENT IP ***', getClientAddress());
+
+    try {
+        const forwardedFor = request.headers.get('x-forwarded-for');
+
+        const clientIp = forwardedFor
+            ?.split(',')[0]
+            ?.trim();
+
+        console.log('*** EXTRACTED CLIENT IP ***', clientIp);
+
+        if (!clientIp) {
+            throw new Error('Client IP unavailable');
+        }
+
+        const response = await fetch(
+            'https://api.tg4dev.com/api/region',
+            {
+                cache: 'no-store',
+                headers: {
+                    'X-TG4-IP': clientIp
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(`Region API returned ${response.status}`);
+        }
+
+        const regionData = await response.json();
+
+        console.log('*** SERVER REGION TEST ***', regionData);
+
+    } catch (error) {
+        console.error('Region API test failed:', error);
+    } */
 
     const rails = await getRails();
 

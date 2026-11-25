@@ -72,18 +72,7 @@
     const description = $derived(data.lang === 'ga' ? data.series.series.descGa : data.series.series.descEn);
 
     function getImageUrl(ep: any) {
-        if (ep?.prodCode) {
-            return `https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto:eco/${ep.prodCode}.jpg`;
-        }
-
-        if (ep?.seriesCode) {
-            return `https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto:eco/${ep.seriesCode}.jpg`;
-        }
-
-        return (
-            ep.poster ||
-            'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg'
-        );
+        return ep?.image || 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';
     }
 
     const subtitleLanguages: Record<string, Record<string, string>> = {
@@ -156,8 +145,6 @@
                         </button>
                         
                         <BookmarkButton bookmark={data.slug} lang={data.lang} onReady={registerBookmarkModal} />
-
-                        <!-- <button class="hero-button-text" type="button">{data.lang === 'ga' ? 'Bookmark' : 'Bookmark'}</button> -->
                     </div>
                 </div>
             </div>
@@ -202,41 +189,14 @@
                     <article class="episode">
                         <div class="episode-media">
                             <a aria-label={isIrish ? 'Seinn' : 'Play'} href={withBase(`/${data.lang}/player/${data.slug}/${ep.episodeID}`)}>
-                                <img
-                                    class="episode-image"
-                                    src={getImageUrl(ep)}
-                                    alt={ep.title}
-                                    onerror={(e) => {
-                                        e.currentTarget.src =
-                                            'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';
-                                    }}
-                                />
+                                <img class="episode-image" src={getImageUrl(ep)} alt={ep.title} onerror={(e) => {e.currentTarget.src = 'https://res.cloudinary.com/tg4/image/upload/w_700,h_395,g_faces,c_fill,f_auto,q_auto/000000.jpg';}} />
                             </a>
 
                             <a aria-label={isIrish ? 'Seinn' : 'Play'} href={withBase(`/${data.lang}/player/${data.slug}/${ep.episodeID}`)}>
-                                <svg
-                                    class="play-icon"
-                                    width="40"
-                                    height="40"
-                                    viewBox="0 0 40 40"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <rect
-                                        width="40"
-                                        height="40"
-                                        fill="#EBEBEB"
-                                    />
-
-                                    <path
-                                        d="M30.6867 20.4249L25.9734 15.8788L11.0911 30.2412L15.8031 34.7886L30.6867 20.4249Z"
-                                        fill="#2B2A2A"
-                                    />
-
-                                    <path
-                                        d="M25.9539 24.9922L30.6645 20.4435L15.7823 6.08105L11.0703 10.6285L25.9539 24.9922Z"
-                                        fill="#2B2A2A"
-                                    />
+                                <svg class="play-icon" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="40" height="40" fill="#EBEBEB" />
+                                    <path d="M30.6867 20.4249L25.9734 15.8788L11.0911 30.2412L15.8031 34.7886L30.6867 20.4249Z" fill="#2B2A2A" />
+                                    <path d="M25.9539 24.9922L30.6645 20.4435L15.7823 6.08105L11.0703 10.6285L25.9539 24.9922Z" fill="#2B2A2A" />
                                 </svg>
                             </a>
                         </div>

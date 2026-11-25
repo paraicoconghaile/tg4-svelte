@@ -110,6 +110,7 @@
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 5px;
+    margin-bottom: 5px;
 }
 
 .intro {
@@ -227,21 +228,22 @@
 
 @media (max-width: 500px) {
     .staff-review {
-        grid-template-columns: 1fr;
-        min-height: auto;
+        grid-template-columns: 1fr 1fr;
     }
 
-    .intro {
-        grid-row: 1;
+    .rating {
+        display: block;
+        font-size: 1.2rem;
+        gap: 1px;
+    }
+
+    .intro h2 {
+        font-size: 1.2rem;
+        line-height: 1.2;
     }
 
     .intro p.review-text {
         display: none;
-    }
-
-    .content-card {
-        grid-row: 2;
-        max-height: 250px;
     }
 }
 </style>

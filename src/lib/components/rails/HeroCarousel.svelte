@@ -227,9 +227,20 @@
 {/if}
 
 <style>
+.carousel {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    background: var(--tg4-grey-2);
+    margin-bottom: 5px;
+}
+
 .single-hero {
     display: block;
     position: relative;
+    background-color: var(--rail-background, var(--tg4-grey-2));
+    color: var(--rail-text, inherit);
     aspect-ratio: 16 / 9;
     overflow: hidden;
     margin: 0 58px 0 55px;
@@ -240,14 +251,6 @@
     height: 100%;
     object-fit: cover;
     display: block;
-}
-
-.carousel {
-    max-width: var(--page-width);
-    margin: 0 auto;
-    overflow: hidden;
-    position: relative;
-    background: var(--tg4-grey-2);
 }
 
 .stage {

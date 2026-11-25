@@ -57,7 +57,7 @@ export const navigation: NavItem[] = [
             },
             {
                 titleEn: 'Drama',
-                titleGa: 'Dramaíocht',
+                titleGa: 'Drámaíocht',
                 hrefEn: '/en/player/drama',
                 hrefGa: '/ga/player/dramaiocht'
             },

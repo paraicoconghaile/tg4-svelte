@@ -4,6 +4,7 @@
     import { withBase } from '$lib/utils/paths';
     import { railGlyphs } from '$lib/utils/railGlyphs';
     import { categoryLabels } from '$lib/config/categoryLabels';
+    import { badgeLabels } from '$lib/config/badgeLabels';
 
     let emblaApi: EmblaCarouselType | undefined;
 
@@ -87,6 +88,20 @@
         return isIrish ? category.ga : category.en;
     }
 
+    function getBadgeLabel(badge: string | null | undefined) {
+        if (!badge) return '';
+
+        const normalizedBadge = badge.trim().toLowerCase();
+
+        const label = Object.entries(badgeLabels).find(
+            ([key]) => key.toLowerCase() === normalizedBadge
+        )?.[1];
+
+        if (!label) return badge;
+
+        return isIrish ? label.ga : label.en;
+    }
+
     let glyphUrl = $derived(
         rail.backgroundGlyph
             ? railGlyphs[rail.backgroundGlyph]
@@ -160,9 +175,10 @@
                                             }
                                         }}
                                     />
-
                                     {#if content.badge}
-                                        <span class="card-badge">{content.badge}</span>
+                                        <span class="card-badge">
+                                            {getBadgeLabel(content.badge)}
+                                        </span>
                                     {/if}
                                 </div>
                                 <h3>{content.name}</h3>
@@ -231,6 +247,8 @@
     background-color: var(--rail-background, var(--tg4-grey-2));
     color: var(--rail-text, inherit);
     padding: 30px 0 20px 0;
+    margin-bottom: 5px;
+    overflow: hidden;
 }
 
 .rail-heading {
@@ -251,10 +269,9 @@
 
 .rail-glyph {
     position: absolute;
-    inset: 0;
+    inset: -1px;
     z-index: 0;
     pointer-events: none;
-
     background-color: var(--glyph-color, transparent);
 
     -webkit-mask-image: var(--glyph-url);
@@ -299,6 +316,16 @@
 .glyph-top-middle {
     -webkit-mask-position: center top;
     mask-position: center top;
+}
+
+.glyph-top-left {
+    -webkit-mask-position: left top;
+    mask-position: left top;
+}
+
+.glyph-top-right {
+    -webkit-mask-position: right top;
+    mask-position: right top;
 }
 
 .carousel-wrapper {

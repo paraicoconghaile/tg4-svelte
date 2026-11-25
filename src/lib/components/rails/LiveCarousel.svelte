@@ -152,6 +152,8 @@
                 {#each streams.filter((stream: any) => stream.state === 'ONAIR') as stream}
                     {@const show = stream.currentShow}
                     {@const nextshow = stream.nextShow}
+                    {@const programmeImage = stream.currentShow?.image?.thumbnail || stream.currentShow?.image?.large}
+                    {@const imageUrl = programmeImage || stream.logoUrl}
 
                     <div class="embla__slide">
                         <!-- <a class="live-card" href={withBase(`/${isIrish ? 'ga' : 'en'}/player/live/${stream.stream}`)}>
@@ -186,7 +188,28 @@
 
                         <a class="live-card" href={withBase(`/${isIrish ? 'ga' : 'en'}/player/live/${stream.stream}`)}>
                             <div class="live-image">
-                                <img src={stream.logoUrl} alt={stream.stream} />
+                                <img
+                                    class="programme-image"
+                                    class:logo-fallback={!programmeImage}
+                                    src={programmeImage || stream.logoUrl}
+                                    alt={stream.currentShow?.title || stream.stream}
+                                    onerror={(event) => {
+                                        const img = event.currentTarget;
+
+                                        if (img.src !== stream.logoUrl) {
+                                            img.src = stream.logoUrl;
+                                            img.classList.add('logo-fallback');
+                                        }
+                                    }}
+                                />
+
+                                {#if programmeImage && stream.logoUrl}
+                                    <img
+                                        class="channel-logo"
+                                        src={stream.logoUrl}
+                                        alt={stream.stream}
+                                    />
+                                {/if}
 
                                 {#if show?.startTime && show?.endTime}
                                     <div class="progress-track">
@@ -239,6 +262,7 @@
     background-color: var(--rail-background, var(--tg4-grey-2));
     color: var(--rail-text, inherit);
     padding: 30px 0 20px 0;
+    margin-bottom: 5px;
 }
 
 .rail-heading {
@@ -262,7 +286,6 @@
     inset: 0;
     z-index: 0;
     pointer-events: none;
-
     background-color: var(--glyph-color, transparent);
 
     -webkit-mask-image: var(--glyph-url);
@@ -307,6 +330,16 @@
 .glyph-top-middle {
     -webkit-mask-position: center top;
     mask-position: center top;
+}
+
+.glyph-top-left {
+    -webkit-mask-position: left top;
+    mask-position: left top;
+}
+
+.glyph-top-right {
+    -webkit-mask-position: right top;
+    mask-position: right top;
 }
 
 .carousel-wrapper {
@@ -383,11 +416,28 @@
     overflow: hidden;
 }
 
-.live-image img {
-    width: 60%;
-    height: 60%;
-    object-fit: contain;
+.live-image .programme-image {
     display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.live-image .programme-image.logo-fallback {
+    object-fit: contain;
+    width: 70%;
+    height: 70%;
+}
+
+.live-image .channel-logo {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 65px;
+    height: auto;
+    object-fit: contain;
+    z-index: 2;
+    pointer-events: none;
 }
 
 .progress-track {

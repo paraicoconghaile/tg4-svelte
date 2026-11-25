@@ -4,7 +4,7 @@ export const categoryLabels: Record<string, { ga: string; en: string }> = {
         en: 'Cúla4'
     },
     Faisneis: {
-        ga: 'Fáisnéis',
+        ga: 'Faisnéis',
         en: 'Documentaries'
     },
     Ceol: {
