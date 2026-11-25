@@ -2,10 +2,15 @@ import { json } from '@sveltejs/kit';
 import { getContinueWatching } from '$lib/api/tg4_1';
 import type { RequestHandler } from './$types';
 
-export const GET: RequestHandler = async ({ cookies, setHeaders }) => {
+export const GET: RequestHandler = async ({ cookies, setHeaders, url }) => {
     setHeaders({
         'cache-control': 'private, no-store'
     });
+
+    // Continue Watching is currently supported on production only
+    if (url.hostname !== 'www.tg4.ie') {
+        return json([]);
+    }
 
     const peachSid = cookies.get('identity.provider.sid');
 
@@ -17,9 +22,11 @@ export const GET: RequestHandler = async ({ cookies, setHeaders }) => {
         const continueWatching = await getContinueWatching(peachSid);
         return json(continueWatching);
     } catch (error) {
-        console.error('Continue Watching API error:', error);
+        console.warn(
+            'Continue Watching unavailable:',
+            error instanceof Error ? error.message : error
+        );
 
-        // Continue Watching is optional, so fail gracefully
         return json([]);
     }
 };
