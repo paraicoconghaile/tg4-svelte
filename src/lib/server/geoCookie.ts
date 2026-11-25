@@ -13,6 +13,12 @@ function isRegion(value: unknown): value is Region {
 }
 
 export const geoCookieHandle: Handle = async ({ event, resolve }) => {
+    // EPG is region-independent
+    if (event.url.pathname === '/api/epg') {
+        event.locals.region = FALLBACK_REGION;
+        return resolve(event);
+    }
+
     // Check for an existing region cookie
     const cachedRegion = event.cookies.get(COOKIE_NAME);
 
