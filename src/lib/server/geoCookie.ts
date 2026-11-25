@@ -25,7 +25,7 @@ export const geoCookieHandle: Handle = async ({ event, resolve }) => {
         // Header supplied by our CloudFront Function
         const clientIp = event.request.headers.get('x-tg4-client-ip');
 
-        console.log('*** TG4 CLOUDFRONT CLIENT IP ***', clientIp);
+        console.log('*** TG4 REGION LOOKUP ***', {path: event.url.pathname, hasClientIp: Boolean(clientIp)});
 
         if (!clientIp) {
             throw new Error('Client IP unavailable');
