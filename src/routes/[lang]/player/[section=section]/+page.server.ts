@@ -3,10 +3,14 @@ import { getGenre, getCategoryRails, getDiscoverRails } from '$lib/api/tg4_1';
 import { slugify } from '$lib/utils/slugify';
 import { genres, getGenreByKey } from '$lib/config/playerNav';
 
-export async function load({ params, setHeaders }) {
+export async function load({ params, locals, setHeaders }) {
     setHeaders({
-        'cache-control': 'public, max-age=0, s-maxage=900'
+        'cache-control': 'no-store'
     });
+
+    /* setHeaders({
+        'cache-control': 'public, max-age=0, s-maxage=900'
+    }); */
 
     const categoryMap: Record<string, string> = {
         faisneis: 'faisneis',
@@ -26,7 +30,7 @@ export async function load({ params, setHeaders }) {
     };
 
     if (params.section === 'discover' || params.section === 'aimsigh') {
-        const rails = await getDiscoverRails();
+        const rails = await getDiscoverRails(locals.region);
 
         return {
             lang: params.lang,
@@ -53,10 +57,15 @@ export async function load({ params, setHeaders }) {
     }
 
     // Get the existing series/programme data
-    const rawProgrammes = await getGenre(genre);
+    const rawProgrammes = await getGenre(
+        genre,
+        0,
+        24,
+        locals.region
+    );
 
     // Get the rails for this category
-    const rails = await getCategoryRails(genre);
+    const rails = await getCategoryRails(genre, locals.region);
     
     const seriesMap = new Map();
 

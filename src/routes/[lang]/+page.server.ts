@@ -1,16 +1,16 @@
 import type { PageServerLoad } from './$types';
 import { getRails } from '$lib/api/tg4_1';
 
-export const load: PageServerLoad = async ({ params, setHeaders, fetch, request, getClientAddress }) => {
-    setHeaders({
-        'cache-control': 'public, max-age=0, s-maxage=900'
-    });
-
+export const load: PageServerLoad = async ({ params, setHeaders, locals }) => {
     /* setHeaders({
+        'cache-control': 'public, max-age=0, s-maxage=900'
+    }); */
+
+    setHeaders({
         'cache-control': 'no-store'
     });
 
-    console.log('*** TG4 REQUEST DEBUG ***', {
+    /* console.log('*** TG4 REQUEST DEBUG ***', {
         path: new URL(request.url).pathname,
         clientIp: request.headers.get('x-tg4-client-ip'),
         forwardedFor: request.headers.get('x-forwarded-for')
@@ -55,7 +55,9 @@ export const load: PageServerLoad = async ({ params, setHeaders, fetch, request,
         console.error('Region API test failed:', error);
     } */
 
-    const rails = await getRails();
+    console.log('*** HOMEPAGE REGION ***', locals.region);
+
+    const rails = await getRails(locals.region);
 
     // Do not include personalised Continue Watching items in public HTML.
     const publicRails = {

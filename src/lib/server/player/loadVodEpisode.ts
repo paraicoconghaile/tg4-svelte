@@ -1,6 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { getGenre, getVideoWithTerritory, getSeriesVideos } from '$lib/api/tg4_1';
-import { getGenreByKey } from '$lib/config/playerNav';
+import { getVideoWithTerritory, getSeriesVideos } from '$lib/api/tg4_1';
 import type { RequestEvent } from '@sveltejs/kit';
 
 type RelatedEpisode = {
@@ -23,7 +22,10 @@ type RelatedEpisode = {
     poster?: string;
 };
 
-export async function loadVodEpisode({params}: RequestEvent) {
+export async function loadVodEpisode({params, locals, setHeaders}: RequestEvent) {
+    setHeaders({
+        'cache-control': 'no-store'
+    });
     //console.log("SHORT EPISODE ROUTE", params);
 
     const categoryMap: Record<string, string> = {
@@ -52,7 +54,7 @@ export async function loadVodEpisode({params}: RequestEvent) {
     }
 
     try {
-        result = await getVideoWithTerritory(params.episode);
+        result = await getVideoWithTerritory(params.episode, locals.region);
     } catch (err) {
         if (
             err instanceof Error &&
@@ -103,7 +105,7 @@ export async function loadVodEpisode({params}: RequestEvent) {
 
     const rawEpisodes =
         video.slug && video.seriesNumber != null
-        ? await getSeriesVideos(video.slug, Number(video.seriesNumber))
+        ? await getSeriesVideos(video.slug, Number(video.seriesNumber), locals.region)
         : null;
 
     //console.log('RAW EPISODES:', JSON.stringify(rawEpisodes, null, 2));

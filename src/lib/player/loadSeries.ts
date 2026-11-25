@@ -1,9 +1,9 @@
 import { error } from '@sveltejs/kit';
 import { getSeries, getSeriesVideos, Tg4ApiError } from '$lib/api/tg4_1';
 
-async function getSeriesVideosOr404(slug: string, seasonNumber: number) {
+async function getSeriesVideosOr404(slug: string, seasonNumber: number, region: App.Locals['region']) {
     try {
-        return await getSeriesVideos(slug, seasonNumber);
+        return await getSeriesVideos(slug, seasonNumber, region);
     } catch (err) {
         if (
             err instanceof Tg4ApiError &&
@@ -16,11 +16,11 @@ async function getSeriesVideosOr404(slug: string, seasonNumber: number) {
     }
 }
 
-export async function loadSeries(slug: string, lang: string) {
+export async function loadSeries(slug: string, lang: string, region: App.Locals['region']) {
     let series;
 
     try {
-        series = await getSeries(slug);
+        series = await getSeries(slug, region);
     } catch (err) {
         if (
             err instanceof Tg4ApiError &&
@@ -50,7 +50,7 @@ export async function loadSeries(slug: string, lang: string) {
     const seasonNumber = latestSeason.number;
     //console.log("Loading latest season:", seasonNumber);
 
-    const rawEpisodes = await getSeriesVideosOr404(series.series.slug, seasonNumber);
+    const rawEpisodes = await getSeriesVideosOr404(series.series.slug, seasonNumber, region);
 
     if (!rawEpisodes) {
         error(404, 'Season not found');
@@ -87,13 +87,13 @@ export async function loadSeries(slug: string, lang: string) {
     };
 }
 
-export async function loadSeason(seriesSlug: string, seasonNumber: number, lang: string) {
+export async function loadSeason(seriesSlug: string, seasonNumber: number, lang: string, region: App.Locals['region']) {
     /* const rawEpisodes = await getSeriesVideos(
         seriesSlug,
         seasonNumber
     ); */
 
-    const rawEpisodes = await getSeriesVideosOr404(seriesSlug, seasonNumber);
+    const rawEpisodes = await getSeriesVideosOr404(seriesSlug, seasonNumber, region);
 
     if (!rawEpisodes) {
         error(404, 'Season not found');

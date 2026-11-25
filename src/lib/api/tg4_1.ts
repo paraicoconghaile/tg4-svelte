@@ -8,10 +8,29 @@ const RAILS_CACHE_TTL = 60_000;
 const RAILS_RETRY_DELAY = 30_000;
 const RAILS_TIMEOUT = 5_000;
 
-let cachedRails: any = null;
-let cacheExpires = 0;
-let retryAfter = 0;
-let pendingRails: Promise<any> | null = null;
+type Region = 'IOI' | 'WW';
+
+interface RailsCache {
+    cachedRails: any | null;
+    cacheExpires: number;
+    retryAfter: number;
+    pendingRails: Promise<any> | null;
+}
+
+const railsCaches: Record<Region, RailsCache> = {
+    IOI: {
+        cachedRails: null,
+        cacheExpires: 0,
+        retryAfter: 0,
+        pendingRails: null
+    },
+    WW: {
+        cachedRails: null,
+        cacheExpires: 0,
+        retryAfter: 0,
+        pendingRails: null
+    }
+};
 
 export type Tg4Territory = {
     region: string | null;
@@ -100,7 +119,7 @@ const apiCache = new Map<string, {
 
 const pendingRequests = new Map<string, Promise<any>>();
 
-async function getCachedApiData(key: string, url: string, ttl: number, notFoundOn400 = false) {
+async function getCachedApiData(key: string, url: string, ttl: number, notFoundOn400 = false, region?: Region) {
     const now = Date.now();
     const cached = apiCache.get(key);
 
@@ -120,7 +139,8 @@ async function getCachedApiData(key: string, url: string, ttl: number, notFoundO
                 const response = await fetch(url, {
                     headers: {
                         'Content-Type': 'application/json',
-                        'x-api-key': API_KEY
+                        'x-api-key': API_KEY,
+                        ...(region ? { 'X-TG4-Region': region } : {})
                     },
                     signal: AbortSignal.timeout(5000)
                 });
@@ -167,33 +187,29 @@ async function getCachedApiData(key: string, url: string, ttl: number, notFoundO
     return structuredClone(await pending);
 }
 
-export async function getGenre(genre: string, skip = 0, limit = 24) {
-    const response = await fetch(
-        `https://api.tg4dev.com/api/series?skip=${skip}&limit=${limit}&category=${genre}&sites=TG4`,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': API_KEY
-            }
-        }
+export async function getGenre(genre: string, skip = 0, limit = 24, region: Region = 'WW') {
+    const url =
+        `https://api.tg4dev.com/api/series?skip=${skip}&limit=${limit}&category=${encodeURIComponent(genre)}&sites=TG4`;
+
+    return getCachedApiData(
+        `genre:${region}:${genre}:${skip}:${limit}`,
+        url,
+        5 * 60_000,
+        false,
+        region
     );
-
-    if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`);
-    }
-
-    return response.json();
 }
 
-export async function getSeriesVideos(seriesTitle: string, seasonNumber: number) {
+export async function getSeriesVideos(seriesTitle: string, seasonNumber: number, region: Region = 'WW') {
     const url =
         `https://api.tg4dev.com/api/series/${encodeURIComponent(seriesTitle)}/${seasonNumber}`;
 
     return getCachedApiData(
-        `episodes:${seriesTitle}:${seasonNumber}`,
+        `episodes:${region}:${seriesTitle}:${seasonNumber}`,
         url,
         2 * 60_000,
-        true
+        true,
+        region
     );
 }
 
@@ -214,48 +230,63 @@ export async function getVideo(videoId: string) {
     return result.data;
 }
 
-export async function getVideoWithTerritory(videoId: string) {
+export async function getVideoWithTerritory(videoId: string, region: Region = 'WW') {
     const url = `https://api.tg4dev.com/api/videos/${videoId}`;
 
     return fetchTg4Api<Tg4VideoResponse>(url, {
         headers: {
             'Content-Type': 'application/json',
-            'x-api-key': API_KEY
-        }
+            'x-api-key': API_KEY,
+            'X-TG4-Region': region
+        },
+        signal: AbortSignal.timeout(5000)
     });
 }
 
-export async function getSeries(slug: string) {
+export async function getSeries(slug: string, region: Region = 'WW') {
     const url = `https://api.tg4dev.com/api/series/${encodeURIComponent(slug)}`;
 
     return getCachedApiData(
-        `series:${slug}`,
+        `series:${region}:${slug}`,
         url,
         5 * 60_000,
-        true
+        true,
+        region
     );
 }
 
-export async function getRails() {
+export async function getRails(region: Region = 'WW') {
+    const cache = railsCaches[region];
     const now = Date.now();
 
+    console.log('*** GET RAILS CALLED ***', {
+        region,
+        cached: !!cache.cachedRails,
+        pending: !!cache.pendingRails
+    });
+
     // Return valid cached rails while fresh
-    if (cachedRails && now < cacheExpires) {
-        return structuredClone(cachedRails);
+    if (cache.cachedRails && now < cache.cacheExpires) {
+        return structuredClone(cache.cachedRails);
     }
 
     // During an API outage, avoid repeated retries
-    if (now < retryAfter) {
-        return structuredClone(cachedRails ?? { rails: [] });
+    if (now < cache.retryAfter) {
+        return structuredClone(cache.cachedRails ?? { rails: [] });
     }
 
-    // Share one API request between simultaneous callers
-    if (!pendingRails) {
-        pendingRails = (async () => {
+    // Share one API request between simultaneous callers in the same region
+    if (!cache.pendingRails) {
+        cache.pendingRails = (async () => {
             const url = 'https://api.tg4dev.com/api/rails/home?api_key=d3b8f0c1-2e4a-4f5b-9c6d-7e8f9a0b1c2d';
 
             try {
+                console.log('*** TG4 RAILS API REQUEST ***', {region, header: region});
+
                 const response = await fetch(url, {
+                    headers: {
+                        'X-TG4-Region': region
+                    },
                     signal: AbortSignal.timeout(RAILS_TIMEOUT)
                 });
 
@@ -270,34 +301,34 @@ export async function getRails() {
                 }
 
                 // Cache only successful, valid API responses
-                cachedRails = data;
-                cacheExpires = Date.now() + RAILS_CACHE_TTL;
-                retryAfter = 0;
+                cache.cachedRails = data;
+                cache.cacheExpires = Date.now() + RAILS_CACHE_TTL;
+                cache.retryAfter = 0;
 
                 return data;
 
             } catch (error) {
-                console.error('Rails API failed:', error);
+                console.error(`Rails API failed (${region}):`, error);
 
-                retryAfter = Date.now() + RAILS_RETRY_DELAY;
+                cache.retryAfter = Date.now() + RAILS_RETRY_DELAY;
 
-                if (cachedRails) {
-                    console.warn('Serving last-known-good Rails data');
-                    return cachedRails;
+                if (cache.cachedRails) {
+                    console.warn(`Serving last-known-good Rails data (${region})`);
+                    return cache.cachedRails;
                 }
 
-                console.warn('No Rails cache available — serving empty rails');
+                console.warn(`No Rails cache available (${region}) — serving empty rails`);
 
                 // Cold-start fallback; never store as valid cache
                 return { rails: [] };
             }
         })().finally(() => {
-            pendingRails = null;
+            cache.pendingRails = null;
         });
     }
 
     // Return an independent copy for every request
-    return structuredClone(await pendingRails);
+    return structuredClone(await cache.pendingRails);
 }
 
 export async function getCurrentEPG() {
@@ -329,24 +360,19 @@ export async function getCurrentEPG() {
     return { epg, territory };
 }
 
-export async function getCategoryRails(category: string) {
-    const url = `https://api.tg4dev.com/api/rails/category/${category}`;
+export async function getCategoryRails(category: string, region: Region = 'WW') {
+    const url = `https://api.tg4dev.com/api/rails/category/${encodeURIComponent(category)}`;
 
-    const response = await fetch(url, {
-        headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': API_KEY
-        }
-    });
-
-    if (!response.ok) {
-        throw new Error(`Failed to fetch category rails: ${response.status}`);
-    }
-
-    return await response.json();
+    return getCachedApiData(
+        `category-rails:${region}:${category}`,
+        url,
+        60_000,
+        false,
+        region
+    );
 }
 
-export async function getContinueWatching(peachSid: string) {
+export async function getContinueWatching(peachSid: string, region: Region = 'WW') {
     const url = `https://api.tg4dev.com/api/user/continue-watching`;
 
     const response = await fetch(url, {
@@ -433,22 +459,14 @@ export async function getHistory(peachSid: string) {
     return response.json();
 }
 
+export async function getDiscoverRails(region: Region = 'WW') {
+    const url = 'https://api.tg4dev.com/api/rails/discover';
 
-export async function getDiscoverRails() {
-    const url = `https://api.tg4dev.com/api/rails/discover?api_key=d3b8f0c1-2e4a-4f5b-9c6d-7e8f9a0b1c2d`;
-
-    const response = await fetch(url);
-
-    if (!response.ok) {
-        const body = await response.text();
-
-        console.error('TG4 DISCOVER API ERROR');
-        console.error('URL:', url);
-        console.error('Status:', response.status);
-        console.error('Response:', body);
-
-        throw new Error(`Discover API Error: ${response.status}`);
-    }
-
-    return response.json();
+    return getCachedApiData(
+        `discover-rails:${region}`,
+        url,
+        60_000,
+        false,
+        region
+    );
 }

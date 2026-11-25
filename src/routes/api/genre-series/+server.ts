@@ -1,7 +1,11 @@
 import { json } from '@sveltejs/kit';
 import { getGenre } from '$lib/api/tg4_1';
 
-export async function GET({ url }) {
+export async function GET({url, locals, setHeaders}) {
+    setHeaders({
+        'cache-control': 'no-store'
+    });
+
     const genre = url.searchParams.get('category');
     const skip = Number(url.searchParams.get('skip') ?? 0);
     const limit = Number(url.searchParams.get('limit') ?? 24);
@@ -20,7 +24,7 @@ export async function GET({ url }) {
         return json({ error: 'Invalid pagination parameters' }, { status: 400 });
     }
 
-    const rawProgrammes = await getGenre(genre, skip, limit);
+    const rawProgrammes = await getGenre(genre, skip, limit, locals.region);
 
     const seriesMap = new Map();
 

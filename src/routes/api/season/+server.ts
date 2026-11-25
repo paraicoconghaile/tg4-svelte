@@ -1,7 +1,11 @@
 import { json, isHttpError } from '@sveltejs/kit';
 import { loadSeason } from '$lib/player/loadSeries';
 
-export async function GET({ url }) {
+export async function GET({ url, locals, setHeaders }) {
+    setHeaders({
+        'cache-control': 'no-store'
+    });
+    
     const seriesSlug = url.searchParams.get('series');
     const seasonNumber = Number(url.searchParams.get('season'));
     const lang = url.searchParams.get('lang') ?? 'en';
@@ -17,7 +21,8 @@ export async function GET({ url }) {
         const season = await loadSeason(
             seriesSlug,
             seasonNumber,
-            lang
+            lang,
+            locals.region
         );
 
         return json(season);
