@@ -13,3 +13,8 @@ customHeaders:
     headers:
       - key: 'Cache-Control'
         value: 'public, max-age=604800'
+
+  - pattern: '/images/**/*'
+    headers:
+      - key: 'Cache-Control'
+        value: 'public, max-age=604800'
